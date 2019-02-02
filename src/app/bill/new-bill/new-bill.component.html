@@ -1,0 +1,125 @@
+<div id="new-bill-wrapper make-scrollable">
+	<div class="title-header">
+		<span id="header-text">Add New Bill</span>
+	</div>
+	<div class="wrapper-content input-form">
+		<form>
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group row">
+						<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
+						<div class="col-sm-5">
+							<select name="vendorName" id="vendorName" class="form-control" formControlName="billVendorName">
+								<option selected>Select a Vendor</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<button type="submit" class="btn button-primary">New Vendor</button>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-3 col-form-label" for="billDate">Bill Date</label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control" id="billDate" formControlName="billDate">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="table-wrapper" formGroupName="billItemInputForm">
+				<table class="itemDetails table table-striped">
+					<thead>
+						<tr>
+							<th *ngFor="let billTableHeader of billTableHeaders" scope="col">{{billTableHeader}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td *ngFor="let billTableColumn of billTableColumns" scope="col">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<item-modal></item-modal>
+
+
+
+
+			<div class="afterTable">
+				<div class="row">
+					<div class="col col-md-8">
+					</div>
+					<div class="col cost-details col-md-4">
+						<span class="cost-row">
+							<label class="col-sm-6" for="subTotalCost">SubTotal:</label>
+							<span class="col-sm-6" id="subTotalCost"></span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="gstCharge">GST:</label>
+							<span class="col-sm-6" id="gstCharges"></span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="shippingCharge">Shipping Charge:</label>
+							<span class="col-sm-6" id="shippingCharge"></span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="discount">Discount:</label>
+							<span class="col-sm-6" id="discount"></span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="priceRoundedOff">Rounded Off:</label>
+							<span class="col-sm-6" id="priceRoundedOff"></span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="totalCost">Total Cost:</label>
+							<span class="col-sm-6" id="totalCost"></span>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col order-notes">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="orderNote">Order Notes</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" id="orderNote" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="privateNote">Private Notes</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" id="privateNote" rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="col payment-details">
+						<div class="form-group row reverse-charge custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="ifReverseCharge">
+							<label class="custom-control-label" for="ifReverseCharge">Subject to Reverse Charge</label>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="amountPaid">Amount Paid</label>
+							<div class="col-sm-3">
+								<input type="number" class="form-control" id="amountPaid">
+							</div>
+							<span class="rupeeSymbol label col-sm-5">₹</span>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="amountPaid">Payment Method</label>
+							<div class="col-sm-8">
+								<select name="paymentMethod" id="paymentMethod" class="form-control">
+									<option selected>Cash</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="action-buttons">
+				<button type="submit" id="billSaveButton" class="btn button-save">Save</button>
+				<button type="button" id="billCancelButton" class="btn button-cancel">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

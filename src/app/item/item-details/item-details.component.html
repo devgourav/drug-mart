@@ -1,0 +1,48 @@
+<div id="item-details-wrapper">
+	<div class="search-header">
+		<div class="row">
+			<div class="search-area col">
+				<div class="input-form">
+					<div class="input-group">
+						<input type="text"placeholder="Search Items" class="search-box form-control">
+						<button type="submit" class="btn button-filter">Filter Options</button>
+					</div>
+				</div>
+			</div>
+			<div class="new-item-area col">
+				<a routerLink="New Item"><button class="btn button-save">New Item</button></a>
+				<button class="btn button-filter">Export</button>
+				<button class="btn button-filter">Import</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="title-header">
+		<span id="header-text">Item Details</span>
+	</div>
+
+	<div class="table-wrapper">
+		<table class="table table-striped table-dark">
+			<thead>
+				<tr>
+					<th *ngFor="let itemDetailsTableHeader of itemDetailsTableHeaders" scope="col">{{itemDetailsTableHeader}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let row of rows">
+					<td *ngFor="let itemDetailsTableColumn of itemDetailsTableColumns">
+						<span id={{itemDetailsTableColumn}}></span>
+					</td>
+					<td>
+						<button type="button" class="btn button-primary">View/Edit</button>
+						<button type="button" class="btn button-cancel">Delete</button>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+
+
+
+</div>
