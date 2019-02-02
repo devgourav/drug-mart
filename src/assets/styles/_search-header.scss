@@ -1,0 +1,22 @@
+.search-header{
+	margin: 10px auto;
+
+	.input-form{
+		padding-left: 40px;
+		font-weight: bold; 
+
+		.search-area{
+			text-align: left;
+
+			.search-box{
+				height: 44px;
+				text-align: left;
+				padding:5px;
+				border-radius: 4px;
+			}
+		}
+	}
+	.new-item-area{
+		text-align: right;
+	}
+}

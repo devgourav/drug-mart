@@ -1,0 +1,15 @@
+@import "../../../assets/styles/_colors.scss";
+@import "../../../assets/styles/_button.scss";
+@import "../../../assets/styles/_title-header.scss";
+
+#tax-details-wrapper{
+	font-family: 'Montserrat', sans-serif;
+	color:$text-color-dark;
+}
+.input-form{
+	padding: 5px;
+	padding-left: 40px;
+	text-align: left;
+	margin: 0 auto;
+	font-weight: bold; 
+}

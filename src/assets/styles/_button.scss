@@ -1,0 +1,62 @@
+@import "_colors.scss";
+
+.button{
+	text-align: center;
+	padding:10px;
+	border-radius: 4px;
+	width: 150px;
+	border:none;
+	z-index: 1;
+	margin:0 5px;
+}
+
+.action-buttons{
+  	display: flex;
+  	justify-content: center;
+}
+
+.button-save{
+	background-color: $positive-color;
+	color:$text-color-light;
+	margin:0 5px;
+	
+}
+.button-save:hover{
+	background-color: $positive-color-dark;
+}
+
+
+.button-cancel{
+	background-color: $negative-color;
+	color:$text-color-light;
+	margin:0 5px;
+}
+.button-cancel:hover{
+	background-color: $negative-color-dark;
+}
+
+.button-search{
+	background-color: $primary-color;
+	color:$text-color-light;
+	margin:0 5px;
+}
+.button-search:hover{
+	background-color: $primary-color-dark;
+}
+
+.button-filter{
+	background-color: $primary-color;
+	color:$text-color-light;
+	margin:0 5px;
+}
+.button-filter:hover{
+	background-color: $primary-color-dark;
+}
+.button-primary{
+	background-color: $primary-color;
+	color:$text-color-light;
+	margin:0 5px;
+}
+.button-primary:hover{
+	background-color: $primary-color-dark;
+}

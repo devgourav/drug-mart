@@ -1,0 +1,41 @@
+<div id="tax-details-wrapper">
+	<div class="title-header">
+		<span id="header-text">Tax Details</span>
+	</div>
+
+	<div class="input-form">
+		<form>
+
+			<div class="row">
+				<div class="col col-md-6">
+					<div class=" form-group row">
+						<label class="col-md-4 col-form-label" for="taxName">Tax Name</label>
+							<div class="col-md-8">
+								<input type="text" id="taxName" class="form-control">
+							</div>
+					</div>
+
+					<div class=" form-group row">
+						<label class="col-md-4 col-form-label" for="taxRate">Tax Rate</label>
+							<div class="col-md-4">
+								<input type="number" id="taxRate" class="form-control">
+							</div>
+							<div class="col-md-4">
+								<select name="taxUnit" id="taxUnit" class="form-control">
+										<option value="taxInPrecentage" selected>% - Percentage</option>
+										<option value="taxInCurrency">₹ - Fixed</option>
+								</select>
+							</div>
+					</div>
+				</div>
+			</div>
+			
+		
+
+			<div id="action-buttons">
+				<button type="submit" class="btn button-save">Add Tax</button>
+			</div>
+
+		</form>
+	</div>
+</div>

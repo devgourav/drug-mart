@@ -1,0 +1,54 @@
+@import "../../assets/styles/_colors.scss";
+
+
+  .sidebar-wrapper{
+  	z-index: 1;
+  	position: fixed;
+  	width: 250px;
+  	min-height: 100%;
+  	overflow-y: hidden;
+  	background: $primary-color;
+  	font-family: 'Montserrat', sans-serif;
+  	font-weight: bold;
+
+  }
+
+  .sidebar-info{
+  	color: $text-color-dark;
+  	background: $primary-color-dark;
+  	text-transform: uppercase;
+  	padding: 20px 0;
+  	text-align: center;
+  }
+
+  .sidebar-brand{
+  	color: $text-color-dark;
+  	text-transform: uppercase;
+  	padding-top: 20px;
+  	margin-bottom: 60px;
+  	text-align: center;
+  }
+
+  .sidebar-nav{
+  	padding: 0;
+  	list-style: none;
+
+  	li{
+  		text-indent: 20px;
+  		line-height: 40px;
+  		text-align: left;
+  		border-bottom: 1px solid $border-color-dark;
+
+
+  		a{
+  			display: block;
+  			text-decoration: none;
+  			color: $text-color-dark;
+
+  		}
+
+  		a:hover{
+  			background: $primary-color-dark;
+  		}
+  	}
+  }

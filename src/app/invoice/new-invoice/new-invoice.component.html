@@ -1,0 +1,193 @@
+<div id="new-invoice-wrapper make-scrollable">
+	<div class="title-header">
+		<span id="header-text">Add New Invoice</span>
+	</div>
+	<div class="wrapper-content">
+		<div class="input-form">
+		<form [formGroup]="invoiceInputForm">
+			<div class="row">
+				<div class="col">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="vendorName">Client Name</label>
+						<div class="col-sm-8">
+							<select name="vendorName" id="vendorName" class="form-control" formControlName="invoiceClientName">
+								<option selected>Select a Client</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="invoiceDate">Invoice Date</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="invoiceDate" formControlName="invoiceDate">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="invoiceDueDate">Due Date</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="invoiceDueDate" formControlName="invoiceDueDate">
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="invoiceNumber">Invoice Number</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="invoiceNumber" formControlName="invoiceNumber">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="purchaseOrderNo">Purchase Order No</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="purchaseOrderNo" formControlName="purchaseOrderNo">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="table-wrapper" formGroupName="invoiceItemInputForm">
+				<table class="itemDetails table table-striped">
+					<thead>
+						<tr>
+							<th scope="col">Item and Description</th>
+							<th scope="col">Category</th>
+							<th scope="col">Unit</th>
+							<th scope="col">Quantity</th>
+							<th scope="col">Price</th>
+							<th scope="col">Discount</th>
+							<th scope="col">Tax</th>
+							<th scope="col">Total</th>
+							<th scope="col">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td *ngFor="let invoiceTableColumn of invoiceTableColumns" scope="col">
+							</td>
+							<td>
+								<button id="itemViewButton" type="button" class="btn button-primary">View</button>
+								<button id="itemDeleteButton" type="button" class="btn button-cancel">Delete</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<select name="itemName" id="itemName" class="form-control" formGroupName="invoiceItemName">
+									<option selected>Select Item</option>
+								</select>
+							</td>
+							<td>
+								<select name="invoiceCategory" id="invoiceCategory" class="form-control" formGroupName="invoiceItemCategory">
+									<option selected>Select Category</option>
+								</select>
+							</td>
+							<td>
+								<select name="unitOfMeasurement" id="unitOfMeasurement" class="form-control" formGroupName="invoiceItemUom">
+									<option selected>piece</option>
+								</select>
+							</td>
+							<td>
+								<input type="number" id="itemQuantity" class="form-control" formGroupName="invoiceItemQuantity">
+							</td>
+							<td>
+								<input type="number" id="itemPrice" class="form-control" formGroupName="invoicePrice">
+							</td>
+							<td>
+								<input type="number" id="itemDiscount" class="form-control" formGroupName="invoiceDiscount">
+							</td>
+							<td>
+								<select name="taxRate" id="taxRate" class="form-control" formGroupName="invoiceItemTax">
+									<option selected>GST 10</option>
+								</select>
+							</td>
+							<td>
+								<label class="form-label" for="totalPrice">₹0.00</label>
+							</td>
+							<td>
+								<button id="itemDeleteButton" type="button" class="btn button-save">Add</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="afterTable">
+				<div class="row">
+					<div class="col col-md-8">
+					</div>
+					<div class="col cost-details col-md-4">
+						<span class="cost-row">
+							<label class="col-sm-6" for="subTotalCost">SubTotal:</label>
+							<span class="col-sm-6" id="subTotalCost">₹400.00</span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="gstCharge">GST:</label>
+							<span class="col-sm-6" id="gstCharges">₹400.00</span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="shippingCharge">Shipping Charge:</label>
+							<span class="col-sm-6" id="shippingCharge">₹400.00</span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="discount">Discount:</label>
+							<span class="col-sm-6" id="discount">₹400.00</span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="priceRoundedOff">Rounded Off:</label>
+							<span class="col-sm-6" id="priceRoundedOff">₹400.00</span>
+						</span>
+						<span class="cost-row">
+							<label class="col-sm-6" for="totalCost">Total Cost:</label>
+							<span class="col-sm-6" id="totalCost">₹400.00</span>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col order-notes">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="orderNote">Order Notes</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" id="orderNote" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="privateNote">Private Notes</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" id="privateNote" rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="col payment-details">
+						<div class="form-group row reverse-charge custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="ifReverseCharge">
+							<label class="custom-control-label" for="ifReverseCharge">Subject to Reverse Charge</label>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="amountPaid">Amount Paid</label>
+							<div class="col-sm-3">
+								<input type="number" class="form-control" id="amountPaid">
+							</div>
+							<span class="rupeeSymbol label col-sm-5">₹</span>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="amountPaid">Payment Method</label>
+							<div class="col-sm-8">
+								<select name="paymentMethod" id="paymentMethod" class="form-control">
+									<option selected>Cash</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="paymentReferenceNo">Payment Reference</label>
+							<div class="col-sm-8">
+								<input type="number" class="form-control" id="paymentReferenceNo">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="action-buttons">
+				<button type="submit" id="invoiceSaveButton" class="btn button-save">Save</button>
+				<button type="button" id="invoiceCancelButton" class="btn button-cancel">Cancel</button>
+			</div>
+		</form>
+		</div>
+	</div>
+</div>

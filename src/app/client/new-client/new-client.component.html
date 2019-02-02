@@ -1,0 +1,125 @@
+<div id="new-client-wrapper">
+	<div class="title-header">
+		<span id="header-text">Add New Client</span>
+	</div>
+
+	<div class="input-form wrapper-content">
+		<form>
+			<div class="row">
+				<div class="col">
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientCompanyName">Company Name</label>
+						 <div class="col-sm-8">
+						 	<input type="text" id="clientCompanyName" class="form-control">
+						 </div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientPhoneNumber">Phone Number</label>
+						<div class="col-sm-8">
+							<input type="tel" id="clientPhoneNumber" class="form-control">
+						</div>
+
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientEmailId">Email Id</label>
+						<div class="col-sm-8">
+							<input type="email" id="clientEmailId" class="form-control">
+						</div>
+
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientWebsite">Website</label>
+						<div class="col-sm-8">
+							<input type="email" id="clientWebsite" class="form-control">
+						</div>
+
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientGstin">GSTIN</label>
+						<div class="col-sm-8">
+							<input type="text" id="clientGstin" class="form-control">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientContactPerson">Contact Person</label>
+						<div class="col-sm-8">
+							<input type="text" id="clientContactPerson" class="form-control">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientContactPhone">Contact Phone</label>
+						<div class="col-sm-8">
+							<input type="text" id="clientContactPhone" class="form-control">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientContactEmail">Contact Email</label>
+						<div class="col-sm-8">
+							<input type="text" id="clientContactEmail" class="form-control">
+						</div>
+					</div>
+
+				</div>
+				<div class="col">
+					<div class="address-details" *ngIf="showBillingAddress">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyBillingAddress">Billing Address</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" id="companyBillingAddress" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyBillingCountry">Country </label>
+							<div class="col-sm-8">
+								<select name="companyBillingCountry" id="companyBillingCountry" class="form-control">
+									<option selected>India</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyBillingState">State</label>
+							<div class="col-sm-8">
+								<select name="companyBillingState" id="companyBillingState" class="form-control">
+									<option selected>Select State</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyBillingCity">City</label>
+							<div class="col-sm-8">
+								<input type="text" id="companyBillingCity" class="form-control">
+							</div>
+
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyBillingPinCode">Pin Code</label>
+							<div class="col-sm-8">
+								<input type="text" id="companyBillingPinCode" class="form-control">
+							</div>
+
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="clientNotes">Notes</label>
+						<div class="col-sm-8">
+							<textarea class="form-control" id="clientNotes" rows="3"></textarea>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+			<div class="action-buttons">
+				<button type="submit" class="btn button-save">Save</button>
+				<button type="submit" class="btn button-cancel">Cancel</button>
+			</div>
+
+		</form>
+
+	</div>
+</div>
