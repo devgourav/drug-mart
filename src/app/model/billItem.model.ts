@@ -1,15 +1,30 @@
 export class BillItem {
+  id: string;
   itemName: string;
-  itemPackType: string;
+  packType: string;
   itemHSN: string;
-  itemMfg: string;
-  itemBatchNumber: string;
-  itemExpiryDate: Date;
-  itemQuantity: number;
-  itemRate: number;
+  manufacturer: string;
+  batchNumber: string;
+  expiryDate: Date;
+  quantity: number;
+  rate: number;
   itemMRP: number;
-  itemTax1: number;
-  itemTax2: number;
-  itemDiscount: number;
-  itemOffer: string;
+  tax1: number;
+  tax2: number;
+  discount: number;
+  offer: string;
+}
+
+export class Bill {
+  id: string;
+  vendorName: string;
+  vendorId: string;
+  billedDate: Date;
+  billItems: BillItem[];
+  totalTax: number;
+  totalDiscount: number;
+  totalAmount: number;
+  orderNote: string;
+  paymentMethod: string;
+  amountPaid: number;
 }

@@ -9,8 +9,9 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
 						<div class="col-sm-5">
-							<select name="vendorName" id="vendorName" class="form-control" formControlName="billVendorName">
+							<select name="vendorName" id="vendorName" class="form-control" formControlName="vendorName">
 								<option selected>Select a Vendor</option>
+								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}</option>
 							</select>
 						</div>
 						<div class="col-sm-4">
@@ -20,7 +21,7 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="billDate">Bill Date</label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control" id="billDate" formControlName="billDate">
+							<input type="date" class="form-control" id="billDate" formControlName="billedDate">
 						</div>
 					</div>
 				</div>
@@ -34,17 +35,20 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr *ngFor="let billItem of billItemList">
+						<tr *ngFor="let billItem of billItems">
 							<td scope="col">{{ billItem.itemName }}</td>
-							<td scope="col">{{ billItem.itemMfg }}</td>
-							<td scope="col">{{ billItem.itemQuantity }}</td>
-							<td scope="col">{{ billItem.itemRate }}</td>
-							<td scope="col">{{ billItem.itemTax1 +  billItem.itemTax2}}</td>
-							<td scope="col">{{ billItem.itemDiscount }}</td>
-							<td scope="col">{{ billItem.itemOffer }}</td>
-							<td scope="col">{{ billItem.itemRate }}</td>
+							<td scope="col">{{ billItem.manufacturer }}</td>
+							<td scope="col">{{ billItem.quantity }}</td>
+							<td scope="col">{{ billItem.rate }}</td>
+							<td scope="col">{{ itemAmount }}</td>
+							<td scope="col">{{ discountAmount }}</td>
+							<td scope="col">{{ itemTax }}</td>
+							<td scope="col">{{ billItem.offer }}</td>
 							<td scope="col">{{ billItem.itemMRP }}</td>
-
+							<td>
+								<button type="button" class="btn button-primary">View/Edit</button>
+								<button type="button" class="btn button-cancel">Delete</button>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -58,28 +62,28 @@
 					</div>
 					<div class="col cost-details col-md-4">
 						<span class="cost-row">
-							<label class="col-sm-6" for="subTotalCost">SubTotal:</label>
-							<span class="col-sm-6" id="subTotalCost"></span>
+							<label class="col-sm-6" for="subTotalAmount">SubTotal:</label>
+							<span class="col-sm-6" id="subTotalAmount">{{ subTotalAmount }}</span>
 						</span>
 						<span class="cost-row">
-							<label class="col-sm-6" for="gstCharge">GST:</label>
-							<span class="col-sm-6" id="gstCharges"></span>
+							<label class="col-sm-6" for="totalTax">Tax:</label>
+							<span class="col-sm-6" id="totalTax">{{ totalTax }}</span>
 						</span>
-						<span class="cost-row">
+						<!-- <span class="cost-row">
 							<label class="col-sm-6" for="shippingCharge">Shipping Charge:</label>
 							<span class="col-sm-6" id="shippingCharge"></span>
-						</span>
+						</span> -->
 						<span class="cost-row">
 							<label class="col-sm-6" for="discount">Discount:</label>
-							<span class="col-sm-6" id="discount"></span>
+							<span class="col-sm-6" id="discount">{{ totalDiscount }}</span>
 						</span>
-						<span class="cost-row">
+						<!-- <span class="cost-row">
 							<label class="col-sm-6" for="priceRoundedOff">Rounded Off:</label>
 							<span class="col-sm-6" id="priceRoundedOff"></span>
-						</span>
+						</span> -->
 						<span class="cost-row">
-							<label class="col-sm-6" for="totalCost">Total Cost:</label>
-							<span class="col-sm-6" id="totalCost"></span>
+							<label class="col-sm-6" for="netAmount">Net Amount:</label>
+							<span class="col-sm-6" id="netAmount">{{ netAmount }}</span>
 						</span>
 					</div>
 				</div>
@@ -96,7 +100,7 @@
 						<div class="form-group row">
 							<label class="col-sm-4 col-form-label" for="billAmountPaid">Amount Paid</label>
 							<div class="col-sm-3">
-								<input type="number" class="form-control" formControlName="billAmountPaid" id="billAmountPaid">
+								<input type="number" class="form-control" formControlName="amountPaid" id="billAmountPaid">
 							</div>
 							<span class="rupeeSymbol label col-sm-5">₹</span>
 						</div>
@@ -112,8 +116,8 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="submit" id="billSaveButton" class="btn button-save">Save</button>
-				<button type="button" id="billCancelButton" class="btn button-cancel">Cancel</button>
+				<button type="submit" id="billSaveButton" class="btn button-save" (click)="saveBill()" >Save</button>
+				<button type="button" id="billCancelButton" class="btn button-cancel" (click)="closeClicked()">Cancel</button>
 			</div>
 		</form>
 	</div>

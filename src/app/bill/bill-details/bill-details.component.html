@@ -17,7 +17,7 @@
 	</div>
 
 	<div class="title-header">
-		<span id="header-text">Bill Details</span>
+		<span id="header-text">Recent Bills</span>
 	</div>
 
 	<div class="table-wrapper">
@@ -28,13 +28,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let row of rows">
-					<td *ngFor="let billDetailsTableColumn of billDetailsTableColumns">
-						<span id={{billDetailsTableColumn}}></span>
-					</td>
+				<tr *ngFor="let bill of bills">
+					<td scope="col">{{ bill?.billedDate }}</td>
+					<td scope="col">{{ bill?.vendorName }}</td>
+					<td scope="col">{{ bill?.totalAmount }}</td>
+					<td scope="col">{{ bill?.totalTax }}</td>
+					<td scope="col">{{ bill?.totalDiscount }}</td>
+					<td scope="col">{{ bill?.orderNotes }}</td>
+					<td scope="col">{{ bill?.billAmountPaid }}</td>
 					<td>
 						<button type="button" class="btn button-primary">View/Edit</button>
-						<button type="button" class="btn button-cancel">Delete</button>
+						<button type="button" class="btn button-cancel" (click)="deleteBill(bill.id)">Delete</button>
 					</td>
 				</tr>
 
