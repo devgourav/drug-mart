@@ -13,6 +13,11 @@ const routes: Routes = [
 		path:'Bills/New Bill',
 		component: NewBillComponent
 	},
+	{
+		path:'Bills/New Bill/:id',
+		component: NewBillComponent
+	}
+
 
 
 ];

@@ -4,71 +4,68 @@
 	</div>
 
 	<div class="input-form wrapper-content">
-		<form>
+		<form [formGroup]="vendorInputForm" >
 			<div class="row">
-				<div class="col">
+				<div class="col-sm-8">
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientCompanyName">Company Name</label>
+						<label class="col-sm-4 col-form-label" for="vendorName">Vendor Name</label>
 						 <div class="col-sm-8">
-						 	<input type="text" id="clientCompanyName" class="form-control">
+						 	<input type="text" id="vendorName" class="form-control" formControlName="name">
 						 </div>
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientPhoneNumber">Phone Number</label>
+						<label class="col-sm-4 col-form-label" for="vendorPhoneNumber">Phone Number</label>
 						<div class="col-sm-8">
-							<input type="tel" id="clientPhoneNumber" class="form-control">
+							<input type="tel" id="vendorPhoneNumber" class="form-control" formControlName="phoneNumber">
 						</div>
 
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientEmailId">Email Id</label>
+						<label class="col-sm-4 col-form-label" for="vendorEmailId">Email Id</label>
 						<div class="col-sm-8">
-							<input type="email" id="clientEmailId" class="form-control">
+							<input type="email" id="vendorEmailId" class="form-control" formControlName="emailId">
 						</div>
 
 					</div>
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientWebsite">Website</label>
+						<label class="col-sm-4 col-form-label" for="vendorWebsite">Website</label>
 						<div class="col-sm-8">
-							<input type="email" id="clientWebsite" class="form-control">
+							<input type="email" id="vendorWebsite" class="form-control" formControlName="website">
 						</div>
 
 					</div>
 
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientGstin">GSTIN</label>
+						<label class="col-sm-4 col-form-label" for="vendorGstin">GSTIN</label>
 						<div class="col-sm-8">
-							<input type="text" id="clientGstin" class="form-control">
+							<input type="text" id="vendorGstin" class="form-control" formControlName="GSTIN">
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientContactPerson">Contact Person</label>
+						<label class="col-sm-4 col-form-label" for="vendorContactPerson">Contact Person</label>
 						<div class="col-sm-8">
-							<input type="text" id="clientContactPerson" class="form-control">
+							<input type="text" id="vendorContactPerson" class="form-control" formControlName="contactPersonName">
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientContactPhone">Contact Phone</label>
+						<label class="col-sm-4 col-form-label" for="vendorContactPhone">Contact Phone</label>
 						<div class="col-sm-8">
-							<input type="text" id="clientContactPhone" class="form-control">
+							<input type="text" id="vendorContactPhone" class="form-control" formControlName="contactPersonPhoneNumber">
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientContactEmail">Contact Email</label>
+						<label class="col-sm-4 col-form-label" for="vendorContactEmail">Contact Email</label>
 						<div class="col-sm-8">
-							<input type="text" id="clientContactEmail" class="form-control">
+							<input type="text" id="vendorContactEmail" class="form-control" formControlName="contactPersonEmailId">
 						</div>
 					</div>
 
-				</div>
-				<div class="col">
-
-					<div class="address-details">
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyShippingAddress">Shipping Address</label>
+					<!--<div class="address-details">
+						 <div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyShippingAddress">Address</label>
 							<div class="col-sm-8">
 								<textarea class="form-control" id="companyShippingAddress" rows="3"></textarea>
 							</div>
@@ -94,26 +91,31 @@
 							<div class="col-sm-8">
 								<input type="text" id="companyShippingCity" class="form-control">
 							</div>
-
 						</div>
+					</div> -->
+
+
 						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyShippingPinCode">Pin Code</label>
+							<label class="col-sm-4 col-form-label" for="vendorAddress">Address</label>
 							<div class="col-sm-8">
-								<input type="text" id="companyShippingPinCode" class="form-control">
+								<textarea class="form-control" id="vendorAddress" rows="3" formControlName="address"></textarea>
 							</div>
 						</div>
 
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" id="companyShippingAddressFlag" class="d-none custom-control-input">
-							<label class="d-none custom-control-label" for="companyShippingAddressFlag"></label>
+
+
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="vendorAddressPinCode">Pin Code</label>
+							<div class="col-sm-8">
+								<input type="text" id="vendorAddressPinCode" class="form-control" formControlName="pincode">
+							</div>
 						</div>
 
-					</div>
 
 					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientNotes">Notes</label>
+						<label class="col-sm-4 col-form-label" for="vendorNotes">Notes</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" id="clientNotes" rows="3"></textarea>
+							<textarea class="form-control" id="vendorNotes" rows="3" formControlName="notes"></textarea>
 						</div>
 					</div>
 
@@ -121,8 +123,9 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="submit" class="btn button-save">Save</button>
-				<button type="submit" class="btn button-cancel">Cancel</button>
+				<button type="button" *ngIf="!vendor.id" (click)="setVendor()" class="btn button-save">Save</button>
+				<button type="button" *ngIf="vendor.id" (click)="updateVendor()" class="btn button-save">Update</button>
+				<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
 			</div>
 
 		</form>

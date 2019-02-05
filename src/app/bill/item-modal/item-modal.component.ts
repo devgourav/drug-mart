@@ -12,31 +12,32 @@ import { NgbModalConfig, NgbModal,NgbActiveModal } from '@ng-bootstrap/ng-bootst
 })
 export class ItemModalComponent implements OnInit {
 
+  billItem: BillItem;
+
   billItemForm = new FormGroup({
     itemName: new FormControl(''),
-    itemPackType: new FormControl(''),
+    packType: new FormControl(''),
     itemHSN: new FormControl(''),
-    itemMfg: new FormControl(''),
-    itemBatchNumber: new FormControl(''),
-    itemExpiryDate: new FormControl(''),
-    itemQuantity: new FormControl(''),
-    itemRate: new FormControl(''),
+    manufacturer: new FormControl(''),
+    batchNumber: new FormControl(''),
+    expiryDate: new FormControl(''),
+    quantity: new FormControl(''),
+    rate: new FormControl(''),
     itemMRP: new FormControl(''),
-    itemTax1: new FormControl(''),
-    itemTax2: new FormControl(''),
-    itemDiscount: new FormControl(''),
-    itemOffer: new FormControl('')
+    tax1: new FormControl(''),
+    tax2: new FormControl(''),
+    discount: new FormControl(''),
+    offer: new FormControl('')
 
   });
 
-  public billItem: BillItem;
 
-  constructor(config: NgbModalConfig, private modalService: NgbModal,
+  constructor(private modalService: NgbModal,
     private activeModal: NgbActiveModal) {
     this.billItem = new BillItem();
   }
 
-  @Output() addItemEvent: EventEmitter<any> = new EventEmitter();
+  @Output() addItemEvent: EventEmitter<BillItem> = new EventEmitter();
 
 
 
