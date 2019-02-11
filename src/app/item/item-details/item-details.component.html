@@ -12,7 +12,7 @@
 			<div class="new-item-area col">
 				<a routerLink="New Item"><button class="btn button-save">New Item</button></a>
 				<button class="btn button-filter">Export</button>
-				<button class="btn button-filter">Import</button>
+				<!-- <button class="btn button-filter">Import</button> -->
 			</div>
 		</div>
 	</div>
@@ -29,13 +29,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="let row of rows">
-					<td *ngFor="let itemDetailsTableColumn of itemDetailsTableColumns">
-						<span id={{itemDetailsTableColumn}}></span>
-					</td>
+				<tr *ngFor="let item of items">
+					<td>{{ item?.name }}</td>
+					<td>{{ item?.manufacturer }}</td>
+					<td>{{ item?.HSNCode }}</td>
+					<td>{{ item?.packType }}</td>
+					<td>{{ item?.purchaseCost }}</td>
+					<td>{{ item?.saleCost }}</td>
+					<td>{{ item?.quantity }}</td>
 					<td>
-						<button type="button" class="btn button-primary">View/Edit</button>
-						<button type="button" class="btn button-cancel">Delete</button>
+						<button type="button" class="btn button-primary" (click)="editItem(item.id)">View/Edit</button>
+						<button type="button" class="btn button-cancel" (click)="deleteItem(item.id)">Delete</button>
 					</td>
 				</tr>
 
