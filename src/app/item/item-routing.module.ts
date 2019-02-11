@@ -14,6 +14,10 @@ const routes: Routes = [
 		path: 'Items/New Item',
 		component: NewItemComponent
 	},
+	{
+		path: 'Items/New Item/:id',
+		component: NewItemComponent
+	}
 ];
 
 @NgModule({
