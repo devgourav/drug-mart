@@ -9,6 +9,8 @@ import { VendorService } from '../../service/vendor.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
+// TODO: Add A save/Update prompt
+
 
 
 @Component({
@@ -20,6 +22,7 @@ export class NewBillComponent implements OnInit {
 
   bill: Bill;
   billItems: BillItem[] = [];
+  billId: string;
   itemTax: number;
   itemAmount: number;
   discountAmount: number;
@@ -33,11 +36,13 @@ export class NewBillComponent implements OnInit {
 
   response: any;
   billItem: BillItem;
+  defaultVendorId: string;
 
   constructor(private location: Location,private modalService: NgbModal,
     private _billService: BillService,private _vendorService: VendorService,
     private route: ActivatedRoute) {
     this.bill = new Bill();
+    this.billId = "";
     this.billItem = new BillItem();
     this.itemTax = 0;
     this.itemAmount = 0;
@@ -48,9 +53,16 @@ export class NewBillComponent implements OnInit {
     this.totalDiscount = 0;
     this.netAmount = 0;
     this.vendors=[];
+    this.defaultVendorId = "";
   }
   ngOnInit() {
     this.populateVendorDropDown();
+    this.route.paramMap.subscribe(params => {
+      this.billId = params.get('id');
+      if(this.billId){
+        this.getBill(params.get('id'));
+      }
+    });
   }
 
   billInputForm = new FormGroup({
@@ -63,6 +75,19 @@ export class NewBillComponent implements OnInit {
 
   billTableHeaders = ['Particular', 'Manufacturer', 'Quantity', 'Rate', 'Amount',
     'Discount', 'Tax','Offers','M.R.P','Actions']
+
+  editItemModal(billItem: BillItem) {
+    const modalRef = this.modalService.open(ItemModalComponent,{size: 'lg',keyboard: true});
+    if(billItem){
+      modalRef.componentInstance.billItem = billItem
+    }
+    modalRef.componentInstance.editItemEvent.subscribe((response) => {
+      this.billItem = response;
+      //// TODO: Use Itm id
+      this.calculateItemCosts();
+      this.calculateTotalCosts();
+    });
+  }
 
   openItemModal() {
     const modalRef = this.modalService.open(ItemModalComponent,{size: 'lg',keyboard: true});
@@ -106,14 +131,54 @@ export class NewBillComponent implements OnInit {
   }
 
   populateVendorDropDown(){
-    this.vendors = this._vendorService.getVendors();
-    console.warn(this.vendors);
-    for(let vendor of this.vendors){
-      console.warn(vendor.name);
-    }
+    this._vendorService.getVendors()
+    .subscribe((response)=>{
+      this.vendors = response;
+    })
   }
 
   closeClicked(){
     this.location.back();
+  }
+
+  getBill(billId: string){
+    this._billService.getBillById(billId)
+    .subscribe((response) => {
+      this.bill = response;
+      this.billItems = this.bill.billItems;
+      this.populateBillData();
+      console.log(this.bill);
+    })
+  }
+
+  setBill(){
+    this.bill = Object.assign({}, this.billInputForm.value);
+    this.bill.billItems = this.billItems;
+    this._billService.setBill(this.bill)
+    .subscribe((response)=> {
+      this.location.back()
+    });
+
+  }
+
+  deleteItem(billItem: BillItem){
+    const index: number = this.bill.billItems.indexOf(billItem);
+    if(index !== -1){
+      this.bill.billItems.splice(index,1);
+    }
+  }
+
+  editItem(billItem: BillItem){
+    this.editItemModal(billItem);
+  }
+
+  populateBillData(){
+    this.billInputForm.setValue({
+      vendorName:this.bill.vendorName,
+      billedDate:this.bill.billedDate,
+      orderNote:this.bill.orderNote,
+      amountPaid:this.bill.amountPaid,
+      paymentMethod:this.bill.paymentMethod
+    });
   }
 }

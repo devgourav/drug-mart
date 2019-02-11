@@ -1,5 +1,6 @@
 export class BillItem {
   id: string;
+  itemId:string;
   itemName: string;
   packType: string;
   itemHSN: string;

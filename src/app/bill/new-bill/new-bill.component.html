@@ -46,8 +46,8 @@
 							<td scope="col">{{ billItem.offer }}</td>
 							<td scope="col">{{ billItem.itemMRP }}</td>
 							<td>
-								<button type="button" class="btn button-primary">View/Edit</button>
-								<button type="button" class="btn button-cancel">Delete</button>
+								<button type="button" class="btn button-primary" (click)="editItem(billItem)">View/Edit</button>
+								<button type="button" class="btn button-cancel" (click)="deleteItem(billItem)">Delete</button>
 							</td>
 						</tr>
 					</tbody>
@@ -98,7 +98,7 @@
 					</div>
 					<div class="col payment-details">
 						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="billAmountPaid">Amount Paid</label>
+							<label class="col-sm-4 col-form-label" for="amountPaid">Amount Paid</label>
 							<div class="col-sm-3">
 								<input type="number" class="form-control" formControlName="amountPaid" id="billAmountPaid">
 							</div>
@@ -116,7 +116,7 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="submit" id="billSaveButton" class="btn button-save" (click)="saveBill()" >Save</button>
+				<button type="submit" id="billSaveButton" class="btn button-save" (click)="setBill()" >Save</button>
 				<button type="button" id="billCancelButton" class="btn button-cancel" (click)="closeClicked()">Cancel</button>
 			</div>
 		</form>
