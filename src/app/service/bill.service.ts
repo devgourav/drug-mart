@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Bill } from '../model/billItem.model';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
+import { throwError, Observable } from 'rxjs';
+import { catchError, retry } from 'rxjs/operators';
 
-
+const billURL = "http://localhost:3000/bills/";
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json'
+  })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -10,33 +17,58 @@ import { HttpClient } from "@angular/common/http";
 export class BillService {
   billList: Bill[];
   response: any;
-  private billURL="http://localhost:3000/bills/";
 
   constructor(private http: HttpClient) {
     this.billList = [];
   }
 
-  getBills(){
-    this.http.get<Bill[]>(this.billURL)
-    .subscribe((response)=>{
-      this.billList = response;
-    });
-    console.log(this.billList);
-    return this.billList;
+  getBills(): Observable<Bill[]> {
+    return this.http.get<Bill[]>(billURL, httpOptions)
+      .pipe(
+        retry(3),
+        catchError(this.handleError)
+      );
   }
 
-  setBill(bill: Bill){
-    this.http.post<Bill>(this.billURL,bill)
-    .subscribe((response)=>{
-      console.log(response);
-    });
+  getBillById(id: String): Observable<Bill> {
+    return this.http.get<Bill>(billURL + id, httpOptions)
+      .pipe(
+        retry(3),
+        catchError(this.handleError)
+      );
   }
 
-  deleteBill(billId: string){
-    this.http.delete(this.billURL+billId)
-    .subscribe((response)=>{
-      console.log("DeleteBill:"+response);
-    })
+  setBill(bill: Bill): Observable<any> {
+    return this.http.post<Bill>(billURL, bill, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
+
+  deleteBill(id: string) {
+    return this.http.delete(billURL + id, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  updateBill(bill: Bill): Observable<any> {
+    return this.http.post<Bill>(billURL + bill.id, bill, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      console.error('An error occurred:', error.error.message);
+    } else {
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    return throwError(
+      'Something bad happened; please try again later.');
+  };
 
 }

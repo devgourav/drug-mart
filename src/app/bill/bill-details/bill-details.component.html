@@ -37,7 +37,7 @@
 					<td scope="col">{{ bill?.orderNotes }}</td>
 					<td scope="col">{{ bill?.billAmountPaid }}</td>
 					<td>
-						<button type="button" class="btn button-primary">View/Edit</button>
+						<button type="button" class="btn button-primary" (click)="editBill(bill.id)">View/Edit</button>
 						<button type="button" class="btn button-cancel" (click)="deleteBill(bill.id)">Delete</button>
 					</td>
 				</tr>

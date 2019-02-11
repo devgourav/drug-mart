@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { HttpClient } from "@angular/common/http";
 import { Vendor } from '../../model/vendor.model';
 import { VendorService } from '../../service/vendor.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-
-
-const savePromptMsg = "Vendor has been saved.";
-const updatePromptMsg = "Vendor has been Updated.";
-
+// TODO: Add A save/Update prompt
 
 
 @Component({
@@ -91,6 +86,7 @@ export class NewVendorComponent implements OnInit {
 
   updateVendor(){
     this.vendor = Object.assign({}, this.vendorInputForm.value);
+    this.vendor.id = this.vendorId;
     this._vendorService.updateVendor(this.vendor)
     .subscribe((response)=>{
       this.location.back()
