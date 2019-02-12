@@ -8,7 +8,7 @@ import { BillRoutingModule } from './bill-routing.module';
 import { ItemModalComponent } from './item-modal/item-modal.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 

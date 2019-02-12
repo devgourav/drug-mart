@@ -10,15 +10,14 @@ export class BillItem {
   quantity: number;
   rate: number;
   itemMRP: number;
-  tax1: number;
-  tax2: number;
+  stateTax: number;
+  countryTax: number;
   discount: number;
   offer: string;
 }
 
 export class Bill {
   id: string;
-  vendorName: string;
   vendorId: string;
   billedDate: Date;
   billItems: BillItem[];

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { BillItem,Bill } from '../../model/billItem.model';
+import { BillItem, Bill } from '../../model/bill.model';
 import { Vendor } from '../../model/vendor.model';
 import { ItemModalComponent } from '../item-modal/item-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -8,6 +8,7 @@ import { BillService } from '../../service/bill.service';
 import { VendorService } from '../../service/vendor.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { Amount } from 'src/app/model/amount.model';
 
 // TODO: Add A save/Update prompt
 
@@ -20,53 +21,35 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class NewBillComponent implements OnInit {
 
-  bill: Bill;
-  billItems: BillItem[] = [];
-  billId: string;
-  itemTax: number;
-  itemAmount: number;
-  discountAmount: number;
+  bill: Bill = new Bill();
+  billItems: Array<BillItem> = new Array<BillItem>();
+  billItem: BillItem = new BillItem();
+  vendors: Vendor[] = [];
 
-  subTotalAmount: number;
-  totalTax: number;
-  totalDiscount: number;
-  netAmount: number;
-  vendors: Vendor[];
-
-
+  billId: string = "";
+  netAmount: Amount = new Amount();
+  taxRate: number;
+  discountRate: number;
   response: any;
-  billItem: BillItem;
-  defaultVendorId: string;
+  defaultVendorId: string = "";
 
-  constructor(private location: Location,private modalService: NgbModal,
-    private _billService: BillService,private _vendorService: VendorService,
+  constructor(private location: Location, private modalService: NgbModal,
+    private _billService: BillService, private _vendorService: VendorService,
     private route: ActivatedRoute) {
-    this.bill = new Bill();
-    this.billId = "";
-    this.billItem = new BillItem();
-    this.itemTax = 0;
-    this.itemAmount = 0;
-    this.discountAmount = 0;
-
-    this.subTotalAmount = 0;
-    this.totalTax = 0;
-    this.totalDiscount = 0;
-    this.netAmount = 0;
-    this.vendors=[];
-    this.defaultVendorId = "";
+    this.netAmount = new Amount();
   }
   ngOnInit() {
     this.populateVendorDropDown();
     this.route.paramMap.subscribe(params => {
       this.billId = params.get('id');
-      if(this.billId){
+      if (this.billId) {
         this.getBill(params.get('id'));
       }
     });
   }
 
   billInputForm = new FormGroup({
-    vendorName: new FormControl(''),
+    vendorId: new FormControl(''),
     billedDate: new FormControl(''),
     orderNote: new FormControl(''),
     amountPaid: new FormControl(''),
@@ -74,111 +57,125 @@ export class NewBillComponent implements OnInit {
   });
 
   billTableHeaders = ['Particular', 'Manufacturer', 'Quantity', 'Rate', 'Amount',
-    'Discount', 'Tax','Offers','M.R.P','Actions']
+    'Discount', 'Tax', 'Total', 'Offers', 'M.R.P', 'Actions']
 
-  editItemModal(billItem: BillItem) {
-    const modalRef = this.modalService.open(ItemModalComponent,{size: 'lg',keyboard: true});
-    if(billItem){
+  openItemModal() {
+    const modalRef = this.modalService.open(ItemModalComponent, { size: 'lg', keyboard: true });
+    modalRef.componentInstance.addItemEvent.subscribe((response) => {
+      this.billItem = response;
+      this.billItems.push(this.billItem);
+      this.calculateTotalCosts(this.billItems);
+    });
+  }
+
+  getSubAmount(rate: number,qty: number): number{
+    return rate*qty;
+  }
+
+  // getTaxAmount(rate: number,qty: number,taxRate: number){
+  //   return taxRate*0.1*this.getSubAmount(rate,qty);
+  // }
+  //
+  // getDiscountAmount(rate: number,qty: number,discountRate: number){
+  //   return discountRate*0.1*this.getSubAmount(rate,qty);
+  // }
+
+  getTotalAmount(rate: number,qty: number,discountRate: number,taxRate: number){
+    return (1+(taxRate-discountRate)*0.01)*this.getSubAmount(rate,qty);
+  }
+
+  calculateTotalCosts(billItems: BillItem[]) {
+    this.netAmount = new Amount();
+    this.taxRate = this.discountRate = 0;
+
+    for (let billItem of billItems) {
+      this.taxRate = billItem.stateTax + billItem.countryTax;
+      this.discountRate = billItem.discount;
+
+      this.netAmount.subAmount += (billItem.rate*billItem.quantity);
+      this.netAmount.taxAmount += (this.taxRate*0.01*this.netAmount.subAmount);
+      this.netAmount.discountAmount += (this.discountRate * 0.01 * this.netAmount.subAmount);
+      this.netAmount.totalAmount += this.netAmount.subAmount + this.netAmount.taxAmount
+        - this.netAmount.discountAmount;
+
+    }
+  }
+
+  populateVendorDropDown() {
+    this._vendorService.getVendors()
+      .subscribe((response) => {
+        this.vendors = response;
+      })
+  }
+
+  closeClicked() {
+    this.location.back();
+  }
+
+  getBill(billId: string) {
+    this._billService.getBillById(billId)
+      .subscribe((response) => {
+        this.bill = response;
+        this.billItems = this.bill.billItems;
+        this.populateBillData();
+        console.warn(this.billItems);
+        this.calculateTotalCosts(this.billItems);
+      })
+  }
+
+  setBill() {
+    this.bill = Object.assign({}, this.billInputForm.value);
+    this.bill.billItems = this.billItems;
+    this._billService.setBill(this.bill)
+      .subscribe((response) => {
+        this.location.back()
+      });
+  }
+
+  updateBill() {
+    this.bill = Object.assign({}, this.billInputForm.value);
+    this.bill.billItems = this.billItems;
+    this.bill.id = this.billId;
+    this._billService.updateBill(this.bill)
+      .subscribe((response) => {
+        this.location.back()
+      });
+  }
+
+  deleteItem(billItem: BillItem) {
+    const index: number = this.bill.billItems.indexOf(billItem);
+    if (index !== -1) {
+      this.bill.billItems.splice(index, 1);
+    }
+  }
+
+  editItem(billItem: BillItem) {
+    const modalRef = this.modalService.open(ItemModalComponent, { size: 'lg', keyboard: true });
+    if (billItem) {
       modalRef.componentInstance.billItem = billItem
     }
     modalRef.componentInstance.editItemEvent.subscribe((response) => {
       this.billItem = response;
-      //// TODO: Use Itm id
-      this.calculateItemCosts();
-      this.calculateTotalCosts();
+      for (let billItem of this.billItems) {
+        if (this.billItem.itemId == billItem.itemId) {
+          const index: number = this.billItems.indexOf(billItem);
+          if (index !== -1) {
+            this.billItems.splice(index, 1);
+            this.billItems.push(this.billItem);
+          }
+        }
+      }
+      this.calculateTotalCosts(this.billItems);
     });
   }
 
-  openItemModal() {
-    const modalRef = this.modalService.open(ItemModalComponent,{size: 'lg',keyboard: true});
-    modalRef.componentInstance.addItemEvent.subscribe((response) => {
-      this.billItem = response;
-      this.billItems.push(this.billItem);
-      this.calculateItemCosts();
-      this.calculateTotalCosts();
-    });
-  }
-
-  saveBill(){
-    this.bill = Object.assign({}, this.billInputForm.value);
-    this.bill.billItems = this.billItems;
-    this._billService.setBill(this.bill);
-    this.location.back();
-  }
-
-  calculateItemCosts(){
-    this.itemAmount = (this.billItem.rate*1*this.billItem.quantity*1);
-    this.itemTax = (this.billItem.tax1*1 + this.billItem.tax2*1)*0.01*this.itemAmount;
-    this.discountAmount = this.billItem.discount*0.01*this.itemAmount;
-  }
-
-  calculateTotalCosts(){
-    for(let billItem of this.billItems){
-      this.itemAmount = 0;
-      this.itemTax = 0;
-      this.discountAmount = 0;
-
-      this.itemAmount = (billItem.rate*1*billItem.quantity*1);
-      this.itemTax = (this.billItem.tax1*1 + this.billItem.tax2*1)*0.01*this.itemAmount;
-      this.discountAmount = this.billItem.discount*0.01*this.itemAmount;
-
-      this.subTotalAmount += this.itemAmount;
-      this.totalTax += this.itemTax;
-      this.totalDiscount += this.discountAmount;
-      this.netAmount += this.subTotalAmount + this.totalTax - this.totalDiscount;
-
-    }
-  }
-
-  populateVendorDropDown(){
-    this._vendorService.getVendors()
-    .subscribe((response)=>{
-      this.vendors = response;
-    })
-  }
-
-  closeClicked(){
-    this.location.back();
-  }
-
-  getBill(billId: string){
-    this._billService.getBillById(billId)
-    .subscribe((response) => {
-      this.bill = response;
-      this.billItems = this.bill.billItems;
-      this.populateBillData();
-      console.log(this.bill);
-    })
-  }
-
-  setBill(){
-    this.bill = Object.assign({}, this.billInputForm.value);
-    this.bill.billItems = this.billItems;
-    this._billService.setBill(this.bill)
-    .subscribe((response)=> {
-      this.location.back()
-    });
-
-  }
-
-  deleteItem(billItem: BillItem){
-    const index: number = this.bill.billItems.indexOf(billItem);
-    if(index !== -1){
-      this.bill.billItems.splice(index,1);
-    }
-  }
-
-  editItem(billItem: BillItem){
-    this.editItemModal(billItem);
-  }
-
-  populateBillData(){
+  populateBillData() {
     this.billInputForm.setValue({
-      vendorName:this.bill.vendorName,
-      billedDate:this.bill.billedDate,
-      orderNote:this.bill.orderNote,
-      amountPaid:this.bill.amountPaid,
-      paymentMethod:this.bill.paymentMethod
+      vendorId: this.bill.vendorId,
+      billedDate: this.bill.billedDate,
+      orderNote: this.bill.orderNote,
+      amountPaid: this.bill.amountPaid,
+      paymentMethod: this.bill.paymentMethod
     });
   }
 }

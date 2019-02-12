@@ -1,7 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { BillItem } from '../../model/billItem.model';
+import { BillItem } from '../../model/bill.model';
 import { NgbModalConfig, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ItemService } from '../../service/item.service';
+import { Item } from 'src/app/model/item.model';
+
+
 
 
 @Component({
@@ -11,9 +15,13 @@ import { NgbModalConfig, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-boots
 })
 export class ItemModalComponent implements OnInit {
 
-  @Input() billItem: BillItem;
+  @Input() billItem: BillItem = new BillItem();
   @Output() addItemEvent: EventEmitter<BillItem> = new EventEmitter();
   @Output() editItemEvent: EventEmitter<BillItem> = new EventEmitter();
+
+  items: Item[] = [];
+  item: Item = new Item();
+  itemId: string = "";
 
   billItemForm = new FormGroup({
     itemName: new FormControl(''),
@@ -25,8 +33,8 @@ export class ItemModalComponent implements OnInit {
     quantity: new FormControl(''),
     rate: new FormControl(''),
     itemMRP: new FormControl(''),
-    tax1: new FormControl(''),
-    tax2: new FormControl(''),
+    stateTax: new FormControl(''),
+    countryTax: new FormControl(''),
     discount: new FormControl(''),
     offer: new FormControl('')
 
@@ -34,11 +42,11 @@ export class ItemModalComponent implements OnInit {
 
 
   constructor(private modalService: NgbModal,
-    private activeModal: NgbActiveModal) {
-    this.billItem = new BillItem();
+    private activeModal: NgbActiveModal, private _itemService: ItemService) {
   }
 
   ngOnInit() {
+    this.populateItemDropdown();
     if (this.billItem.itemName!="" && this.billItem.itemName!=null) {
       console.warn("BillItem:" + this.billItem);
       this.populateBillItem();
@@ -68,12 +76,42 @@ export class ItemModalComponent implements OnInit {
       quantity: this.billItem.quantity,
       rate: this.billItem.rate,
       itemMRP: this.billItem.itemMRP,
-      tax1: this.billItem.tax1,
-      tax2: this.billItem.tax2,
+      stateTax: +this.billItem.stateTax,
+      countryTax: +this.billItem.countryTax,
       discount: this.billItem.discount,
       offer: this.billItem.offer
     });
+  }
 
+  populateItemDropdown(){
+    this._itemService.getItems()
+    .subscribe((response)=>{
+      this.items = response;
+    })
+  }
+
+  populateItemModal(event: any){
+    this.itemId = event.target.value;
+    for(let item of this.items){
+      if(item.id == this.itemId){
+        this.item = item;
+      }
+    }
+    this.billItemForm.setValue({
+      itemName: this.item.name,
+      packType: this.item.packType,
+      itemHSN: this.item.HSNCode,
+      manufacturer: this.item.manufacturer,
+      itemMRP: this.item.itemMRP,
+      batchNumber: "",
+      expiryDate: "",
+      quantity: null,
+      rate: this.item.saleCost,
+      stateTax: null,
+      countryTax: null,
+      discount: null,
+      offer: ""
+    });
   }
 
 

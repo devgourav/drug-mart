@@ -30,12 +30,12 @@
 			<tbody>
 				<tr *ngFor="let bill of bills">
 					<td scope="col">{{ bill?.billedDate }}</td>
-					<td scope="col">{{ bill?.vendorName }}</td>
-					<td scope="col">{{ bill?.totalAmount }}</td>
-					<td scope="col">{{ bill?.totalTax }}</td>
-					<td scope="col">{{ bill?.totalDiscount }}</td>
-					<td scope="col">{{ bill?.orderNotes }}</td>
-					<td scope="col">{{ bill?.billAmountPaid }}</td>
+					<td scope="col">{{ vendorName }}</td>
+					<td scope="col">{{ totalAmount }}</td>
+					<td scope="col">{{ totalTax }}</td>
+					<td scope="col">{{ totalDiscount }}</td>
+					<td scope="col">{{ bill?.orderNote }}</td>
+					<td scope="col">{{ bill?.amountPaid }}</td>
 					<td>
 						<button type="button" class="btn button-primary" (click)="editBill(bill.id)">View/Edit</button>
 						<button type="button" class="btn button-cancel" (click)="deleteBill(bill.id)">Delete</button>
