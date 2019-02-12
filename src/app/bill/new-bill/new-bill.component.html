@@ -9,7 +9,7 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
 						<div class="col-sm-5">
-							<select name="vendorName" id="vendorName" class="form-control" formControlName="vendorName">
+							<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId">
 								<option selected>Select a Vendor</option>
 								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}</option>
 							</select>
@@ -40,9 +40,11 @@
 							<td scope="col">{{ billItem.manufacturer }}</td>
 							<td scope="col">{{ billItem.quantity }}</td>
 							<td scope="col">{{ billItem.rate }}</td>
-							<td scope="col">{{ itemAmount }}</td>
-							<td scope="col">{{ discountAmount }}</td>
-							<td scope="col">{{ itemTax }}</td>
+							<td scope="col">{{ getSubAmount(billItem.rate,billItem.quantity) }}</td>
+							<td scope="col">{{ billItem.discount}}</td>
+							<td scope="col">{{ billItem.stateTax + billItem.countryTax }}</td>
+							<td scope="col">{{ getTotalAmount(billItem.rate,billItem.quantity,billItem.discount,
+								billItem.stateTax + billItem.countryTax) }}</td>
 							<td scope="col">{{ billItem.offer }}</td>
 							<td scope="col">{{ billItem.itemMRP }}</td>
 							<td>
@@ -63,11 +65,11 @@
 					<div class="col cost-details col-md-4">
 						<span class="cost-row">
 							<label class="col-sm-6" for="subTotalAmount">SubTotal:</label>
-							<span class="col-sm-6" id="subTotalAmount">{{ subTotalAmount }}</span>
+							<span class="col-sm-6" id="subTotalAmount">{{ netAmount.subAmount }}</span>
 						</span>
 						<span class="cost-row">
 							<label class="col-sm-6" for="totalTax">Tax:</label>
-							<span class="col-sm-6" id="totalTax">{{ totalTax }}</span>
+							<span class="col-sm-6" id="totalTax">{{ netAmount.taxAmount }}</span>
 						</span>
 						<!-- <span class="cost-row">
 							<label class="col-sm-6" for="shippingCharge">Shipping Charge:</label>
@@ -75,7 +77,7 @@
 						</span> -->
 						<span class="cost-row">
 							<label class="col-sm-6" for="discount">Discount:</label>
-							<span class="col-sm-6" id="discount">{{ totalDiscount }}</span>
+							<span class="col-sm-6" id="discount">{{ netAmount.discountAmount }}</span>
 						</span>
 						<!-- <span class="cost-row">
 							<label class="col-sm-6" for="priceRoundedOff">Rounded Off:</label>
@@ -83,7 +85,7 @@
 						</span> -->
 						<span class="cost-row">
 							<label class="col-sm-6" for="netAmount">Net Amount:</label>
-							<span class="col-sm-6" id="netAmount">{{ netAmount }}</span>
+							<span class="col-sm-6" id="netAmount">{{ netAmount.totalAmount }}</span>
 						</span>
 					</div>
 				</div>
@@ -116,7 +118,8 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="submit" id="billSaveButton" class="btn button-save" (click)="setBill()" >Save</button>
+				<button type="submit" *ngIf="bill.id" id="billUpdateButton" class="btn button-save" (click)="updateBill()" >Update</button>
+				<button type="submit" *ngIf="!bill.id" id="billSaveButton" class="btn button-save" (click)="setBill()" >Save</button>
 				<button type="button" id="billCancelButton" class="btn button-cancel" (click)="closeClicked()">Cancel</button>
 			</div>
 		</form>

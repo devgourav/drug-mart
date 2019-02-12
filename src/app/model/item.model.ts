@@ -5,9 +5,9 @@ export class Item{
   description: string;
   HSNCode: string;
   packType: string;
-  MRP: number;
   manufacturer: string;
   purchaseCost: number;
+  itemMRP: number;
   saleCost: number;
   saleDiscount: number;
   saleOffers: string;

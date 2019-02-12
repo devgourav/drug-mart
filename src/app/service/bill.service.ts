@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Bill } from '../model/billItem.model';
+import { Bill } from '../model/bill.model';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { throwError, Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
@@ -30,7 +30,7 @@ export class BillService {
       );
   }
 
-  getBillById(id: String): Observable<Bill> {
+  getBillById(id: string): Observable<Bill> {
     return this.http.get<Bill>(billURL + id, httpOptions)
       .pipe(
         retry(3),
@@ -53,7 +53,7 @@ export class BillService {
   }
 
   updateBill(bill: Bill): Observable<any> {
-    return this.http.post<Bill>(billURL + bill.id, bill, httpOptions)
+    return this.http.put<Bill>(billURL + bill.id, bill, httpOptions)
       .pipe(
         catchError(this.handleError)
       );

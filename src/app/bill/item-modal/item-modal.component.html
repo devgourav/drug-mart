@@ -11,6 +11,16 @@
       <div class="col">
 
         <div class="form-group row">
+          <label class="col-sm-4 col-form-label" for="itemName">Item List</label>
+          <div class="col-sm-8">
+            <select name="itemPackType" id="itemPackType" class="form-control" (change)="populateItemModal($event)">
+              <option value="default" selected>Select Item</option>
+              <option *ngFor="let item of items" value="{{ item.id }}">{{ item.name }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="itemName">Particular</label>
           <div class="col-sm-8">
             <input type="text" class="form-control" id="itemName" formControlName="itemName">
@@ -20,9 +30,7 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="itemPackType">Pack type</label>
           <div class="col-sm-8">
-            <select name="itemPackType" id="itemPackType" class="form-control" formControlName="packType">
-              <option value="default" selected>Select Pack Type</option>
-            </select>
+            <input type="text" class="form-control" id="packType" formControlName="packType">
           </div>
         </div>
 
@@ -36,9 +44,7 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="itemMfg">Manufacturer</label>
           <div class="col-sm-8">
-            <select name="itemMfg" id="itemMfg" class="form-control" formControlName="manufacturer">
-              <option value="default" selected>Select Manufacturer</option>
-            </select>
+            <input type="text" class="form-control" id="itemMfg" formControlName="manufacturer">
           </div>
         </div>
 
@@ -82,8 +88,8 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="itemTax1">SGST</label>
           <div class="col-sm-8">
-            <select name="itemTax1" id="itemTax1" class="form-control" formControlName="tax1">
-              <option value = 6 selected>6%</option>
+            <select name="itemTax1" id="itemTax1" class="form-control" formControlName="stateTax">
+              <option [ngValue]="6" selected>6%</option>
             </select>
           </div>
         </div>
@@ -91,8 +97,8 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="itemTax2">CGST</label>
           <div class="col-sm-8">
-            <select name="itemTax2" id="itemTax2" class="form-control" formControlName="tax2">
-              <option value = 6 selected>6%</option>
+            <select name="itemTax2" id="itemTax2" class="form-control" formControlName="countryTax">
+              <option [ngValue]="6" selected>6%</option>
             </select>
           </div>
         </div>

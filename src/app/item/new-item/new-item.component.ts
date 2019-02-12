@@ -39,6 +39,7 @@ export class NewItemComponent implements OnInit {
     quantity: new FormControl(''),
     HSNCode: new FormControl(''),
     purchaseCost: new FormControl(''),
+    itemMRP: new FormControl(''),
     saleCost: new FormControl(''),
     saleDiscount: new FormControl(''),
     saleOffers: new FormControl('')
@@ -63,6 +64,7 @@ export class NewItemComponent implements OnInit {
       HSNCode: this.item.HSNCode,
       purchaseCost: this.item.purchaseCost,
       saleCost: this.item.saleCost,
+      itemMRP: this.item.itemMRP,
       saleDiscount: this.item.saleDiscount,
       saleOffers: this.item.saleOffers
     })
