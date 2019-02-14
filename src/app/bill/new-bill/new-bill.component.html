@@ -9,7 +9,8 @@
 					<div class="form-group row">
 						<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
 						<div class="col-sm-5">
-							<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId">
+							<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId"
+							(change)="setVendorName($event)">
 								<option selected>Select a Vendor</option>
 								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}</option>
 							</select>

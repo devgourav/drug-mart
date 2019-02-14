@@ -25,6 +25,7 @@ export class ItemModalComponent implements OnInit {
 
   billItemForm = new FormGroup({
     itemName: new FormControl(''),
+    itemId: new FormControl(''),
     packType: new FormControl(''),
     itemHSN: new FormControl(''),
     manufacturer: new FormControl(''),
@@ -68,6 +69,7 @@ export class ItemModalComponent implements OnInit {
   populateBillItem() {
     this.billItemForm.setValue({
       itemName: this.billItem.itemName,
+      itemId: this.billItem.itemId,
       packType: this.billItem.packType,
       itemHSN: this.billItem.itemHSN,
       manufacturer: this.billItem.manufacturer,
@@ -99,6 +101,7 @@ export class ItemModalComponent implements OnInit {
     }
     this.billItemForm.setValue({
       itemName: this.item.name,
+      itemId:this.item.id,
       packType: this.item.packType,
       itemHSN: this.item.HSNCode,
       manufacturer: this.item.manufacturer,

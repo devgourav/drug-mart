@@ -13,7 +13,8 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="itemName">Item List</label>
           <div class="col-sm-8">
-            <select name="itemPackType" id="itemPackType" class="form-control" (change)="populateItemModal($event)">
+            <select name="itemPackType" id="itemPackType" class="form-control"
+            (change)="populateItemModal($event)" formControlName="itemId">
               <option value="default" selected>Select Item</option>
               <option *ngFor="let item of items" value="{{ item.id }}">{{ item.name }}</option>
             </select>

@@ -19,6 +19,7 @@ export class BillItem {
 export class Bill {
   id: string;
   vendorId: string;
+  vendorName: string;
   billedDate: Date;
   billItems: BillItem[];
   totalTax: number;

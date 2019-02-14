@@ -31,7 +31,7 @@ export class NewBillComponent implements OnInit {
   taxRate: number;
   discountRate: number;
   response: any;
-  defaultVendorId: string = "";
+  subVendor = {vendorId:"",vendorName: ""};
 
   constructor(private location: Location, private modalService: NgbModal,
     private _billService: BillService, private _vendorService: VendorService,
@@ -68,8 +68,8 @@ export class NewBillComponent implements OnInit {
     });
   }
 
-  getSubAmount(rate: number,qty: number): number{
-    return rate*qty;
+  getSubAmount(rate: number, qty: number): number {
+    return rate * qty;
   }
 
   // getTaxAmount(rate: number,qty: number,taxRate: number){
@@ -80,8 +80,8 @@ export class NewBillComponent implements OnInit {
   //   return discountRate*0.1*this.getSubAmount(rate,qty);
   // }
 
-  getTotalAmount(rate: number,qty: number,discountRate: number,taxRate: number){
-    return (1+(taxRate-discountRate)*0.01)*this.getSubAmount(rate,qty);
+  getTotalAmount(rate: number, qty: number, discountRate: number, taxRate: number) {
+    return (1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty);
   }
 
   calculateTotalCosts(billItems: BillItem[]) {
@@ -92,8 +92,8 @@ export class NewBillComponent implements OnInit {
       this.taxRate = billItem.stateTax + billItem.countryTax;
       this.discountRate = billItem.discount;
 
-      this.netAmount.subAmount += (billItem.rate*billItem.quantity);
-      this.netAmount.taxAmount += (this.taxRate*0.01*this.netAmount.subAmount);
+      this.netAmount.subAmount += (billItem.rate * billItem.quantity);
+      this.netAmount.taxAmount += (this.taxRate * 0.01 * this.netAmount.subAmount);
       this.netAmount.discountAmount += (this.discountRate * 0.01 * this.netAmount.subAmount);
       this.netAmount.totalAmount += this.netAmount.subAmount + this.netAmount.taxAmount
         - this.netAmount.discountAmount;
@@ -123,8 +123,16 @@ export class NewBillComponent implements OnInit {
       })
   }
 
+  setVendorName(event: any){
+    this.subVendor.vendorId = event.target.value;
+    this._vendorService.getVendorById(this.subVendor.vendorId)
+    .subscribe((response)=>{
+      this.subVendor.vendorName = response.name;
+    })
+  }
+
   setBill() {
-    this.bill = Object.assign({}, this.billInputForm.value);
+    this.bill = Object.assign({}, this.billInputForm.value,this.subVendor);
     this.bill.billItems = this.billItems;
     this._billService.setBill(this.bill)
       .subscribe((response) => {
@@ -133,7 +141,7 @@ export class NewBillComponent implements OnInit {
   }
 
   updateBill() {
-    this.bill = Object.assign({}, this.billInputForm.value);
+    this.bill = Object.assign({}, this.billInputForm.value,this.subVendor);
     this.bill.billItems = this.billItems;
     this.bill.id = this.billId;
     this._billService.updateBill(this.bill)
@@ -159,10 +167,12 @@ export class NewBillComponent implements OnInit {
       for (let billItem of this.billItems) {
         if (this.billItem.itemId == billItem.itemId) {
           const index: number = this.billItems.indexOf(billItem);
-          if (index !== -1) {
-            this.billItems.splice(index, 1);
-            this.billItems.push(this.billItem);
-          }
+          // if (index !== -1) {
+          //   this.billItems.splice(index, 1);
+          //   this.billItems.push(this.billItem);
+          // }
+          this.billItems[index] = this.billItem;
+          break;
         }
       }
       this.calculateTotalCosts(this.billItems);
