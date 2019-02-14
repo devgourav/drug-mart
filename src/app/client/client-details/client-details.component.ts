@@ -4,7 +4,7 @@ import { ClientService } from '../../service/client.service';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
-const confirmMsg = "Do you want to delete this vendor?";
+const confirmMsg = "Do you want to delete this client?";
 
 
 @Component({

@@ -2,16 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { BillItem, Bill } from '../../model/bill.model';
 import { Vendor } from '../../model/vendor.model';
-import { ItemModalComponent } from '../item-modal/item-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BillService } from '../../service/bill.service';
 import { VendorService } from '../../service/vendor.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Amount } from 'src/app/model/amount.model';
+import { BillItemModalComponent } from '../billItem-modal/billItem-modal.component';
 
 // TODO: Add A save/Update prompt
-
 
 
 @Component({
@@ -60,7 +59,7 @@ export class NewBillComponent implements OnInit {
     'Discount', 'Tax', 'Total', 'Offers', 'M.R.P', 'Actions']
 
   openItemModal() {
-    const modalRef = this.modalService.open(ItemModalComponent, { size: 'lg', keyboard: true });
+    const modalRef = this.modalService.open(BillItemModalComponent, { size: 'lg', keyboard: true });
     modalRef.componentInstance.addItemEvent.subscribe((response) => {
       this.billItem = response;
       this.billItems.push(this.billItem);
@@ -158,7 +157,7 @@ export class NewBillComponent implements OnInit {
   }
 
   editItem(billItem: BillItem) {
-    const modalRef = this.modalService.open(ItemModalComponent, { size: 'lg', keyboard: true });
+    const modalRef = this.modalService.open(BillItemModalComponent, { size: 'lg', keyboard: true });
     if (billItem) {
       modalRef.componentInstance.billItem = billItem
     }
