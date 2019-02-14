@@ -1,62 +1,62 @@
 import { Injectable } from '@angular/core';
-import { Bill } from '../model/bill.model';
+import { Client } from '../model/client.model';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 import { throwError, Observable } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-const billURL = "http://localhost:3000/bills/";
+
+const clientURL = "http://localhost:3000/clients/";
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
   })
 };
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class BillService {
-  billList: Bill[];
+export class ClientService {
   response: any;
 
   constructor(private http: HttpClient) {
-    this.billList = [];
   }
 
-  getBills(): Observable<Bill[]> {
-    return this.http.get<Bill[]>(billURL, httpOptions)
+  getClients(): Observable<Client[]> {
+    return this.http.get<Client[]>(clientURL, httpOptions)
       .pipe(
         retry(3),
         catchError(this.handleError)
       );
   }
 
-  getBillById(id: string): Observable<Bill> {
-    return this.http.get<Bill>(billURL + id, httpOptions)
+  getClientById(id: string): Observable<Client> {
+    return this.http.get<Client>(clientURL + id, httpOptions)
       .pipe(
         retry(3),
         catchError(this.handleError)
       );
   }
 
-  setBill(bill: Bill): Observable<any> {
-    return this.http.post<Bill>(billURL, bill, httpOptions)
+  setClient(client: Client): Observable<any> {
+    return this.http.post<Client>(clientURL, client, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  deleteBill(id: string): Observable<any> {
-    return this.http.delete(billURL + id, httpOptions)
+  deleteClient(id: string): Observable<{}> {
+    return this.http.delete(clientURL + id, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  updateBill(bill: Bill): Observable<any> {
-    return this.http.put<Bill>(billURL + bill.id, bill, httpOptions)
+  updateClient(client: Client): Observable<any> {
+    return this.http.put(clientURL + client.id, client, httpOptions)
       .pipe(
         catchError(this.handleError)
-      );
+      )
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -70,5 +70,4 @@ export class BillService {
     return throwError(
       'Something bad happened; please try again later.');
   };
-
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Bill } from '../../model/bill.model';
+import { Bill, BillItem } from '../../model/bill.model';
 import { BillService } from '../../service/bill.service';
 import { Router } from '@angular/router';
-import { VendorService } from 'src/app/service/vendor.service';
+import { Amount } from 'src/app/model/amount.model';
+import { Vendor } from 'src/app/model/vendor.model';
 
 
 const confirmMsg = "Do you want to delete this Bill?";
@@ -16,16 +17,18 @@ const confirmMsg = "Do you want to delete this Bill?";
 })
 export class BillDetailsComponent implements OnInit {
   bills: Bill[] = [];
-  vendorName: string = "";
-  totalAmount:number = null;
-  totalTax:number = null;
-  totalDiscount:number = null;
+  vendor: Vendor = new Vendor();
 
-  constructor(private _billService: BillService, private router: Router,
-  private _vendorService: VendorService) {
+  taxRate: number;
+  discountRate: number;
+  billAmount: Amount;
+  response:any;
+
+  constructor(private _billService: BillService, private router: Router) {
+    this.billAmount = new Amount();
   }
 
-  billDetailsTableHeaders = ['BillDate', 'Vendor', 'Amount', 'Tax', 'Discount',
+  billDetailsTableHeaders = ['BillDate', 'Vendor', 'Sub Amount', 'Tax', 'Discount', 'Total Amount',
     'Order Notes', 'Amount Paid', 'Actions'];
 
   ngOnInit() {
@@ -34,30 +37,52 @@ export class BillDetailsComponent implements OnInit {
 
   getBills() {
     this._billService.getBills()
-    .subscribe((response)=>{
-      this.bills = response;
-      console.log(this.bills);
-    })
+      .subscribe((response) => {
+        this.bills = response;
+        console.log(this.bills);
+      })
   }
 
   deleteBill(billId: string) {
     if (confirm(confirmMsg)) {
       this._billService.deleteBill(billId)
-      .subscribe(()=>{
-        this.getBills();
-      });
+        .subscribe((response) => {
+          console.log(response);
+          this.getBills();
+        });
     }
   }
 
-  editBill(billId: string){
-    this.router.navigate(['Bills/New Bill',billId]);
+  editBill(billId: string) {
+    this.router.navigate(['Bills/New Bill', billId]);
   }
 
-  getTotalAmount(bill: Bill){
-    for(let billItem of bill.billItems){
-      this.totalAmount+=billItem.rate*1*billItem.quantity*1;
-      this.totalTax+=billItem.rate*1*billItem.quantity*1;
+  getSubAmount(billItems: BillItem[]): number {
+    this.billAmount.subAmount = 0;
+    for (let billItem of billItems) {
+      this.billAmount.subAmount += (billItem.rate * billItem.quantity);
     }
+    return this.billAmount.subAmount;
   }
 
+  getTaxAmount(billItems: BillItem[]): number {
+    this.billAmount.taxAmount = 0;
+    for (let billItem of billItems) {
+      this.billAmount.taxAmount += (billItem.stateTax + billItem.countryTax) * 0.01 * this.billAmount.subAmount;
+    }
+    return this.billAmount.taxAmount;
+  }
+
+  getDiscountAmount(billItems: BillItem[]): number {
+    this.billAmount.discountAmount = 0;
+    for (let billItem of billItems) {
+      this.billAmount.discountAmount += (billItem.discount * 0.01 * this.billAmount.subAmount);
+    }
+    return this.billAmount.discountAmount;
+  }
+
+  getTotalAmount(): number {
+    return  this.billAmount.totalAmount = this.billAmount.subAmount + this.billAmount.taxAmount
+        - this.billAmount.discountAmount;
+  }
 }

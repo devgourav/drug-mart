@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewVendorComponent } from './new-vendor.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('NewVendorComponent', () => {
   let component: NewVendorComponent;
@@ -8,6 +11,7 @@ describe('NewVendorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ FormsModule,ReactiveFormsModule,RouterTestingModule,HttpClientModule ],
       declarations: [ NewVendorComponent ]
     })
     .compileComponents();
