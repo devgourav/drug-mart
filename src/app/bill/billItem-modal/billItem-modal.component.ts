@@ -10,10 +10,10 @@ import { Item } from 'src/app/model/item.model';
 
 @Component({
   selector: 'item-modal',
-  templateUrl: './item-modal.component.html',
-  styleUrls: ['./item-modal.component.scss'],
+  templateUrl: './billItem-modal.component.html',
+  styleUrls: ['./billItem-modal.component.scss'],
 })
-export class ItemModalComponent implements OnInit {
+export class BillItemModalComponent implements OnInit {
 
   @Input() billItem: BillItem = new BillItem();
   @Output() addItemEvent: EventEmitter<BillItem> = new EventEmitter();

@@ -13,8 +13,10 @@ const routes: Routes = [
 		path:'Invoice/New Invoice',
 		component: NewInvoiceComponent
 	},
-
-
+	{
+		path:'Invoice/New Invoice/:id',
+		component: NewInvoiceComponent
+	}
 ];
 
 @NgModule({
