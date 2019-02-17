@@ -1,3 +1,5 @@
+import { Address } from './address.model';
+
 export class Client {
   id: string;
   name: string;
@@ -8,7 +10,6 @@ export class Client {
   contactPersonName: string;
   contactPersonPhoneNumber: string;
   contactPersonEmailId: string;
-  address: string;
-  pincode: string;
+  address: Address;
   notes: string;
 }

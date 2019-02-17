@@ -45,7 +45,7 @@ export class ClientDetailsComponent implements OnInit {
     }
   }
 
-  editVendor(clientId: string){
+  editClient(clientId: string){
     this.router.navigate(['Clients/New Client',clientId]);
   }
 
