@@ -71,8 +71,8 @@ export class NewClientComponent implements OnInit {
       contactPersonName: this.client.contactPersonName,
       contactPersonPhoneNumber: this.client.contactPersonPhoneNumber,
       contactPersonEmailId: this.client.contactPersonEmailId,
-      address: this.client.address,
-      pincode: this.client.pincode,
+      address: this.client.address.streetAddress,
+      pincode: this.client.address.pincode,
       notes: this.client.notes
     })
   }

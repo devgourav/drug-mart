@@ -78,8 +78,8 @@ export class NewVendorComponent implements OnInit {
       contactPersonName: this.vendor.contactPersonName,
       contactPersonPhoneNumber: this.vendor.contactPersonPhoneNumber,
       contactPersonEmailId: this.vendor.contactPersonEmailId,
-      address: this.vendor.address,
-      pincode: this.vendor.pincode,
+      address: this.vendor.address.streetAddress,
+      pincode: this.vendor.address.pincode,
       notes: this.vendor.notes
     })
   }

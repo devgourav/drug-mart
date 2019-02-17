@@ -37,8 +37,8 @@
 					<td>{{ client?.phoneNumber }}</td>
 					<td>{{ client?.contactPersonPhoneNumber }}</td>
 					<td>
-						<button type="button" class="btn button-primary">View/Edit</button>
-						<button type="button" class="btn button-cancel">Delete</button>
+						<button type="button" class="btn button-primary" (click)="editClient(client.id)">View/Edit</button>
+						<button type="button" class="btn button-cancel" (click)="deleteClient(client.id)">Delete</button>
 					</td>
 				</tr>
 
