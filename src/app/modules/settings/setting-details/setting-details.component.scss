@@ -1,0 +1,32 @@
+@import "../../../../assets/styles/_colors.scss";
+@import "../../../../assets/styles/_button.scss";
+@import "../../../../assets/styles/_title-header.scss";
+
+
+
+
+#settings-wrapper{
+	font-family: 'Montserrat', sans-serif;
+	color:$text-color-dark;
+}
+
+.settings-menu{
+	margin-top:10%;
+	background: 1px solid $primary-color-dark;
+	text-align: left;
+}
+
+
+.settings-list{
+	list-style: none;
+	padding: 0;
+
+	li{
+		margin-bottom: 20px;
+		a{
+			display: block;
+			text-decoration: none;
+		}
+	}
+
+}
