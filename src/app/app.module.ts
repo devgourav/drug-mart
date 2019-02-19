@@ -8,17 +8,21 @@ import { AppComponent } from './app.component';
 
 
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { VendorModule } from './vendor/vendor.module';
-import { BillModule } from './bill/bill.module';
-import { ClientModule } from './client/client.module';
-import { InvoiceModule } from './invoice/invoice.module';
-import { ItemModule } from './item/item.module';
-import { SettingsModule } from './settings/settings.module';
+
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { VendorService } from './service/vendor.service'
-import { BillService } from './service/bill.service'
+import { VendorModule } from './modules/vendor/vendor.module';
+import { BillModule } from './modules/bill/bill.module';
+import { ClientModule } from './modules/client/client.module';
+import { VendorService } from './core/service/vendor.service';
+import { BillService } from './core/service/bill.service';
+import { InvoiceModule } from './modules/invoice/invoice.module';
+import { SettingsModule } from './modules/settings/settings.module';
+import { ItemModule } from './modules/item/item.module';
+import { ItemService } from './core/service/item.service';
+import { InvoiceService } from './core/service/invoice.service';
+
 
 
 
@@ -41,7 +45,7 @@ import { BillService } from './service/bill.service'
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [ VendorService, BillService ],
+  providers: [ VendorService, BillService, ItemService,InvoiceService ],
   bootstrap: [AppComponent],
   exports:[SidebarComponent]
 
