@@ -15,12 +15,12 @@ import { ItemService } from 'src/app/core/service/item.service';
 })
 export class InvoiceItemModalComponent implements OnInit {
 
-  @Input() invoiceItem: InvoiceItem = new InvoiceItem();
+  @Input() invoiceItem: InvoiceItem;
   @Output() addItemEvent: EventEmitter<InvoiceItem> = new EventEmitter();
   @Output() editItemEvent: EventEmitter<InvoiceItem> = new EventEmitter();
 
   items: Item[] = [];
-  item: Item = new Item();
+  item: Item;
   itemId: string = "";
 
   invoiceItemForm = new FormGroup({
@@ -78,8 +78,8 @@ export class InvoiceItemModalComponent implements OnInit {
       quantity: this.invoiceItem.quantity,
       rate: this.invoiceItem.rate,
       itemMRP: this.invoiceItem.itemMRP,
-      stateTax: +this.invoiceItem.stateTax,
-      countryTax: +this.invoiceItem.countryTax,
+      stateTax: +this.invoiceItem.tax.get("stateTax"),
+      countryTax: +this.invoiceItem.tax.get("countryTax"),
       discount: this.invoiceItem.discount,
       offer: this.invoiceItem.offer
     });
@@ -92,7 +92,7 @@ export class InvoiceItemModalComponent implements OnInit {
     })
   }
 
-  populateItemModal(event: any){
+  populateOnItemSelectEvent(event: any){
     this.itemId = event.target.value;
     for(let item of this.items){
       if(item.id == this.itemId){

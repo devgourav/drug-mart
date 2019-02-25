@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SettingDetailsComponent} from './setting-details/setting-details.component'
 import { CompanyDetailsComponent } from './company-details/company-details.component';
 import { TaxDetailsComponent } from './tax-details/tax-details.component';
+import { DiscountDetailsComponent } from './discount-details/discount-details.component';
 
 
 
@@ -19,6 +20,10 @@ const routes: Routes = [
 	{
 		path:'Settings/Tax Details',
 		component: TaxDetailsComponent
+	},
+	{
+		path:'Settings/Discounts',
+		component: DiscountDetailsComponent
 	}
 ];
 

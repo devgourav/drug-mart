@@ -1,0 +1,71 @@
+<div id="discount-details-wrapper">
+	<div class="title-header">
+		<span id="header-text">Discount Details</span>
+	</div>
+
+	<div class="input-form">
+		<form [formGroup]="discountInputForm">
+
+			<div class="row">
+				<div class="col col-md-6">
+					<div class=" form-group row">
+						<label class="col-md-4 col-form-label" for="discountName">Discount Name</label>
+							<div class="col-md-8">
+								<input type="text" id="discountName" class="form-control" formControlName="name">
+							</div>
+					</div>
+
+					<div class=" form-group row">
+						<label class="col-md-4 col-form-label" for="discountRate">Discount Rate</label>
+							<div class="col-md-4">
+								<input type="number" id="discountRate" class="form-control" formControlName="rate">
+							</div>
+							<div class="col-md-4">
+								<select name="discountUnit" id="discountUnit" class="form-control" formControlName="type">
+										<option value="percentage" [selected]="true">% - Percentage</option>
+										<option value="fixed">₹ - Fixed</option>
+								</select>
+							</div>
+					</div>
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label" for="description">Description</label>
+            <div class="col-sm-8">
+              <textarea class="form-control" id="description" rows="3" formControlName="description"></textarea>
+            </div>
+          </div>
+				</div>
+			</div>
+
+
+
+			<div id="action-buttons">
+				<button type="submit" class="btn button-save" (click)="setDiscount()">Add Discount</button>
+			</div>
+
+		</form>
+	</div>
+
+	<div class="table-wrapper row">
+		<table class="col-sm-6 table table-striped table-dark">
+			<thead>
+				<tr>
+					<th *ngFor="let discountDetailsTableHeader of discountDetailsTableHeaders" scope="col">{{discountDetailsTableHeader}}</th>
+				</tr>
+			</thead>
+			<tbody>
+					<tr *ngFor="let discount of discounts">
+							<td>{{ discount?.name }}</td>
+							<td>{{ discount?.rate }}</td>
+              <td>{{ discount?.type }}</td>
+							<td>
+								<button type="button" class="btn button-cancel" (click)="deleteDiscount(discount.id)">Delete</button>
+							</td>
+					</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="action-buttons">
+		<button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+	</div>
+</div>

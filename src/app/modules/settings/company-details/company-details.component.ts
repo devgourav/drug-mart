@@ -28,6 +28,11 @@ export class CompanyDetailsComponent implements OnInit {
     this.showBillingAddress = false;
   }
 
+  closeClicked(){
+    this.location.back();
+    this.companyDetailsInputForm.reset();
+  }
+
 
   companyDetailsInputForm = new FormGroup({
     name: new FormControl(''),
@@ -58,8 +63,8 @@ export class CompanyDetailsComponent implements OnInit {
     this._companyDetailsService.getCompanyDetails()
       .subscribe((response) => {
         console.log("response:");
-        if (response && response[0]) {
-          this.companyDetails = response[0];
+        if (response) {
+          this.companyDetails = response;
           this.populateCompanyDetailsData();
         }
       });
@@ -77,18 +82,18 @@ export class CompanyDetailsComponent implements OnInit {
       GSTIN: this.companyDetails.GSTIN,
       serviceTaxNo: this.companyDetails.serviceTaxNo,
       billingAddress: {
-        streetAddress: this.companyDetails.billingAddress.streetAddress,
-        country: this.companyDetails.billingAddress.country,
-        state: this.companyDetails.billingAddress.state,
-        city: this.companyDetails.billingAddress.city,
-        pincode: this.companyDetails.billingAddress.pincode
+        streetAddress: this.companyDetails.billingAddress.get("streetAddress"),
+        country: this.companyDetails.billingAddress.get("country"),
+        state: this.companyDetails.billingAddress.get("state"),
+        city: this.companyDetails.billingAddress.get("city"),
+        pincode: this.companyDetails.billingAddress.get("pincode")
       },
       shippingAddress: {
-        streetAddress: this.companyDetails.shippingAddress.streetAddress,
-        country: this.companyDetails.shippingAddress.country,
-        state: this.companyDetails.shippingAddress.state,
-        city: this.companyDetails.shippingAddress.city,
-        pincode: this.companyDetails.shippingAddress.pincode
+        streetAddress: this.companyDetails.shippingAddress.get("streetAddress"),
+        country: this.companyDetails.shippingAddress.get("country"),
+        state: this.companyDetails.shippingAddress.get("state"),
+        city: this.companyDetails.shippingAddress.get("city"),
+        pincode: this.companyDetails.shippingAddress.get("pincode")
       }
     });
   }

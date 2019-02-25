@@ -123,8 +123,8 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="button" *ngIf="!client.id" (click)="setClient()" class="btn button-save">Save</button>
-				<button type="button" *ngIf="client.id" (click)="updateClient()" class="btn button-save">Update</button>
+				<button type="button" *ngIf="!clientId" (click)="setClient()" class="btn button-save">Save</button>
+				<button type="button" *ngIf="clientId" (click)="updateClient()" class="btn button-save">Update</button>
 				<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
 			</div>
 

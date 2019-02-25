@@ -13,8 +13,8 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label" for="itemName">Item List</label>
           <div class="col-sm-8">
-            <select name="itemPackType" id="itemPackType" class="form-control"
-            (change)="populateItemModal($event)" formControlName="itemId">
+            <select name="itemName" id="itemPackType" class="form-control"
+            (change)="populateOnItemSelectEvent($event)" formControlName="itemId">
               <option value="default" selected>Select Item</option>
               <option *ngFor="let item of items" value="{{ item.id }}">{{ item.name }}</option>
             </select>
@@ -125,8 +125,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" *ngIf="billItem.itemName" class="btn button-primary" (click)="editBillItem();activeModal.close('Close')">Save Item</button>
-    <button type="button" *ngIf="!billItem.itemName" class="btn button-primary" (click)="addBillItem();activeModal.close('Close')">Add Item</button>
+    <button type="button" *ngIf="billItem" class="btn button-primary" (click)="editBillItem();activeModal.close('Close')">Save Item</button>
+    <button type="button" *ngIf="!billItem" class="btn button-primary" (click)="addBillItem();activeModal.close('Close')">Add Item</button>
     <button type="button" class="btn button-cancel" (click)="activeModal.close('Close')">Cancel</button>
   </div>
 </form>

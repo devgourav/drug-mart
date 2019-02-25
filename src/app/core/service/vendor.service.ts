@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Vendor } from '../model/vendor.model';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
-import { throwError, Observable } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
-
-const vendorURL = "http://localhost:3000/vendors/";
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
 
 
 @Injectable({
@@ -18,56 +11,54 @@ const httpOptions = {
 })
 export class VendorService {
   response: any;
-
-  constructor(private http: HttpClient) {
+  vendorCollection: AngularFirestoreCollection<Vendor>;
+  vendors: Observable<Vendor[]>;
+  vendor: Observable<Vendor>;
+  vendorDocument: AngularFirestoreDocument<Vendor>;
+  constructor(private afs: AngularFirestore) {
+    this.vendorCollection = this.afs.collection('vendors');
   }
 
   getVendors(): Observable<Vendor[]> {
-    return this.http.get<Vendor[]>(vendorURL, httpOptions)
-      .pipe(
-        retry(3),
-        catchError(this.handleError)
-      );
+    return this.vendors = this.vendorCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Vendor;
+        data.id = a.payload.doc.id;
+        return data;
+      }))
+    );
   }
 
   getVendorById(id: string): Observable<Vendor> {
-    return this.http.get<Vendor>(vendorURL + id, httpOptions)
-      .pipe(
-        retry(3),
-        catchError(this.handleError)
-      );
+    this.vendorDocument = this.afs.doc(`vendors/${id}`);
+    return this.vendorDocument.valueChanges();
   }
 
-  setVendor(vendor: Vendor): Observable<any> {
-    return this.http.post<Vendor>(vendorURL, vendor, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+  setVendor(vendor: Vendor) {
+    const id = this.afs.createId();
+    vendor.id = id;
+    this.vendorCollection.doc(id).set(vendor);
   }
 
-  deleteVendor(id: string): Observable<{}> {
-    return this.http.delete(vendorURL + id, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+  deleteVendor(vendor: Vendor) {
+    this.vendorDocument = this.afs.doc(`vendors/${vendor.id}`);
+    this.vendorDocument.delete();
   }
 
-  updateVendor(vendor: Vendor): Observable<any> {
-    return this.http.put(vendorURL + vendor.id, vendor, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      )
+  updateVendor(vendor: Vendor) {
+    this.vendorDocument = this.afs.doc(`vendors/${vendor.id}`);
+    this.vendorDocument.update(vendor);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    return throwError(
-      'Something bad happened; please try again later.');
-  };
+  // private handleError(error: HttpErrorResponse) {
+  //   if (error.error instanceof ErrorEvent) {
+  //     console.error('An error occurred:', error.error.message);
+  //   } else {
+  //     console.error(
+  //       `Backend returned code ${error.status}, ` +
+  //       `body was: ${error.error}`);
+  //   }
+  //   return throwError(
+  //     'Something bad happened; please try again later.');
+  // };
 }

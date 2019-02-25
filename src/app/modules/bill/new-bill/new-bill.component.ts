@@ -7,11 +7,12 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 import { BillItemModalComponent } from '../billItem-modal/billItem-modal.component';
-import { Bill, BillItem } from 'src/app/core/model/bill.model';
+import { Bill } from 'src/app/core/model/bill.model';
 import { Vendor } from 'src/app/core/model/vendor.model';
 import { Amount } from 'src/app/core/model/amount.model';
 import { BillService } from 'src/app/core/service/bill.service';
 import { VendorService } from 'src/app/core/service/vendor.service';
+import { BillItem } from 'src/app/core/model/billItem.model';
 
 // TODO: Add A save/Update prompt
 
@@ -23,23 +24,26 @@ import { VendorService } from 'src/app/core/service/vendor.service';
 })
 export class NewBillComponent implements OnInit {
 
-  bill: Bill = new Bill();
-  billItems: Array<BillItem> = new Array<BillItem>();
-  billItem: BillItem = new BillItem();
-  vendors: Vendor[] = [];
+  bill: Bill;
+  billItems: BillItem[] = [];
+  billItem: BillItem;
 
   billId: string = "";
   netAmount: Amount = new Amount();
   taxRate: number;
   discountRate: number;
-  response: any;
-  subVendor = {vendorId:"",vendorName: ""};
+
+  vendorNameMaps: Map<string,string>[] = [];
+  vendorNameMap: Map<string,string> = new Map();
+
 
   constructor(private location: Location, private modalService: NgbModal,
     private _billService: BillService, private _vendorService: VendorService,
     private route: ActivatedRoute) {
     this.netAmount = new Amount();
   }
+
+
   ngOnInit() {
     this.populateVendorDropDown();
     this.route.paramMap.subscribe(params => {
@@ -63,9 +67,24 @@ export class NewBillComponent implements OnInit {
 
   openItemModal() {
     const modalRef = this.modalService.open(BillItemModalComponent, { size: 'lg', keyboard: true });
-    modalRef.componentInstance.addItemEvent.subscribe((response) => {
-      this.billItem = response;
-      this.billItems.push(this.billItem);
+    modalRef.componentInstance.addItemEvent.subscribe((response:BillItem) => {
+      this.billItem = new BillItem(
+        response.itemId,
+        response.itemName,
+        response.packType,
+        response.itemHSN,
+        response.manufacturer,
+        response.batchNumber,
+        response.expiryDate,
+        response.quantity,
+        response.rate,
+        response.itemMRP,
+        response.tax,
+        response.discount,
+        response.offer
+      );
+      const billItem = Object.assign({},this.billItem)
+      this.billItems.push(billItem);
       this.calculateTotalCosts(this.billItems);
     });
   }
@@ -91,7 +110,8 @@ export class NewBillComponent implements OnInit {
     this.taxRate = this.discountRate = 0;
 
     for (let billItem of billItems) {
-      this.taxRate = billItem.stateTax + billItem.countryTax;
+      console.log(billItem);
+      this.taxRate = billItem.tax['stateTax'] + billItem.tax['countryTax'];
       this.discountRate = billItem.discount;
 
       this.netAmount.subAmount += (billItem.rate * billItem.quantity);
@@ -103,11 +123,20 @@ export class NewBillComponent implements OnInit {
     }
   }
 
+  openNewVendor() {
+    // TODO: Route to NewVendorComponent
+  }
+
   populateVendorDropDown() {
     this._vendorService.getVendors()
       .subscribe((response) => {
-        this.vendors = response;
-      })
+        response.forEach((vendor,index)=>{
+          this.vendorNameMap.set("id",vendor.id);
+          this.vendorNameMap.set("name",vendor.name);
+          this.vendorNameMaps.push(this.vendorNameMap);
+        })
+        console.log(this.vendorNameMaps);
+      });
   }
 
   closeClicked() {
@@ -117,45 +146,55 @@ export class NewBillComponent implements OnInit {
   getBill(billId: string) {
     this._billService.getBillById(billId)
       .subscribe((response) => {
-        this.bill = response;
+        this.bill = new Bill(
+          response.vendorId,
+          response.billItems,
+          response.billedDate,
+          response.orderNote,
+          response.paymentMethod,
+          response.amountPaid
+        );
+        console.log(this.bill);
         this.billItems = this.bill.billItems;
         this.populateBillData();
-        console.warn(this.billItems);
         this.calculateTotalCosts(this.billItems);
       })
   }
 
-  setVendorName(event: any){
-    this.subVendor.vendorId = event.target.value;
-    this._vendorService.getVendorById(this.subVendor.vendorId)
-    .subscribe((response)=>{
-      this.subVendor.vendorName = response.name;
-    })
+  setVendorName(event: any) {
+    this.vendorNameMap.set("id",event.target.value);
+    // this.vendorNameMap.set("name",event.target.value) ;
+
   }
 
   setBill() {
-    this.bill = Object.assign({}, this.billInputForm.value,this.subVendor);
-    this.bill.billItems = this.billItems;
-    this._billService.setBill(this.bill)
-      .subscribe((response) => {
-        this.location.back()
-      });
+    this._billService.setBill(this.getBillObj());
+    this.closeClicked();
   }
 
   updateBill() {
-    this.bill = Object.assign({}, this.billInputForm.value,this.subVendor);
-    this.bill.billItems = this.billItems;
+    this._billService.updateBill(this.getBillObj());
+    this.closeClicked();
+  }
+
+  getBillObj():Bill{
+    this.bill = new Bill(
+      this.billInputForm.get("vendorId").value,
+      this.billItems,
+      this.billInputForm.get("billedDate").value,
+      this.billInputForm.get("orderNote").value,
+      this.billInputForm.get("paymentMethod").value,
+      this.billInputForm.get("amountPaid").value
+    );
     this.bill.id = this.billId;
-    this._billService.updateBill(this.bill)
-      .subscribe((response) => {
-        this.location.back()
-      });
+    const bill = Object.assign({},this.bill);
+    return bill;
   }
 
   deleteItem(billItem: BillItem) {
-    const index: number = this.bill.billItems.indexOf(billItem);
+    const index: number = this.billItems.indexOf(billItem);
     if (index !== -1) {
-      this.bill.billItems.splice(index, 1);
+      this.billItems.splice(index, 1);
     }
   }
 
@@ -169,10 +208,6 @@ export class NewBillComponent implements OnInit {
       for (let billItem of this.billItems) {
         if (this.billItem.itemId == billItem.itemId) {
           const index: number = this.billItems.indexOf(billItem);
-          // if (index !== -1) {
-          //   this.billItems.splice(index, 1);
-          //   this.billItems.push(this.billItem);
-          // }
           this.billItems[index] = this.billItem;
           break;
         }

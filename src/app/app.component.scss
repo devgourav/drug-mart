@@ -1,5 +1,40 @@
+@import "../assets/styles/_colors.scss";
+@import "../assets/styles/_button.scss";
+@import "../assets/styles/_title-header.scss";
+
+
+
+
 #content{
 	position    :absolute;
 	width       : 100%;
 	padding-left: 250px;
+}
+
+
+
+#login-wrapper{
+	font-family: 'Montserrat', sans-serif;
+	color:$text-color-dark;
+}
+
+.login-menu{
+	margin-top:10%;
+	background: 1px solid $primary-color-dark;
+	text-align: left;
+}
+
+
+.login-list{
+	list-style: none;
+	padding: 0;
+
+	li{
+		margin-bottom: 20px;
+		a{
+			display: block;
+			text-decoration: none;
+		}
+	}
+
 }

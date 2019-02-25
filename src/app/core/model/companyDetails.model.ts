@@ -1,5 +1,3 @@
-import { Address } from './address.model';
-
 export class CompanyDetails {
   id: string;
   name: string;
@@ -9,19 +7,19 @@ export class CompanyDetails {
   website:string;
   GSTIN: string;
   serviceTaxNo: string;
-  billingAddress: Address;
-  shippingAddress: Address;
+  billingAddress: Map<string, string> = new Map();
+  shippingAddress: Map<string, string> = new Map();
 
-  constructor(){
-    this.name = "";
-    this.phoneNumber = "";
-    this.altPhoneNumber = "";
-    this.emailId = "";
-    this.website = "";
-    this.GSTIN = "";
-    this.serviceTaxNo = "";
-    this.billingAddress = new Address();
-    this.shippingAddress = new Address();
-
-  }
+  // constructor(){
+  //   this.name = "";
+  //   this.phoneNumber = "";
+  //   this.altPhoneNumber = "";
+  //   this.emailId = "";
+  //   this.website = "";
+  //   this.GSTIN = "";
+  //   this.serviceTaxNo = "";
+  //   this.billingAddress = new Address();
+  //   this.shippingAddress = new Address();
+  //
+  // }
 }

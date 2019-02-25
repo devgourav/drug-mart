@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyB-ywG__-kSN9lVnn8SB2WYUQkay_7TJGY",
+    authDomain: "drugmart-firestore.firebaseapp.com",
+    databaseURL: "https://drugmart-firestore.firebaseio.com",
+    projectId: "drugmart-firestore",
+    storageBucket: "drugmart-firestore.appspot.com",
+    messagingSenderId: "246329296077"
+  }
 };
 
 /*

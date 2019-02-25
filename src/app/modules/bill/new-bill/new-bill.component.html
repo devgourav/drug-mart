@@ -11,12 +11,12 @@
 						<div class="col-sm-5">
 							<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId"
 							(change)="setVendorName($event)">
-								<option selected>Select a Vendor</option>
-								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}</option>
+								<option [selected]="true">Select a Vendor</option>
+								<option *ngFor="let vendorNameMap of vendorNameMaps" value="{{ vendorNameMap.id }}">{{ vendorNameMap.get("name") }}</option>
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<button type="submit" class="btn button-primary">New Vendor</button>
+							<button type="submit" class="btn button-primary" (click)="openNewVendor()">New Vendor</button>
 						</div>
 					</div>
 					<div class="form-group row">
@@ -43,9 +43,9 @@
 							<td scope="col">{{ billItem.rate }}</td>
 							<td scope="col">{{ getSubAmount(billItem.rate,billItem.quantity) }}</td>
 							<td scope="col">{{ billItem.discount}}</td>
-							<td scope="col">{{ billItem.stateTax + billItem.countryTax }}</td>
+							<td scope="col">{{ billItem.tax.stateTax + billItem.tax.countryTax }}</td>
 							<td scope="col">{{ getTotalAmount(billItem.rate,billItem.quantity,billItem.discount,
-								billItem.stateTax + billItem.countryTax) }}</td>
+								billItem.tax.stateTax + billItem.tax.countryTax) }}</td>
 							<td scope="col">{{ billItem.offer }}</td>
 							<td scope="col">{{ billItem.itemMRP }}</td>
 							<td>
@@ -119,8 +119,8 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="submit" *ngIf="bill.id" id="billUpdateButton" class="btn button-save" (click)="updateBill()" >Update</button>
-				<button type="submit" *ngIf="!bill.id" id="billSaveButton" class="btn button-save" (click)="setBill()" >Save</button>
+				<button type="submit" *ngIf="billId" id="billUpdateButton" class="btn button-save" (click)="updateBill()" >Update</button>
+				<button type="submit" *ngIf="!billId" id="billSaveButton" class="btn button-save" (click)="setBill()" >Save</button>
 				<button type="button" id="billCancelButton" class="btn button-cancel" (click)="closeClicked()">Cancel</button>
 			</div>
 		</form>

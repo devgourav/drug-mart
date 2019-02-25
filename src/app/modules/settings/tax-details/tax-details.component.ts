@@ -15,7 +15,7 @@ const confirmMsg = "Do you want to delete this tax?";
 export class TaxDetailsComponent implements OnInit {
   taxId: string = "";
   taxes: Tax[] = [];
-  tax: Tax = new Tax();
+  tax: Tax;
 
   constructor(private location: Location, private _taxService: TaxService) { }
 
@@ -24,6 +24,11 @@ export class TaxDetailsComponent implements OnInit {
   ngOnInit() {
     this.getTaxDetails();
   }
+
+  closeClicked() {
+    this.location.back();
+  }
+
 
   taxInputForm = new FormGroup({
     name: new FormControl(''),
@@ -34,7 +39,7 @@ export class TaxDetailsComponent implements OnInit {
     this._taxService.getTaxes()
       .subscribe((response) => {
         console.log("response:");
-        if (response && response.length>0) {
+        if (response) {
           this.taxes = response;
         }
       });

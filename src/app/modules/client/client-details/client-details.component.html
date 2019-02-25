@@ -32,13 +32,13 @@
 				<tr *ngFor="let client of clients">
 					<td>{{ client?.name }}</td>
 					<td>{{ client?.contactPersonName }}</td>
-					<td>{{ client?.address }}</td>
+					<td>{{ client?.address.streetAddress }}</td>
 					<td>{{ client?.emailId }}</td>
 					<td>{{ client?.phoneNumber }}</td>
 					<td>{{ client?.contactPersonPhoneNumber }}</td>
 					<td>
 						<button type="button" class="btn button-primary" (click)="editClient(client.id)">View/Edit</button>
-						<button type="button" class="btn button-cancel" (click)="deleteClient(client.id)">Delete</button>
+						<button type="button" class="btn button-cancel" (click)="deleteClient(client)">Delete</button>
 					</td>
 				</tr>
 

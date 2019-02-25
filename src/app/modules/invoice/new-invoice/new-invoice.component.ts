@@ -22,9 +22,9 @@ import { ClientService } from 'src/app/core/service/client.service';
 })
 export class NewInvoiceComponent implements OnInit {
 
-  invoice: Invoice = new Invoice();
+  invoice: Invoice;
   invoiceItems: Array<InvoiceItem> = new Array<InvoiceItem>();
-  invoiceItem: InvoiceItem = new InvoiceItem();
+  invoiceItem: InvoiceItem;
   clients: Client[] = [];
 
   invoiceId: string = "";
@@ -90,7 +90,7 @@ export class NewInvoiceComponent implements OnInit {
     this.taxRate = this.discountRate = 0;
 
     for (let invoiceItem of invoiceItems) {
-      this.taxRate = invoiceItem.stateTax + invoiceItem.countryTax;
+      this.taxRate = invoiceItem.tax.get("stateTax") + invoiceItem.tax.get("countryTax")
       this.discountRate = invoiceItem.discount;
 
       this.netAmount.subAmount += (invoiceItem.rate * invoiceItem.quantity);
@@ -135,20 +135,16 @@ export class NewInvoiceComponent implements OnInit {
   setInvoice() {
     this.invoice = Object.assign({}, this.invoiceInputForm.value,this.subClient);
     this.invoice.invoiceItems = this.invoiceItems;
-    this._invoiceService.setInvoice(this.invoice)
-      .subscribe((response) => {
-        this.location.back()
-      });
+    this._invoiceService.setInvoice(this.invoice);
+    this.closeClicked();
   }
 
   updateInvoice() {
     this.invoice = Object.assign({}, this.invoiceInputForm.value,this.subClient);
     this.invoice.invoiceItems = this.invoiceItems;
     this.invoice.id = this.invoiceId;
-    this._invoiceService.updateInvoice(this.invoice)
-      .subscribe((response) => {
-        this.location.back()
-      });
+    this._invoiceService.updateInvoice(this.invoice);
+    this.closeClicked();
   }
 
   deleteItem(invoiceItem: InvoiceItem) {
