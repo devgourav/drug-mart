@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Vendor } from 'src/app/core/model/vendor.model';
 import { VendorService } from 'src/app/core/service/vendor.service';
@@ -16,7 +15,7 @@ const confirmMsg = "Do you want to delete this vendor?";
 export class VendorDetailsComponent implements OnInit {
   vendors: Vendor[] = [];
 
-  constructor(private location: Location,private _vendorService: VendorService,
+  constructor(private _vendorService: VendorService,
     private router: Router) {
   }
 
@@ -32,23 +31,16 @@ export class VendorDetailsComponent implements OnInit {
     .subscribe((response)=>{
       this.vendors = response;
     })
-    console.log("VendorList:"+this.vendors);
   }
 
-  deleteVendor(vendorId: string){
+  deleteVendor(vendor: Vendor){
     if(confirm(confirmMsg)){
-      this._vendorService.deleteVendor(vendorId)
-      .subscribe(()=>{
-        this.getVendors();
-      });
-
+      this._vendorService.deleteVendor(vendor);
     }
   }
-
 
   editVendor(vendorId: string){
     this.router.navigate(['Vendors/New Vendor',vendorId]);
   }
-
 
 }

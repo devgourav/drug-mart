@@ -14,12 +14,10 @@ import { ItemService } from 'src/app/core/service/item.service';
 })
 export class NewItemComponent implements OnInit {
   item: Item;
-  itemId: string;
+  itemId: string = "";
 
   constructor(private location: Location,private _itemService: ItemService,
     private route: ActivatedRoute) {
-      this.item = new Item();
-      this.itemId = "";
     }
 
   ngOnInit() {
@@ -49,7 +47,19 @@ export class NewItemComponent implements OnInit {
   getItem(itemId: string){
     this._itemService.getItemById(itemId)
     .subscribe((response) => {
-      this.item = response;
+      this.item = new Item(
+        response.name,
+        response.quantity,
+        response.description,
+        response.HSNCode,
+        response.packType,
+        response.manufacturer,
+        response.purchaseCost,
+        response.itemMRP,
+        response.saleCost,
+        response.saleDiscount,
+        response.saleOffers
+      )
       this.populateItemData();
     })
   }
@@ -76,20 +86,43 @@ export class NewItemComponent implements OnInit {
   }
 
   setItem(){
-    this.item = Object.assign({}, this.itemInputForm.value);
-    this._itemService.setItem(this.item)
-    .subscribe((response)=> {
-      this.location.back()
-    });
+    this.item = new Item(
+      this.itemInputForm.get("name").value,
+      this.itemInputForm.get("description").value,
+      this.itemInputForm.get("manufacturer").value,
+      this.itemInputForm.get("packType").value,
+      this.itemInputForm.get("quantity").value,
+      this.itemInputForm.get("HSNCode").value,
+      this.itemInputForm.get("purchaseCost").value,
+      this.itemInputForm.get("saleCost").value,
+      this.itemInputForm.get("itemMRP").value,
+      this.itemInputForm.get("saleDiscount").value,
+      this.itemInputForm.get("saleOffers").value
+    );
+    const item = Object.assign({}, this.item);
+    this._itemService.setItem(item);
+    this.closeClicked();
   }
 
   updateItem(){
-    this.item = Object.assign({}, this.itemInputForm.value);
+    this.item = new Item(
+      this.itemInputForm.get("name").value,
+      this.itemInputForm.get("description").value,
+      this.itemInputForm.get("manufacturer").value,
+      this.itemInputForm.get("packType").value,
+      this.itemInputForm.get("quantity").value,
+      this.itemInputForm.get("HSNCode").value,
+      this.itemInputForm.get("purchaseCost").value,
+      this.itemInputForm.get("saleCost").value,
+      this.itemInputForm.get("itemMRP").value,
+      this.itemInputForm.get("saleDiscount").value,
+      this.itemInputForm.get("saleOffers").value
+    );
     this.item.id = this.itemId;
-    this._itemService.updateItem(this.item)
-    .subscribe((response)=>{
-      this.location.back()
-    });
+    const item = Object.assign({}, this.item);
+    this._itemService.setItem(item);
+    this.closeClicked();
+
   }
 
 }

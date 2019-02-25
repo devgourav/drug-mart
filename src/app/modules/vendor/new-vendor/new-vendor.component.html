@@ -123,8 +123,8 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="button" *ngIf="!vendor.id" (click)="setVendor()" class="btn button-save">Save</button>
-				<button type="button" *ngIf="vendor.id" (click)="updateVendor()" class="btn button-save">Update</button>
+				<button type="button" *ngIf="!vendorId" (click)="setVendor()" class="btn button-save">Save</button>
+				<button type="button" *ngIf="vendorId" (click)="updateVendor()" class="btn button-save">Update</button>
 				<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
 			</div>
 

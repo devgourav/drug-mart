@@ -7,11 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-	sidebarItems = ['Dashboard', 'Clients', 'Vendors', 'Items', 'Invoice','Bills', 'Reports', 'Settings'];
+	sidebarItems = ['Dashboard', 'Clients', 'Vendors', 'Items', 'Invoice','Bills','Reports', 'Settings'];
 
 	constructor() { }
-
-
 
 	ngOnInit() {
 

@@ -4,6 +4,10 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Client } from 'src/app/core/model/client.model';
 import { ClientService } from 'src/app/core/service/client.service';
+
+// TODO: Add A save/Update prompt
+
+
 @Component({
   selector: 'app-new-client',
   templateUrl: './new-client.component.html',
@@ -12,37 +16,18 @@ import { ClientService } from 'src/app/core/service/client.service';
 export class NewClientComponent implements OnInit {
   client: Client;
   clientId: string;
+  addressMap: Map<string,string>;
 
   constructor(private location: Location,private _clientService: ClientService,
     private route: ActivatedRoute) {
-    this.client = new Client();
     this.clientId = "";
   }
-
-  showBillingAddress = true;
-
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.clientId = params.get('id');
       if(this.clientId){
         this.getClient(params.get('id'));
       }
-    });
-  }
-
-  getClient(clientId: string){
-    this._clientService.getClientById(clientId)
-    .subscribe((response) => {
-      this.client = response;
-      this.populateClientData();
-    })
-  }
-
-  setClient(){
-    this.client = Object.assign({}, this.clientInputForm.value);
-    this._clientService.setClient(this.client)
-    .subscribe((response)=> {
-      this.location.back()
     });
   }
 
@@ -61,7 +46,70 @@ export class NewClientComponent implements OnInit {
 
   });
 
+  closeClicked(){
+    this.location.back();
+    this.clientInputForm.reset();
+  }
+
+  getClient(clientId: string){
+    this._clientService.getClientById(clientId)
+    .subscribe((response) => {
+      this.addressMap = new Map();
+      this.addressMap.set("streetAddress",response.address["streetAddress"]);
+      this.addressMap.set("pincode",response.address["pincode"]);
+
+
+      this.client = new Client(
+        response.name,
+        response.phoneNumber,
+        response.emailId,
+        response.website,
+        response.GSTIN,
+        response.contactPersonName,
+        response.contactPersonPhoneNumber,
+        response.contactPersonEmailId,
+        this.addressMap,
+        response.notes
+      );
+      this.populateClientData();
+    })
+  }
+
+  setClient(){
+    this.addressMap = new Map();
+    this.addressMap.set("streetAddress",this.clientInputForm.get("address").value);
+    this.addressMap.set("pincode",this.clientInputForm.get("pincode").value);
+
+    const addressMap = this.convertMapToObject(this.addressMap);
+
+    this.client = new Client(
+      this.clientInputForm.get("name").value,
+      this.clientInputForm.get("phoneNumber").value,
+      this.clientInputForm.get("emailId").value,
+      this.clientInputForm.get("website").value,
+      this.clientInputForm.get("GSTIN").value,
+      this.clientInputForm.get("contactPersonName").value,
+      this.clientInputForm.get("contactPersonPhoneNumber").value,
+      this.clientInputForm.get("contactPersonEmailId").value,
+      addressMap,
+      this.clientInputForm.get("notes").value
+    );
+    const client = Object.assign({},this.client);
+    console.log(client);
+    this._clientService.setClient(client);
+    this.closeClicked();
+  }
+
+  convertMapToObject(map: Map<any,any>):Map<any,any>{
+    let objectMap = Object.create(null);
+    for(let[k,v] of map){
+      objectMap[k]=v;
+    }
+    return objectMap;
+  }
+
   populateClientData(){
+    console.log(this.client);
     this.clientInputForm.setValue({
       name: this.client.name,
       phoneNumber: this.client.phoneNumber,
@@ -71,25 +119,37 @@ export class NewClientComponent implements OnInit {
       contactPersonName: this.client.contactPersonName,
       contactPersonPhoneNumber: this.client.contactPersonPhoneNumber,
       contactPersonEmailId: this.client.contactPersonEmailId,
-      address: this.client.address.streetAddress,
-      pincode: this.client.address.pincode,
+      address: this.client.address.get("streetAddress"),
+      pincode: this.client.address.get("pincode"),
       notes: this.client.notes
     })
   }
 
   updateClient(){
-    this.client = Object.assign({}, this.clientInputForm.value);
+    this.addressMap = new Map();
+    this.addressMap.set("streetAddress",this.clientInputForm.get("address").value);
+    this.addressMap.set("pincode",this.clientInputForm.get("pincode").value);
+
+    const addressMap = this.convertMapToObject(this.addressMap);
+
+    this.client = new Client(
+      this.clientInputForm.get("name").value,
+      this.clientInputForm.get("phoneNumber").value,
+      this.clientInputForm.get("emailId").value,
+      this.clientInputForm.get("website").value,
+      this.clientInputForm.get("GSTIN").value,
+      this.clientInputForm.get("contactPersonName").value,
+      this.clientInputForm.get("contactPersonPhoneNumber").value,
+      this.clientInputForm.get("contactPersonEmailId").value,
+      addressMap,
+      this.clientInputForm.get("notes").value
+    );
     this.client.id = this.clientId;
-    this._clientService.updateClient(this.client)
-    .subscribe((response)=>{
-      this.location.back()
-    });
+    const client = Object.assign({},this.client);
+    this._clientService.updateClient(client);
+    this.closeClicked();
   }
 
-  closeClicked(){
-    this.location.back();
-    this.clientInputForm.reset();
-  }
 
 
 }

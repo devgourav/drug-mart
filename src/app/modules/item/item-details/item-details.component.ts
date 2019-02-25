@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Item } from 'src/app/core/model/item.model';
 import { ItemService } from 'src/app/core/service/item.service';
 
-const confirmMsg = "Do you want to delete this Item?";
+
+const confirmMsg = "Do you want to delete this item?";
 
 
 @Component({
@@ -18,33 +19,30 @@ export class ItemDetailsComponent implements OnInit {
     private router: Router) {
   }
 
+
   itemDetailsTableHeaders = ['Name', 'Manufacturer', 'HSN Code', 'Pack Type', 'Purchase Cost',
-    'Min. Sale Cost', 'Quantity', 'Actions'];
+'Min. Sale Cost', 'Quantity', 'Actions'];
 
   ngOnInit() {
     this.getItems();
   }
 
-  getItems() {
+  getItems(){
     this._itemService.getItems()
-      .subscribe((response) => {
-        this.items = response;
-      })
-    console.log("ItemList:" + this.items);
+    .subscribe((response)=>{
+      this.items = response;
+    })
+    console.log("ItemList:"+this.items);
   }
 
-  deleteItem(itemId: string) {
-    if (confirm(confirmMsg)) {
-      this._itemService.deleteItem(itemId)
-        .subscribe(() => {
-          this.getItems();
-        });
-
+  deleteItem(item: Item){
+    if(confirm(confirmMsg)){
+      this._itemService.deleteItem(item);
     }
   }
 
-  editItem(itemId: string) {
-    this.router.navigate(['Items/New Item', itemId]);
+  editItem(itemId: string){
+    this.router.navigate(['Items/New Item',itemId]);
   }
 
 }

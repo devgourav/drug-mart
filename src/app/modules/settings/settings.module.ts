@@ -5,9 +5,10 @@ import { CompanyDetailsComponent } from './company-details/company-details.compo
 import { TaxDetailsComponent } from './tax-details/tax-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsRoutingModule } from './settings-routing.module';
+import { DiscountDetailsComponent } from './discount-details/discount-details.component';
 
 @NgModule({
-  declarations: [SettingDetailsComponent,CompanyDetailsComponent,TaxDetailsComponent],
+  declarations: [SettingDetailsComponent,CompanyDetailsComponent,TaxDetailsComponent, DiscountDetailsComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,

@@ -1,15 +1,8 @@
  import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-
-import { SidebarComponent } from './sidebar/sidebar.component';
-
-
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { VendorModule } from './modules/vendor/vendor.module';
@@ -22,14 +15,18 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { ItemModule } from './modules/item/item.module';
 import { ItemService } from './core/service/item.service';
 import { InvoiceService } from './core/service/invoice.service';
-
-
-
+import { AuthModule } from './core/auth/auth.module';
+import { SidebarComponent } from './core/common/sidebar/sidebar.component';
+import { LoginComponent } from './core/auth/login/login.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +40,10 @@ import { InvoiceService } from './core/service/invoice.service';
     NgbModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AuthModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
   ],
   providers: [ VendorService, BillService, ItemService,InvoiceService ],
   bootstrap: [AppComponent],

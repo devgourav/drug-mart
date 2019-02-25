@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { NgbModalConfig, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { BillItem } from 'src/app/core/model/bill.model';
 import { Item } from 'src/app/core/model/item.model';
 import { ItemService } from 'src/app/core/service/item.service';
+import { NgbModalConfig, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { BillItem } from 'src/app/core/model/billItem.model';
 
 
 
@@ -14,13 +14,14 @@ import { ItemService } from 'src/app/core/service/item.service';
 })
 export class BillItemModalComponent implements OnInit {
 
-  @Input() billItem: BillItem = new BillItem();
+  @Input() billItem: BillItem;
   @Output() addItemEvent: EventEmitter<BillItem> = new EventEmitter();
   @Output() editItemEvent: EventEmitter<BillItem> = new EventEmitter();
 
   items: Item[] = [];
-  item: Item = new Item();
+  item: Item;
   itemId: string = "";
+  taxMap: Map<string,number>;
 
   billItemForm = new FormGroup({
     itemName: new FormControl(''),
@@ -41,28 +42,50 @@ export class BillItemModalComponent implements OnInit {
   });
 
 
-  constructor(private modalService: NgbModal,
-    private activeModal: NgbActiveModal, private _itemService: ItemService) {
+  constructor(private modalService: NgbModal,private activeModal: NgbActiveModal,
+    private _itemService: ItemService) {
   }
 
   ngOnInit() {
     this.populateItemDropdown();
-    if (this.billItem.itemName!="" && this.billItem.itemName!=null) {
+    if (this.billItem) {
       console.warn("BillItem:" + this.billItem);
       this.populateBillItem();
     }
   }
 
   addBillItem() {
-    this.billItem = Object.assign({}, this.billItemForm.value);
-    console.warn(this.billItem);
-    this.addItemEvent.emit(this.billItem);
+    this.addItemEvent.emit(this.getBillItemObj());
   }
 
   editBillItem() {
-    this.billItem = Object.assign({}, this.billItemForm.value);
-    console.warn(this.billItem);
-    this.editItemEvent.emit(this.billItem);
+    this.editItemEvent.emit(this.getBillItemObj());
+  }
+
+  getBillItemObj():BillItem{
+    this.taxMap = new Map();
+    this.taxMap.set("stateTax",this.billItemForm.get("stateTax").value);
+    this.taxMap.set("countryTax",this.billItemForm.get("countryTax").value);
+
+    const taxMap = this.convertMapToObject(this.taxMap);
+
+    this.billItem = new BillItem(
+      this.billItemForm.get("itemId").value,
+      this.billItemForm.get("itemName").value,
+      this.billItemForm.get("packType").value,
+      this.billItemForm.get("itemHSN").value,
+      this.billItemForm.get("manufacturer").value,
+      this.billItemForm.get("batchNumber").value,
+      this.billItemForm.get("expiryDate").value,
+      this.billItemForm.get("quantity").value,
+      this.billItemForm.get("rate").value,
+      this.billItemForm.get("itemMRP").value,
+      taxMap,
+      this.billItemForm.get("discount").value,
+      this.billItemForm.get("offer").value
+    );
+    const billItem = Object.assign({}, this.billItem);
+    return billItem;
   }
 
   populateBillItem() {
@@ -77,8 +100,8 @@ export class BillItemModalComponent implements OnInit {
       quantity: this.billItem.quantity,
       rate: this.billItem.rate,
       itemMRP: this.billItem.itemMRP,
-      stateTax: +this.billItem.stateTax,
-      countryTax: +this.billItem.countryTax,
+      stateTax: this.billItem.tax["stateTax"],
+      countryTax: this.billItem.tax["countryTax"],
       discount: this.billItem.discount,
       offer: this.billItem.offer
     });
@@ -91,7 +114,7 @@ export class BillItemModalComponent implements OnInit {
     })
   }
 
-  populateItemModal(event: any){
+  populateOnItemSelectEvent(event: any){
     this.itemId = event.target.value;
     for(let item of this.items){
       if(item.id == this.itemId){
@@ -114,6 +137,14 @@ export class BillItemModalComponent implements OnInit {
       discount: null,
       offer: ""
     });
+  }
+
+  convertMapToObject(map: Map<any,any>):Map<any,any>{
+    let objectMap = Object.create(null);
+    for(let[k,v] of map){
+      objectMap[k]=v;
+    }
+    return objectMap;
   }
 
 

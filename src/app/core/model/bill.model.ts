@@ -1,31 +1,26 @@
-export class BillItem {
-  id: string;
-  itemId:string;
-  itemName: string;
-  packType: string;
-  itemHSN: string;
-  manufacturer: string;
-  batchNumber: string;
-  expiryDate: Date;
-  quantity: number;
-  rate: number;
-  itemMRP: number;
-  stateTax: number;
-  countryTax: number;
-  discount: number;
-  offer: string;
-}
+import { BillItem } from './billItem.model';
 
 export class Bill {
   id: string;
   vendorId: string;
   vendorName: string;
+  billItems: BillItem[]
   billedDate: Date;
-  billItems: BillItem[];
   totalTax: number;
   totalDiscount: number;
   totalAmount: number;
   orderNote: string;
   paymentMethod: string;
   amountPaid: number;
+
+  constructor(vendorId: string, billItems: BillItem[],billedDate: Date,orderNote: string,
+    paymentMethod: string, amountPaid: number) {
+    this.vendorId = vendorId;
+    this.billItems = billItems;
+    this.billedDate = billedDate;
+    this.orderNote = orderNote;
+    this.paymentMethod = paymentMethod;
+    this.amountPaid = amountPaid;
+  }
+
 }

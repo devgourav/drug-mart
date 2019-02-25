@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Client } from 'src/app/core/model/client.model';
 import { ClientService } from 'src/app/core/service/client.service';
+
 
 const confirmMsg = "Do you want to delete this client?";
 
@@ -15,13 +15,12 @@ const confirmMsg = "Do you want to delete this client?";
 export class ClientDetailsComponent implements OnInit {
   clients: Client[] = [];
 
-  constructor(private location: Location,private _clientService: ClientService,
+  constructor(private _clientService: ClientService,
     private router: Router) {
   }
 
-  clientDetailsTableHeaders = ['Vendor Name','Contact Name','Address',
-  'Email','Vendor Phone','Contact Phone','Actions']
-
+  clientDetailsTableHeaders = ['Client Name','Contact Name','Address',
+  'Email','Client Phone','Contact Phone','Actions']
 
   ngOnInit() {
     this.getClients();
@@ -32,23 +31,17 @@ export class ClientDetailsComponent implements OnInit {
     .subscribe((response)=>{
       this.clients = response;
     })
-    console.log("VendorList:"+this.clients);
+    console.log("ClientList:"+this.clients);
   }
 
-  deleteClient(clientId: string){
+  deleteClient(client: Client){
     if(confirm(confirmMsg)){
-      this._clientService.deleteClient(clientId)
-      .subscribe(()=>{
-        this.getClients();
-      });
-
+      this._clientService.deleteClient(client);
     }
   }
 
   editClient(clientId: string){
     this.router.navigate(['Clients/New Client',clientId]);
   }
-
-
 
 }

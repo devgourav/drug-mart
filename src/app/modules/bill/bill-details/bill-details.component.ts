@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Vendor } from 'src/app/core/model/vendor.model';
-import { Bill, BillItem } from 'src/app/core/model/bill.model';
+import { Bill } from 'src/app/core/model/bill.model';
 import { BillService } from 'src/app/core/service/bill.service';
 import { Amount } from 'src/app/core/model/amount.model';
+import { BillItem } from 'src/app/core/model/billItem.model';
 
 
 const confirmMsg = "Do you want to delete this Bill?";
@@ -17,7 +17,6 @@ const confirmMsg = "Do you want to delete this Bill?";
 })
 export class BillDetailsComponent implements OnInit {
   bills: Bill[] = [];
-  vendor: Vendor = new Vendor();
 
   taxRate: number;
   discountRate: number;
@@ -39,17 +38,12 @@ export class BillDetailsComponent implements OnInit {
     this._billService.getBills()
       .subscribe((response) => {
         this.bills = response;
-        console.log(this.bills);
       })
   }
 
-  deleteBill(billId: string) {
+  deleteBill(bill: Bill) {
     if (confirm(confirmMsg)) {
-      this._billService.deleteBill(billId)
-        .subscribe((response) => {
-          console.log(response);
-          this.getBills();
-        });
+      this._billService.deleteBill(bill);
     }
   }
 
@@ -68,7 +62,7 @@ export class BillDetailsComponent implements OnInit {
   getTaxAmount(billItems: BillItem[]): number {
     this.billAmount.taxAmount = 0;
     for (let billItem of billItems) {
-      this.billAmount.taxAmount += (billItem.stateTax + billItem.countryTax) * 0.01 * this.billAmount.subAmount;
+      this.billAmount.taxAmount += (billItem.tax["stateTax"] + billItem.tax["countryTax"]) * 0.01 * this.billAmount.subAmount;
     }
     return this.billAmount.taxAmount;
   }
