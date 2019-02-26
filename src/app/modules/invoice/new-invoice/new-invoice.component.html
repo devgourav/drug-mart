@@ -43,9 +43,9 @@
 							<td scope="col">{{ invoiceItem.rate }}</td>
 							<td scope="col">{{ getSubAmount(invoiceItem.rate,invoiceItem.quantity) }}</td>
 							<td scope="col">{{ invoiceItem.discount}}</td>
-							<td scope="col">{{ invoiceItem.stateTax + invoiceItem.countryTax }}</td>
+							<td scope="col">{{ invoiceItem.tax.stateTax + invoiceItem.tax.countryTax }}</td>
 							<td scope="col">{{ getTotalAmount(invoiceItem.rate,invoiceItem.quantity,invoiceItem.discount,
-								invoiceItem.stateTax + invoiceItem.countryTax) }}</td>
+								invoiceItem.tax.stateTax + invoiceItem.tax.countryTax) }}</td>
 							<td scope="col">{{ invoiceItem.offer }}</td>
 							<td scope="col">{{ invoiceItem.itemMRP }}</td>
 							<td>
@@ -119,8 +119,8 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="submit" *ngIf="invoice.id" id="invoiceUpdateButton" class="btn button-save" (click)="updateInvoice()" >Update</button>
-				<button type="submit" *ngIf="!invoice.id" id="invoiceSaveButton" class="btn button-save" (click)="setInvoice()" >Save</button>
+				<button type="submit" *ngIf="invoiceId" id="invoiceUpdateButton" class="btn button-save" (click)="updateInvoice()" >Update</button>
+				<button type="submit" *ngIf="!invoiceId" id="invoiceSaveButton" class="btn button-save" (click)="setInvoice()" >Save</button>
 				<button type="button" id="invoiceCancelButton" class="btn button-cancel" (click)="closeClicked()">Cancel</button>
 			</div>
 		</form>

@@ -38,8 +38,8 @@
 					<td scope="col">{{ invoice?.orderNote }}</td>
 					<td scope="col">{{ invoice?.amountPaid }}</td>
 					<td>
-						<button type="button" class="btn button-primary" (click)="editInvoice(invoice?.id)">View/Edit</button>
-						<button type="button" class="btn button-cancel" (click)="deleteInvoice(invoice?.id)">Delete</button>
+						<button type="button" class="btn button-primary" (click)="editInvoice(invoice.id)">View/Edit</button>
+						<button type="button" class="btn button-cancel" (click)="deleteInvoice(invoice)">Delete</button>
 					</td>
 				</tr>
 

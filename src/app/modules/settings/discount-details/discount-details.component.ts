@@ -15,7 +15,7 @@ const confirmMsg = "Do you want to delete this discount?";
 export class DiscountDetailsComponent implements OnInit {
   discountId: string = "";
   discounts: Discount[] = [];
-  discount: Discount = new Discount();
+  discount: Discount;
 
   constructor(private location: Location, private _discountService: DiscountService) { }
 
@@ -47,23 +47,15 @@ export class DiscountDetailsComponent implements OnInit {
       });
   }
 
-  deleteDiscount(discountId: string){
+  deleteDiscount(discount: Discount){
     if(confirm(confirmMsg)){
-      this._discountService.deleteDiscount(discountId)
-      .subscribe(()=>{
-        this.getDiscountDetails();
-      });
-
+      this._discountService.deleteDiscount(discount);
     }
   }
 
   setDiscount(){
     this.discount = Object.assign({}, this.discountInputForm.value);
-    this._discountService.setDiscount(this.discount)
-      .subscribe((response) => {
-        this.getDiscountDetails();
-        console.log(response);
-      });
+    this._discountService.setDiscount(this.discount);
   }
 
 

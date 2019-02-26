@@ -1,18 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-
 import { BillItemModalComponent } from '../billItem-modal/billItem-modal.component';
 import { Bill } from 'src/app/core/model/bill.model';
-import { Vendor } from 'src/app/core/model/vendor.model';
 import { Amount } from 'src/app/core/model/amount.model';
 import { BillService } from 'src/app/core/service/bill.service';
 import { VendorService } from 'src/app/core/service/vendor.service';
 import { BillItem } from 'src/app/core/model/billItem.model';
+import { Vendor } from 'src/app/core/model/vendor.model';
 
 // TODO: Add A save/Update prompt
 
@@ -33,8 +30,9 @@ export class NewBillComponent implements OnInit {
   taxRate: number;
   discountRate: number;
 
-  vendorNameMaps: Map<string,string>[] = [];
-  vendorNameMap: Map<string,string> = new Map();
+  vendors: Vendor[];
+  vendorId: string = "";
+  vendorName: string = "";
 
 
   constructor(private location: Location, private modalService: NgbModal,
@@ -110,7 +108,6 @@ export class NewBillComponent implements OnInit {
     this.taxRate = this.discountRate = 0;
 
     for (let billItem of billItems) {
-      console.log(billItem);
       this.taxRate = billItem.tax['stateTax'] + billItem.tax['countryTax'];
       this.discountRate = billItem.discount;
 
@@ -130,12 +127,7 @@ export class NewBillComponent implements OnInit {
   populateVendorDropDown() {
     this._vendorService.getVendors()
       .subscribe((response) => {
-        response.forEach((vendor,index)=>{
-          this.vendorNameMap.set("id",vendor.id);
-          this.vendorNameMap.set("name",vendor.name);
-          this.vendorNameMaps.push(this.vendorNameMap);
-        })
-        console.log(this.vendorNameMaps);
+        this.vendors = response;
       });
   }
 
@@ -154,7 +146,6 @@ export class NewBillComponent implements OnInit {
           response.paymentMethod,
           response.amountPaid
         );
-        console.log(this.bill);
         this.billItems = this.bill.billItems;
         this.populateBillData();
         this.calculateTotalCosts(this.billItems);
@@ -162,8 +153,12 @@ export class NewBillComponent implements OnInit {
   }
 
   setVendorName(event: any) {
-    this.vendorNameMap.set("id",event.target.value);
-    // this.vendorNameMap.set("name",event.target.value) ;
+    this.vendorId = event.target.value;
+    for(let vendor of this.vendors){
+      if(this.vendorId == vendor.id){
+        this.vendorName = vendor.name;
+      }
+    }
 
   }
 
@@ -179,13 +174,14 @@ export class NewBillComponent implements OnInit {
 
   getBillObj():Bill{
     this.bill = new Bill(
-      this.billInputForm.get("vendorId").value,
+      this.vendorId,
       this.billItems,
       this.billInputForm.get("billedDate").value,
       this.billInputForm.get("orderNote").value,
       this.billInputForm.get("paymentMethod").value,
       this.billInputForm.get("amountPaid").value
     );
+    this.bill.vendorName = this.vendorName;
     this.bill.id = this.billId;
     const bill = Object.assign({},this.bill);
     return bill;
@@ -203,7 +199,7 @@ export class NewBillComponent implements OnInit {
     if (billItem) {
       modalRef.componentInstance.billItem = billItem
     }
-    modalRef.componentInstance.editItemEvent.subscribe((response) => {
+    modalRef.componentInstance.editItemEvent.subscribe((response: BillItem) => {
       this.billItem = response;
       for (let billItem of this.billItems) {
         if (this.billItem.itemId == billItem.itemId) {

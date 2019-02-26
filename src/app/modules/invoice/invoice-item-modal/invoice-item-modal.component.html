@@ -14,7 +14,7 @@
           <label class="col-sm-4 col-form-label" for="itemName">Item List</label>
           <div class="col-sm-8">
             <select name="itemPackType" id="itemPackType" class="form-control"
-            (change)="populateItemModal($event)" formControlName="itemId">
+            (change)="populateOnItemSelectEvent($event)" formControlName="itemId">
               <option value="default" selected>Select Item</option>
               <option *ngFor="let item of items" value="{{ item.id }}">{{ item.name }}</option>
             </select>
@@ -90,7 +90,7 @@
           <label class="col-sm-4 col-form-label" for="itemTax1">SGST</label>
           <div class="col-sm-8">
             <select name="itemTax1" id="itemTax1" class="form-control" formControlName="stateTax">
-              <option [ngValue]="6" selected>6%</option>
+              <option *ngFor="let tax of taxes" value="{{ tax.rate }}">{{ tax.name }}</option>
             </select>
           </div>
         </div>
@@ -99,7 +99,7 @@
           <label class="col-sm-4 col-form-label" for="itemTax2">CGST</label>
           <div class="col-sm-8">
             <select name="itemTax2" id="itemTax2" class="form-control" formControlName="countryTax">
-              <option [ngValue]="6" selected>6%</option>
+              <option *ngFor="let tax of taxes" value="{{ tax.rate }}">{{ tax.name }}</option>
             </select>
           </div>
         </div>
@@ -125,8 +125,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" *ngIf="invoiceItem.itemName" class="btn button-primary" (click)="editInvoiceItem();activeModal.close('Close')">Save Item</button>
-    <button type="button" *ngIf="!invoiceItem.itemName" class="btn button-primary" (click)="addInvoiceItem();activeModal.close('Close')">Add Item</button>
+    <button type="button" *ngIf="invoiceItem" class="btn button-primary" (click)="editInvoiceItem();activeModal.close('Close')">Save Item</button>
+    <button type="button" *ngIf="!invoiceItem" class="btn button-primary" (click)="addInvoiceItem();activeModal.close('Close')">Add Item</button>
     <button type="button" class="btn button-cancel" (click)="activeModal.close('Close')">Cancel</button>
   </div>
 </form>

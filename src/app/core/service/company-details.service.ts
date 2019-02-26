@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CompanyDetails } from '../model/companyDetails.model';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
-import { throwError, Observable } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
-
-const companyDetailsURL = "http://localhost:3000/companyDetails/";
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
 
 
 @Injectable({
@@ -18,48 +11,53 @@ const httpOptions = {
 })
 export class CompanyDetailsService {
   response: any;
-
-  constructor(private http: HttpClient) {
+  companyDetailsCollection: AngularFirestoreCollection<CompanyDetails>;
+  companyDetails: Observable<CompanyDetails[]>;
+  companyDetailsDocument: AngularFirestoreDocument<CompanyDetails>;
+  constructor(private afs: AngularFirestore) {
+    this.companyDetailsCollection = this.afs.collection('companyDetails');
   }
 
-  getCompanyDetails(): Observable<CompanyDetails> {
-    return this.http.get<CompanyDetails>(companyDetailsURL, httpOptions)
-      .pipe(
-        retry(3),
-        catchError(this.handleError)
-      );
+  getCompanyDetails(): Observable<CompanyDetails[]> {
+    return this.companyDetails = this.companyDetailsCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as CompanyDetails;
+        data.id = a.payload.doc.id;
+        return data;
+      }))
+    );
   }
 
-  setCompanyDetails(companyDetails: CompanyDetails): Observable<any> {
-    return this.http.post<CompanyDetails>(companyDetailsURL, companyDetails, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+  getCompanyDetailsById(id: string): Observable<CompanyDetails> {
+    this.companyDetailsDocument = this.afs.doc(`companyDetails/${id}`);
+    return this.companyDetailsDocument.valueChanges();
   }
 
-  deleteCompanyDetails(): Observable<{}> {
-    return this.http.delete(companyDetailsURL, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+  setCompanyDetails(companyDetails: CompanyDetails) {
+    const id = this.afs.createId();
+    companyDetails.id = id;
+    this.companyDetailsCollection.doc(id).set(companyDetails);
   }
 
-  updateCompanyDetails(companyDetails: CompanyDetails): Observable<any> {
-    return this.http.put(companyDetailsURL + companyDetails.id, companyDetails, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      )
+  deleteCompanyDetails(companyDetails: CompanyDetails) {
+    this.companyDetailsDocument = this.afs.doc(`companyDetails/${companyDetails.id}`);
+    this.companyDetailsDocument.delete();
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    return throwError(
-      'Something bad happened; please try again later.');
-  };
+  updateCompanyDetails(companyDetails: CompanyDetails) {
+    this.companyDetailsDocument = this.afs.doc(`companyDetails/${companyDetails.id}`);
+    this.companyDetailsDocument.update(companyDetails);
+  }
+
+  // private handleError(error: HttpErrorResponse) {
+  //   if (error.error instanceof ErrorEvent) {
+  //     console.error('An error occurred:', error.error.message);
+  //   } else {
+  //     console.error(
+  //       `Backend returned code ${error.status}, ` +
+  //       `body was: ${error.error}`);
+  //   }
+  //   return throwError(
+  //     'Something bad happened; please try again later.');
+  // };
 }

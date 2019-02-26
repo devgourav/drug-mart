@@ -45,23 +45,15 @@ export class TaxDetailsComponent implements OnInit {
       });
   }
 
-  deleteTax(taxId: string){
+  deleteTax(tax: Tax){
     if(confirm(confirmMsg)){
-      this._taxService.deleteTax(taxId)
-      .subscribe(()=>{
-        this.getTaxDetails();
-      });
-
+      this._taxService.deleteTax(tax);
     }
   }
 
   setTax(){
     this.tax = Object.assign({}, this.taxInputForm.value);
-    this._taxService.setTax(this.tax)
-      .subscribe((response) => {
-        this.getTaxDetails();
-        console.log(response);
-      });
+    this._taxService.setTax(this.tax);
   }
 
 
