@@ -11,9 +11,10 @@ import { CompanyDetailsService } from 'src/app/core/service/company-details.serv
   styleUrls: ['./company-details.component.scss']
 })
 export class CompanyDetailsComponent implements OnInit {
-  companyDetailsId: string = "";
-  companyDetails: CompanyDetails = new CompanyDetails();
+  companyDetails: CompanyDetails;
   showBillingAddress: boolean = true;
+  addressMap: Map<string, string>;
+  companyDetailsId: string = "";
 
   constructor(private location: Location, private _companyDetailsService: CompanyDetailsService) {
   }
@@ -28,7 +29,7 @@ export class CompanyDetailsComponent implements OnInit {
     this.showBillingAddress = false;
   }
 
-  closeClicked(){
+  closeClicked() {
     this.location.back();
     this.companyDetailsInputForm.reset();
   }
@@ -40,7 +41,7 @@ export class CompanyDetailsComponent implements OnInit {
     altPhoneNumber: new FormControl(''),
     emailId: new FormControl(''),
     website: new FormControl(''),
-    GSTIN: new FormControl(''),
+    GSTNumber: new FormControl(''),
     serviceTaxNo: new FormControl(''),
     billingAddress: new FormGroup({
       streetAddress: new FormControl(''),
@@ -64,7 +65,20 @@ export class CompanyDetailsComponent implements OnInit {
       .subscribe((response) => {
         console.log("response:");
         if (response) {
-          this.companyDetails = response;
+          const cDetails = response[0];
+          this.companyDetails = new CompanyDetails(
+            cDetails.name,
+            cDetails.phoneNumber,
+            cDetails.altPhoneNumber,
+            cDetails.emailId,
+            cDetails.website,
+            cDetails.GSTNumber,
+            cDetails.serviceTaxNo,
+            cDetails.billingAddress,
+            cDetails.shippingAddress
+          );
+          this.companyDetailsId = cDetails.id;
+          this.companyDetails.id = cDetails.id;
           this.populateCompanyDetailsData();
         }
       });
@@ -79,45 +93,77 @@ export class CompanyDetailsComponent implements OnInit {
       altPhoneNumber: this.companyDetails.altPhoneNumber,
       emailId: this.companyDetails.emailId,
       website: this.companyDetails.website,
-      GSTIN: this.companyDetails.GSTIN,
+      GSTNumber: this.companyDetails.GSTNumber,
       serviceTaxNo: this.companyDetails.serviceTaxNo,
       billingAddress: {
-        streetAddress: this.companyDetails.billingAddress.get("streetAddress"),
-        country: this.companyDetails.billingAddress.get("country"),
-        state: this.companyDetails.billingAddress.get("state"),
-        city: this.companyDetails.billingAddress.get("city"),
-        pincode: this.companyDetails.billingAddress.get("pincode")
+        streetAddress: this.companyDetails.billingAddress["streetAddress"],
+        country: this.companyDetails.billingAddress["country"],
+        state: this.companyDetails.billingAddress["state"],
+        city: this.companyDetails.billingAddress["city"],
+        pincode: this.companyDetails.billingAddress["pincode"]
       },
       shippingAddress: {
-        streetAddress: this.companyDetails.shippingAddress.get("streetAddress"),
-        country: this.companyDetails.shippingAddress.get("country"),
-        state: this.companyDetails.shippingAddress.get("state"),
-        city: this.companyDetails.shippingAddress.get("city"),
-        pincode: this.companyDetails.shippingAddress.get("pincode")
+        streetAddress: this.companyDetails.shippingAddress["streetAddress"],
+        country: this.companyDetails.shippingAddress["country"],
+        state: this.companyDetails.shippingAddress["state"],
+        city: this.companyDetails.shippingAddress["city"],
+        pincode: this.companyDetails.shippingAddress["pincode"]
       }
     });
   }
 
   saveCompanyDetails() {
-    this.companyDetailsId = this.companyDetails.id;
-
-    if (this.companyDetails.id == null || this.companyDetails.id == "") {
-      this.companyDetails = Object.assign({}, this.companyDetailsInputForm.value);
-      this._companyDetailsService.setCompanyDetails(this.companyDetails)
-        .subscribe((response) => {
-          this.getCompanyDetails();
-          console.log(response);
-        });
+    if (!this.companyDetails) {
+      this._companyDetailsService.setCompanyDetails(this.getCompanyObj());
+      this.getCompanyDetails();
     } else {
-      this.companyDetails = Object.assign({}, this.companyDetailsInputForm.value);
-      this.companyDetails.id = this.companyDetailsId;
-      this._companyDetailsService.updateCompanyDetails(this.companyDetails)
-        .subscribe((response) => {
-          console.log(response);
-          this.location.back()
-        });
+      this._companyDetailsService.updateCompanyDetails(this.getCompanyObj());
+      this.getCompanyDetails();
     }
 
+  }
+
+  getCompanyObj(): CompanyDetails {
+    this.addressMap = new Map();
+    this.addressMap.set("streetAddress", this.companyDetailsInputForm.get("billingAddress").get("streetAddress").value);
+    this.addressMap.set("country", this.companyDetailsInputForm.get("billingAddress").get("country").value);
+    this.addressMap.set("state", this.companyDetailsInputForm.get("billingAddress").get("state").value);
+    this.addressMap.set("city", this.companyDetailsInputForm.get("billingAddress").get("city").value);
+    this.addressMap.set("pincode", this.companyDetailsInputForm.get("billingAddress").get("pincode").value);
+
+    const billingAddress = this.convertMapToObject(this.addressMap);
+
+    this.addressMap = new Map();
+    this.addressMap.set("streetAddress", this.companyDetailsInputForm.get("shippingAddress").get("streetAddress").value);
+    this.addressMap.set("country", this.companyDetailsInputForm.get("shippingAddress").get("country").value);
+    this.addressMap.set("state", this.companyDetailsInputForm.get("shippingAddress").get("state").value);
+    this.addressMap.set("city", this.companyDetailsInputForm.get("shippingAddress").get("city").value);
+    this.addressMap.set("pincode", this.companyDetailsInputForm.get("shippingAddress").get("pincode").value);
+
+    const shippingAddress = this.convertMapToObject(this.addressMap);
+
+    this.companyDetails = new CompanyDetails(
+      this.companyDetailsInputForm.get("name").value,
+      this.companyDetailsInputForm.get("phoneNumber").value,
+      this.companyDetailsInputForm.get("altPhoneNumber").value,
+      this.companyDetailsInputForm.get("emailId").value,
+      this.companyDetailsInputForm.get("website").value,
+      this.companyDetailsInputForm.get("GSTNumber").value,
+      this.companyDetailsInputForm.get("serviceTaxNo").value,
+      billingAddress,
+      shippingAddress
+    );
+    this.companyDetails.id = this.companyDetailsId;
+    const companyDetails = Object.assign({},this.companyDetails);
+    return companyDetails;
+  }
+
+  convertMapToObject(map: Map<any, any>): Map<any, any> {
+    let objectMap = Object.create(null);
+    for (let [k, v] of map) {
+      objectMap[k] = v;
+    }
+    return objectMap;
   }
 
 

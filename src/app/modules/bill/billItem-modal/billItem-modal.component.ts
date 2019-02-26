@@ -4,6 +4,8 @@ import { Item } from 'src/app/core/model/item.model';
 import { ItemService } from 'src/app/core/service/item.service';
 import { NgbModalConfig, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { BillItem } from 'src/app/core/model/billItem.model';
+import { TaxService } from 'src/app/core/service/tax.service';
+import { Tax } from 'src/app/core/model/tax.model';
 
 
 
@@ -20,6 +22,7 @@ export class BillItemModalComponent implements OnInit {
 
   items: Item[] = [];
   item: Item;
+  taxes: Tax[];
   itemId: string = "";
   taxMap: Map<string,number>;
 
@@ -43,10 +46,11 @@ export class BillItemModalComponent implements OnInit {
 
 
   constructor(private modalService: NgbModal,private activeModal: NgbActiveModal,
-    private _itemService: ItemService) {
+    private _itemService: ItemService,private _taxService: TaxService) {
   }
 
   ngOnInit() {
+    this.fetchTaxDetails();
     this.populateItemDropdown();
     if (this.billItem) {
       console.warn("BillItem:" + this.billItem);
@@ -64,8 +68,8 @@ export class BillItemModalComponent implements OnInit {
 
   getBillItemObj():BillItem{
     this.taxMap = new Map();
-    this.taxMap.set("stateTax",this.billItemForm.get("stateTax").value);
-    this.taxMap.set("countryTax",this.billItemForm.get("countryTax").value);
+    this.taxMap.set("stateTax",+this.billItemForm.get("stateTax").value);
+    this.taxMap.set("countryTax",+this.billItemForm.get("countryTax").value);
 
     const taxMap = this.convertMapToObject(this.taxMap);
 
@@ -128,7 +132,7 @@ export class BillItemModalComponent implements OnInit {
       itemHSN: this.item.HSNCode,
       manufacturer: this.item.manufacturer,
       itemMRP: this.item.itemMRP,
-      batchNumber: "",
+      batchNumber: this.item.batchNumber,
       expiryDate: "",
       quantity: null,
       rate: this.item.saleCost,
@@ -137,6 +141,13 @@ export class BillItemModalComponent implements OnInit {
       discount: null,
       offer: ""
     });
+  }
+
+  fetchTaxDetails(){
+    this._taxService.getTaxes()
+      .subscribe((response) => {
+        this.taxes = response;
+      });
   }
 
   convertMapToObject(map: Map<any,any>):Map<any,any>{

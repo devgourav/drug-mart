@@ -4,11 +4,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceItemModalComponent } from '../invoice-item-modal/invoice-item-modal.component';
-import { Invoice, InvoiceItem } from 'src/app/core/model/invoice.model';
+import { Invoice } from 'src/app/core/model/invoice.model';
 import { Client } from 'src/app/core/model/client.model';
 import { Amount } from 'src/app/core/model/amount.model';
 import { InvoiceService } from 'src/app/core/service/invoice.service';
 import { ClientService } from 'src/app/core/service/client.service';
+import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
 
 
 // TODO: Add A save/Update prompt
@@ -23,16 +24,18 @@ import { ClientService } from 'src/app/core/service/client.service';
 export class NewInvoiceComponent implements OnInit {
 
   invoice: Invoice;
-  invoiceItems: Array<InvoiceItem> = new Array<InvoiceItem>();
+  invoiceItems: InvoiceItem[] = [];
   invoiceItem: InvoiceItem;
-  clients: Client[] = [];
 
   invoiceId: string = "";
   netAmount: Amount = new Amount();
   taxRate: number;
   discountRate: number;
-  response: any;
-  subClient = {clientId:"",clientName: ""};
+
+  clients: Client[];
+  clientId: string = "";
+  clientName: string = "";
+
 
   constructor(private location: Location, private modalService: NgbModal,
     private _invoiceService: InvoiceService, private _clientService: ClientService,
@@ -62,9 +65,24 @@ export class NewInvoiceComponent implements OnInit {
 
   openItemModal() {
     const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
-    modalRef.componentInstance.addItemEvent.subscribe((response) => {
-      this.invoiceItem = response;
-      this.invoiceItems.push(this.invoiceItem);
+    modalRef.componentInstance.addItemEvent.subscribe((response: InvoiceItem) => {
+      this.invoiceItem = new InvoiceItem(
+        response.itemId,
+        response.itemName,
+        response.packType,
+        response.itemHSN,
+        response.manufacturer,
+        response.batchNumber,
+        response.expiryDate,
+        response.quantity,
+        response.rate,
+        response.itemMRP,
+        response.tax,
+        response.discount,
+        response.offer
+      );
+      const invoiceItem = Object.assign({}, this.invoiceItem)
+      this.invoiceItems.push(invoiceItem);
       this.calculateTotalCosts(this.invoiceItems);
     });
   }
@@ -90,7 +108,7 @@ export class NewInvoiceComponent implements OnInit {
     this.taxRate = this.discountRate = 0;
 
     for (let invoiceItem of invoiceItems) {
-      this.taxRate = invoiceItem.tax.get("stateTax") + invoiceItem.tax.get("countryTax")
+      this.taxRate = invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"]
       this.discountRate = invoiceItem.discount;
 
       this.netAmount.subAmount += (invoiceItem.rate * invoiceItem.quantity);
@@ -116,7 +134,14 @@ export class NewInvoiceComponent implements OnInit {
   getInvoice(invoiceId: string) {
     this._invoiceService.getInvoiceById(invoiceId)
       .subscribe((response) => {
-        this.invoice = response;
+        this.invoice = new Invoice(
+          response.clientId,
+          response.invoicedDate,
+          response.invoiceItems,
+          response.orderNote,
+          response.paymentMethod,
+          response.amountPaid
+        );
         this.invoiceItems = this.invoice.invoiceItems;
         this.populateInvoiceData();
         console.warn(this.invoiceItems);
@@ -124,27 +149,38 @@ export class NewInvoiceComponent implements OnInit {
       })
   }
 
-  setClientName(event: any){
-    this.subClient.clientId = event.target.value;
-    this._clientService.getClientById(this.subClient.clientId)
-    .subscribe((response)=>{
-      this.subClient.clientName = response.name;
-    })
+  setClientName(event: any) {
+    this.clientId = event.target.value;
+    for(let client of this.clients){
+      if(this.clientId == client.id){
+        this.clientName = client.name;
+      }
+    }
   }
 
   setInvoice() {
-    this.invoice = Object.assign({}, this.invoiceInputForm.value,this.subClient);
-    this.invoice.invoiceItems = this.invoiceItems;
-    this._invoiceService.setInvoice(this.invoice);
+    this._invoiceService.setInvoice(this.getInvoiceObj());
     this.closeClicked();
   }
 
   updateInvoice() {
-    this.invoice = Object.assign({}, this.invoiceInputForm.value,this.subClient);
-    this.invoice.invoiceItems = this.invoiceItems;
-    this.invoice.id = this.invoiceId;
-    this._invoiceService.updateInvoice(this.invoice);
+    this._invoiceService.updateInvoice(this.getInvoiceObj());
     this.closeClicked();
+  }
+
+  getInvoiceObj(): Invoice {
+    this.invoice = new Invoice(
+      this.clientId,
+      this.invoiceInputForm.get("invoicedDate").value,
+      this.invoiceItems,
+      this.invoiceInputForm.get("orderNote").value,
+      this.invoiceInputForm.get("paymentMethod").value,
+      this.invoiceInputForm.get("amountPaid").value
+    );
+    this.invoice.clientName = this.clientName;
+    this.invoice.id = this.invoiceId;
+    const bill = Object.assign({}, this.invoice);
+    return bill;
   }
 
   deleteItem(invoiceItem: InvoiceItem) {
@@ -159,15 +195,11 @@ export class NewInvoiceComponent implements OnInit {
     if (invoiceItem) {
       modalRef.componentInstance.invoiceItem = invoiceItem
     }
-    modalRef.componentInstance.editItemEvent.subscribe((response) => {
+    modalRef.componentInstance.editItemEvent.subscribe((response:InvoiceItem) => {
       this.invoiceItem = response;
       for (let invoiceItem of this.invoiceItems) {
         if (this.invoiceItem.itemId == invoiceItem.itemId) {
           const index: number = this.invoiceItems.indexOf(invoiceItem);
-          // if (index !== -1) {
-          //   this.invoiceItems.splice(index, 1);
-          //   this.invoiceItems.push(this.invoiceItem);
-          // }
           this.invoiceItems[index] = this.invoiceItem;
           break;
         }

@@ -1,16 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Discount } from '../model/discount.model';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
-import { throwError, Observable } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-
-
-const discountURL = "http://localhost:3000/discounts/";
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -18,56 +10,54 @@ const httpOptions = {
 })
 export class DiscountService {
   response: any;
-
-  constructor(private http: HttpClient) {
+  discountCollection: AngularFirestoreCollection<Discount>;
+  discounts: Observable<Discount[]>;
+  discount: Observable<Discount>;
+  discountDocument: AngularFirestoreDocument<Discount>;
+  constructor(private afs: AngularFirestore) {
+    this.discountCollection = this.afs.collection('discounts')
   }
 
   getDiscounts(): Observable<Discount[]> {
-    return this.http.get<Discount[]>(discountURL, httpOptions)
-      .pipe(
-        retry(3),
-        catchError(this.handleError)
-      );
+    return this.discounts = this.discountCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Discount
+        data.id = a.payload.doc.id;
+        return data;
+      }))
+    );
   }
 
-  setDiscount(discount: Discount): Observable<any> {
-    return this.http.post<Discount>(discountURL, discount, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+  getDiscountById(id: string): Observable<Discount> {
+    this.discountDocument = this.afs.doc(`discounts/${id}`);
+    return this.discountDocument.valueChanges();
   }
 
-  getDiscountById(id:string): Observable<Discount[]> {
-    return this.http.get<Discount[]>(discountURL + id, httpOptions)
-      .pipe(
-        retry(3),
-        catchError(this.handleError)
-      );
+  setDiscount(discount: Discount) {
+    const id = this.afs.createId();
+    discount.id = id;
+    this.discountCollection.doc(id).set(discount);
   }
 
-  deleteDiscount(id: string): Observable<{}> {
-    return this.http.delete(discountURL + id, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+  deleteDiscount(discount: Discount) {
+    this.discountDocument = this.afs.doc(`discounts/${discount.id}`);
+    this.discountDocument.delete();
   }
 
-  updateDiscount(discount: Discount): Observable<any> {
-    return this.http.put(discountURL + discount.id, discount, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      )
+  updateDiscount(discount: Discount) {
+    this.discountDocument = this.afs.doc(`discounts/${discount.id}`);
+    this.discountDocument.update(discount);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    return throwError(
-      'Something bad happened; please try again later.');
-  };
+  // private handleError(error: HttpErrorResponse) {
+  //   if (error.error instanceof ErrorEvent) {
+  //     console.error('An error occurred:', error.error.message);
+  //   } else {
+  //     console.error(
+  //       `Backend returned code ${error.status}, ` +
+  //       `body was: ${error.error}`);
+  //   }
+  //   return throwError(
+  //     'Something bad happened; please try again later.');
+  // };
 }

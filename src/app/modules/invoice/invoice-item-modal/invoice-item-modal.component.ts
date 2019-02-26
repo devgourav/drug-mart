@@ -1,9 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { NgbModalConfig, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { InvoiceItem } from 'src/app/core/model/invoice.model';
 import { Item } from 'src/app/core/model/item.model';
 import { ItemService } from 'src/app/core/service/item.service';
+import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
+import { TaxService } from 'src/app/core/service/tax.service';
+import { Tax } from 'src/app/core/model/tax.model';
 
 
 
@@ -22,6 +24,8 @@ export class InvoiceItemModalComponent implements OnInit {
   items: Item[] = [];
   item: Item;
   itemId: string = "";
+  taxMap: Map<string,number>;
+  taxes: Tax[];
 
   invoiceItemForm = new FormGroup({
     itemName: new FormControl(''),
@@ -42,28 +46,51 @@ export class InvoiceItemModalComponent implements OnInit {
   });
 
 
-  constructor(private modalService: NgbModal,
-    private activeModal: NgbActiveModal, private _itemService: ItemService) {
+  constructor(private modalService: NgbModal,private activeModal: NgbActiveModal,
+    private _itemService: ItemService,private _taxService: TaxService) {
   }
 
   ngOnInit() {
+    this.fetchTaxDetails();
     this.populateItemDropdown();
-    if (this.invoiceItem.itemName!="" && this.invoiceItem.itemName!=null) {
+    if (this.invoiceItem) {
       console.warn("InvoiceItem:" + this.invoiceItem);
       this.populateInvoiceItem();
     }
   }
 
   addInvoiceItem() {
-    this.invoiceItem = Object.assign({}, this.invoiceItemForm.value);
-    console.warn(this.invoiceItem);
-    this.addItemEvent.emit(this.invoiceItem);
+    this.addItemEvent.emit(this.getBillItemObj());
   }
 
   editInvoiceItem() {
-    this.invoiceItem = Object.assign({}, this.invoiceItemForm.value);
-    console.warn(this.invoiceItem);
-    this.editItemEvent.emit(this.invoiceItem);
+    this.editItemEvent.emit(this.getBillItemObj());
+  }
+
+  getBillItemObj():InvoiceItem{
+    this.taxMap = new Map();
+    this.taxMap.set("stateTax",+this.invoiceItemForm.get("stateTax").value);
+    this.taxMap.set("countryTax",+this.invoiceItemForm.get("countryTax").value);
+
+    const taxMap = this.convertMapToObject(this.taxMap);
+
+    this.invoiceItem = new InvoiceItem(
+      this.invoiceItemForm.get("itemId").value,
+      this.invoiceItemForm.get("itemName").value,
+      this.invoiceItemForm.get("packType").value,
+      this.invoiceItemForm.get("itemHSN").value,
+      this.invoiceItemForm.get("manufacturer").value,
+      this.invoiceItemForm.get("batchNumber").value,
+      this.invoiceItemForm.get("expiryDate").value,
+      this.invoiceItemForm.get("quantity").value,
+      this.invoiceItemForm.get("rate").value,
+      this.invoiceItemForm.get("itemMRP").value,
+      taxMap,
+      this.invoiceItemForm.get("discount").value,
+      this.invoiceItemForm.get("offer").value
+    );
+    const billItem = Object.assign({}, this.invoiceItem);
+    return billItem;
   }
 
   populateInvoiceItem() {
@@ -78,8 +105,8 @@ export class InvoiceItemModalComponent implements OnInit {
       quantity: this.invoiceItem.quantity,
       rate: this.invoiceItem.rate,
       itemMRP: this.invoiceItem.itemMRP,
-      stateTax: +this.invoiceItem.tax.get("stateTax"),
-      countryTax: +this.invoiceItem.tax.get("countryTax"),
+      stateTax: +this.invoiceItem.tax["stateTax"],
+      countryTax: +this.invoiceItem.tax["countryTax"],
       discount: this.invoiceItem.discount,
       offer: this.invoiceItem.offer
     });
@@ -117,7 +144,20 @@ export class InvoiceItemModalComponent implements OnInit {
     });
   }
 
+  fetchTaxDetails(){
+    this._taxService.getTaxes()
+      .subscribe((response) => {
+        this.taxes = response;
+      });
+  }
 
+  convertMapToObject(map: Map<any,any>):Map<any,any>{
+    let objectMap = Object.create(null);
+    for(let[k,v] of map){
+      objectMap[k]=v;
+    }
+    return objectMap;
+  }
 
 
 

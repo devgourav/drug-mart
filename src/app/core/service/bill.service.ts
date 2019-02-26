@@ -3,7 +3,6 @@ import { Bill } from '../model/bill.model';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { BillItem } from '../model/billItem.model';
 
 
 
@@ -13,14 +12,11 @@ import { BillItem } from '../model/billItem.model';
 export class BillService {
   response: any;
   billCollection: AngularFirestoreCollection<Bill>;
-  billItemCollection: AngularFirestoreCollection<BillItem>;
   bills: Observable<Bill[]>;
   bill: Observable<Bill>;
-  billItem: Observable<BillItem>;
   billDocument: AngularFirestoreDocument<Bill>;
   constructor(private afs: AngularFirestore) {
     this.billCollection = this.afs.collection('bills');
-    this.billItemCollection = this.afs.collection('bills');
   }
 
   getBills(): Observable<Bill[]> {

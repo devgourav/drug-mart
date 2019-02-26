@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Invoice, InvoiceItem } from 'src/app/core/model/invoice.model';
+import { Invoice } from 'src/app/core/model/invoice.model';
 import { Amount } from 'src/app/core/model/amount.model';
 import { InvoiceService } from 'src/app/core/service/invoice.service';
+import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
 
 const confirmMsg = "Do you want to delete this Invoice?";
 
@@ -36,7 +37,6 @@ export class InvoiceDetailsComponent implements OnInit {
     this._invoiceService.getInvoices()
       .subscribe((response) => {
         this.invoices = response;
-        console.log(this.invoices);
       })
   }
 
@@ -61,7 +61,7 @@ export class InvoiceDetailsComponent implements OnInit {
   getTaxAmount(invoiceItems: InvoiceItem[]): number {
     this.invoiceAmount.taxAmount = 0;
     for (let invoiceItem of invoiceItems) {
-      this.invoiceAmount.taxAmount += (invoiceItem.tax.get("stateTax") + invoiceItem.tax.get("countryTax")) * 0.01 * this.invoiceAmount.subAmount;
+      this.invoiceAmount.taxAmount += (invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"]) * 0.01 * this.invoiceAmount.subAmount;
     }
     return this.invoiceAmount.taxAmount;
   }
