@@ -8,7 +8,8 @@ import { SettingsRoutingModule } from './settings-routing.module';
 import { DiscountDetailsComponent } from './discount-details/discount-details.component';
 
 @NgModule({
-  declarations: [SettingDetailsComponent,CompanyDetailsComponent,TaxDetailsComponent, DiscountDetailsComponent],
+  declarations: [SettingDetailsComponent,CompanyDetailsComponent,
+    TaxDetailsComponent, DiscountDetailsComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,

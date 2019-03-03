@@ -32,6 +32,7 @@ export class ItemDetailsComponent implements OnInit {
     .subscribe((response)=>{
       this.items = response;
     })
+    console.log(new Date());
     console.log("ItemList:"+this.items);
   }
 
