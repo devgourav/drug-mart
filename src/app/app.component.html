@@ -1,12 +1,28 @@
-<div id="container">
-	<app-sidebar></app-sidebar>
+<div *ngIf="auth.user | async as user; else login">
+	<div *ngIf="auth.user | async as user">
+		<div id="container">
+			<app-sidebar></app-sidebar>
+			<div id="content">
+				<router-outlet></router-outlet>
+			</div>
+		</div>
+	</div>
+</div>
+<ng-template #login>
+	<button type="button" class="btn btn-primary btn-google" (click)="auth.googleLogin()">
+		Google SignIn
+	</button>
 
-	<div id="content">
-		<router-outlet></router-outlet>
+	<div id="recaptcha-container"></div>
+	<input type="number" name="phone_number" class="uk-input uk-form-large" [ngModel]="phoneNumber" placeholder="e.g 9999999999" required>
+
+	<button type="submit" class="btn btn-primary" (click)="onSignInSubmit()">Log-In with Mobile Number</button>
+
+	<div *ngIf="this.confirmationResult">
+		<label for="">Enter OTP</label>
+		<input type="number" name="phone_number" class="input" [(ngModel)]="phoneNumber" placeholder="e.g 9999999999" required>
+		<button type="submit" class="btn btn-primary" (click)="verifyLoginCode()">Verify OTP</button>
 	</div>
 
-</div>
 
-<!-- <div id="content">
-	<app-login></app-login>
-</div> -->
+</ng-template>

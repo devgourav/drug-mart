@@ -13,8 +13,8 @@ export class Item {
   saleDiscount: number = null;
   saleOffers: string = null;
   expiryDate: Date = new Date();
-  creationDate: Date = new Date();
-  modificationDate: Date = new Date();
+  creationDate: Date;
+  modificationDate: Date;
 
   constructor(name: string, quantity: number, description: string, HSNCode: string, batchNumber: string,
     expiryDate: Date,packType: string,manufacturer: string, purchaseCost: number, itemMRP: number,

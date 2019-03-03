@@ -3,20 +3,25 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { VendorDetailsComponent} from './vendor-details/vendor-details.component'
 import { NewVendorComponent } from './new-vendor/new-vendor.component';
+import { CanReadGuard } from 'src/app/core/guard/can-read.guard';
+import { CanEditGuard } from 'src/app/core/guard/can-edit.guard';
 
 
 const routes: Routes = [
 	{
 		path:'Vendors',
-		component: VendorDetailsComponent
+		component: VendorDetailsComponent,
+		canActivate: [CanReadGuard]
 	},
 	{
 		path:'Vendors/New Vendor',
-		component: NewVendorComponent
+		component: NewVendorComponent,
+		canActivate: [CanEditGuard]
 	},
 	{
 		path:'Vendors/New Vendor/:id',
-		component: NewVendorComponent
+		component: NewVendorComponent,
+		canActivate: [CanReadGuard]
 	}
 ];
 

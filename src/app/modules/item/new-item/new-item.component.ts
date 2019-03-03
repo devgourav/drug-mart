@@ -64,7 +64,9 @@ export class NewItemComponent implements OnInit {
           response.saleCost,
           response.saleDiscount,
           response.saleOffers
-        )
+        );
+        console.log(new Date());
+        console.log(response.expiryDate);
         this.populateItemData();
       })
   }
@@ -120,6 +122,13 @@ export class NewItemComponent implements OnInit {
       this.itemInputForm.get("saleOffers").value
     );
     this.item.id = this.itemId;
+    if(this.itemId){
+      this.item.modificationDate = new Date();
+    }else{
+      this.item.creationDate = new Date();
+      this.item.modificationDate = new Date();
+    }
+
     const item = Object.assign({}, this.item);
     return item;
   }

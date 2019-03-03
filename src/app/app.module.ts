@@ -17,16 +17,18 @@ import { ItemService } from './core/service/item.service';
 import { InvoiceService } from './core/service/invoice.service';
 import { AuthModule } from './core/auth/auth.module';
 import { SidebarComponent } from './core/common/sidebar/sidebar.component';
-import { LoginComponent } from './core/auth/login/login.component';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
+import { AuthService } from './core/service/auth.service';
+import { ClientService } from './core/service/client.service';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    SidebarComponent,
-    LoginComponent
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -43,9 +45,10 @@ import { environment } from '../environments/environment';
     HttpClientModule,
     AuthModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AngularFireAuthModule
   ],
-  providers: [ VendorService, BillService, ItemService,InvoiceService ],
+  providers: [ VendorService, BillService, ItemService,InvoiceService, AuthService, ClientService ],
   bootstrap: [AppComponent],
   exports:[SidebarComponent]
 

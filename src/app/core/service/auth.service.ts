@@ -1,46 +1,110 @@
 import { Injectable } from '@angular/core';
-import { Auth } from '../model/auth.model';
+import { User, Roles } from '../model/user.model';
+import { Observable, of } from 'rxjs';
+import { switchMap, map } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { auth } from 'firebase/app';
+import { Router } from '@angular/router';
+import { UserService } from './user.service';
 
-import { HttpHeaders, HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
 
-const userURL = "http://localhost:3000/users/";
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  response:any;
+  response: any;
+  user: Observable<User>;
+  roles: Roles;
 
-  constructor(private http: HttpClient) { }
 
-  getUserDetails(){
-    // TODO: post to api server and return data if correct
+  constructor(private afAuth: AngularFireAuth, private _userService: UserService,
+    private router: Router) {
+
+    this.user = this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (user) {
+          return this._userService.getUserById(user.uid);
+        } else {
+          return of(null)
+        }
+      })
+    );
+
   }
 
-  getUserById(auth: Auth): Observable<Auth> {
-    return this.http.get<Auth>(userURL, httpOptions)
-      .pipe(
-        retry(3),
-        catchError(this.handleError)
-      );
+
+
+  async googleLogin() {
+    console.log("Google login");
+    const provider = new auth.GoogleAuthProvider()
+    await this.afAuth.auth.signInWithPopup(provider).then(
+      (firebaseUser) => {
+        this.updateUserData(firebaseUser.user);
+      }
+    )
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+  async logout() {
+    await this.afAuth.auth.signOut();
+    return this.router.navigate(['/']);
+  }
+
+  private updateUserData(user: any) {
+    this._userService.getUserById(user.uid).subscribe(
+      (existingUser) => {
+        if (existingUser) {
+          this.roles = existingUser.roles;
+        } else {
+          this.roles = { subscriber: true, editor: false, admin: false };
+        }
+        const data = {
+          id: user.uid,
+          email: user.email,
+          username: user.email,
+          displayName: user.displayName,
+          roles: this.roles
+        }
+        console.log(data);
+        this._userService.setUser(data);
+      }
+    )
+  }
+
+
+  private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+    if (!user) {
+      return false
     }
-    return throwError(
-      'Something bad happened; please try again later.');
-  };
+    for (const role of allowedRoles) {
+      if (user.roles[role]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  //Abilities
+  canRead(user: User): boolean {
+    const allowed = ['admin', 'editor', 'subscriber']
+    return this.checkAuthorization(user, allowed);
+  }
+
+  canWrite(user: User): boolean {
+    const allowed = ['admin', 'editor']
+    return this.checkAuthorization(user, allowed);
+  }
+
+  canUpdate(user: User): boolean {
+    const allowed = ['admin', 'editor']
+    return this.checkAuthorization(user, allowed);
+  }
+
+  canDelete(user: User): boolean {
+    const allowed = ['admin']
+    return this.checkAuthorization(user, allowed);
+  }
+
+
 }
