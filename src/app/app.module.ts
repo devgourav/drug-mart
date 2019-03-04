@@ -23,6 +23,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { AuthService } from './core/service/auth.service';
 import { ClientService } from './core/service/client.service';
+import { SharedModule } from './core/shared/shared.module';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { ClientService } from './core/service/client.service';
     AuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    SharedModule
   ],
   providers: [ VendorService, BillService, ItemService,InvoiceService, AuthService, ClientService ],
   bootstrap: [AppComponent],
