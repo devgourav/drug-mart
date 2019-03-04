@@ -36,6 +36,8 @@ export class CompanyDetailsService {
   setCompanyDetails(companyDetails: CompanyDetails) {
     const id = this.afs.createId();
     companyDetails.id = id;
+    companyDetails.creationDate = new Date();
+    companyDetails.modificationDate = new Date();
     this.companyDetailsCollection.doc(id).set(companyDetails);
   }
 
@@ -45,6 +47,7 @@ export class CompanyDetailsService {
   }
 
   updateCompanyDetails(companyDetails: CompanyDetails) {
+    companyDetails.modificationDate = new Date();
     this.companyDetailsDocument = this.afs.doc(`companyDetails/${companyDetails.id}`);
     this.companyDetailsDocument.update(companyDetails);
   }

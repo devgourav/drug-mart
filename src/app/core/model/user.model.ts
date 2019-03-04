@@ -4,6 +4,8 @@ export interface User{
   email:string;
   displayName?: string;
   roles: Roles;
+  creationDate: Date;
+  modificationDate: Date;
 
   // constructor(id: string,username: string,email: string){
   //   this.id = id;

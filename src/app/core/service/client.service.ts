@@ -37,6 +37,8 @@ export class ClientService {
   setClient(client: Client) {
     const id = this.afs.createId();
     client.id = id;
+    client.creationDate = new Date();
+    client.modificationDate = new Date();
     this.clientCollection.doc(id).set(client);
 
   }
@@ -47,6 +49,7 @@ export class ClientService {
   }
 
   updateClient(client: Client) {
+    client.modificationDate = new Date();
     this.clientDocument = this.afs.doc(`clients/${client.id}`);
     this.clientDocument.update(client);
 

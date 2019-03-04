@@ -36,6 +36,8 @@ export class TaxService {
   setTax(tax: Tax) {
     const id = this.afs.createId();
     tax.id = id;
+    tax.creationDate = new Date();
+    tax.modificationDate = new Date();
     this.taxCollection.doc(id).set(tax);
   }
 
@@ -45,6 +47,7 @@ export class TaxService {
   }
 
   updateTax(tax: Tax) {
+    tax.modificationDate = new Date();
     this.taxDocument = this.afs.doc(`taxs/${tax.id}`);
     this.taxDocument.update(tax);
   }

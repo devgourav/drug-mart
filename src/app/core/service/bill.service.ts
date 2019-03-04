@@ -37,6 +37,8 @@ export class BillService {
   setBill(bill: Bill) {
     const id = this.afs.createId();
     bill.id = id;
+    bill.creationDate = new Date();
+    bill.modificationDate = new Date();
     this.billCollection.doc(id).set(bill);
   }
 
@@ -46,6 +48,7 @@ export class BillService {
   }
 
   updateBill(bill: Bill) {
+    bill.modificationDate = new Date();
     this.billDocument = this.afs.doc(`bills/${bill.id}`);
     this.billDocument.update(bill);
   }

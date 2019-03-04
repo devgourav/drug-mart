@@ -1,11 +1,10 @@
 export class Tax{
   id: string;
-  name: string;
-  rate: number;
+  creationDate: Date;
+  modificationDate: Date;
 
-  constructor(id: string,name: string,rate: number){
-    this.id  = id;
-    this.name = name;
-    this.rate = rate;
+  constructor(
+    public name: string,
+    public rate: number){
   }
 }

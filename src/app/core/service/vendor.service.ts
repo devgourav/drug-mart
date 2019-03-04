@@ -37,6 +37,8 @@ export class VendorService {
   setVendor(vendor: Vendor) {
     const id = this.afs.createId();
     vendor.id = id;
+    vendor.creationDate = new Date();
+    vendor.modificationDate = new Date();
     this.vendorCollection.doc(id).set(vendor);
   }
 
@@ -46,6 +48,7 @@ export class VendorService {
   }
 
   updateVendor(vendor: Vendor) {
+    vendor.modificationDate = new Date();
     this.vendorDocument = this.afs.doc(`vendors/${vendor.id}`);
     this.vendorDocument.update(vendor);
   }
