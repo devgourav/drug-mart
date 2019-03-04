@@ -4,6 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Vendor } from 'src/app/core/model/vendor.model';
 import { VendorService } from 'src/app/core/service/vendor.service';
+import { Subscription } from 'rxjs';
 
 // TODO: Add A save/Update prompt
 
@@ -17,17 +18,18 @@ export class NewVendorComponent implements OnInit {
   vendor: Vendor;
   vendorId: string = "";
   addressMap: Map<string,string>;
+  private subscriptions: Array<Subscription> = [];
 
   constructor(private location: Location,private _vendorService: VendorService,
     private route: ActivatedRoute) {
   }
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.subscriptions.push(this.route.paramMap.subscribe(params => {
       this.vendorId = params.get('id');
       if(this.vendorId){
         this.getVendor(params.get('id'));
       }
-    });
+    }));
   }
 
   vendorInputForm = new FormGroup({
@@ -51,7 +53,7 @@ export class NewVendorComponent implements OnInit {
   }
 
   getVendor(vendorId: string){
-    this._vendorService.getVendorById(vendorId)
+    this.subscriptions.push(this._vendorService.getVendorById(vendorId)
     .subscribe((response) => {
       this.addressMap = new Map();
       this.addressMap.set("streetAddress",response.address["streetAddress"]);
@@ -70,7 +72,7 @@ export class NewVendorComponent implements OnInit {
         response.notes
       );
       this.populateVendorData();
-    })
+    }))
   }
 
   setVendor(){
@@ -135,6 +137,11 @@ export class NewVendorComponent implements OnInit {
     return objectMap;
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
+  }
 
 
 }

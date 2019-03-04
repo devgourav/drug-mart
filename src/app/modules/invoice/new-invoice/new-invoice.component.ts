@@ -36,6 +36,8 @@ export class NewInvoiceComponent implements OnInit {
   clientId: string = "";
   clientName: string = "";
 
+    private subscriptions: Array<Subscription> = [];
+
 
   constructor(private location: Location, private modalService: NgbModal,
     private _invoiceService: InvoiceService, private _clientService: ClientService,
@@ -44,12 +46,12 @@ export class NewInvoiceComponent implements OnInit {
   }
   ngOnInit() {
     this.populateClientDropDown();
-    this.route.paramMap.subscribe(params => {
+    this.subscriptions.push(this.route.paramMap.subscribe(params => {
       this.invoiceId = params.get('id');
       if (this.invoiceId) {
         this.getInvoice(params.get('id'));
       }
-    });
+    }));
   }
 
   invoiceInputForm = new FormGroup({
@@ -65,7 +67,7 @@ export class NewInvoiceComponent implements OnInit {
 
   openItemModal() {
     const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
-    modalRef.componentInstance.addItemEvent.subscribe((response: InvoiceItem) => {
+    this.subscriptions.push(modalRef.componentInstance.addItemEvent.subscribe((response: InvoiceItem) => {
       this.invoiceItem = new InvoiceItem(
         response.itemId,
         response.itemName,
@@ -84,7 +86,7 @@ export class NewInvoiceComponent implements OnInit {
       const invoiceItem = Object.assign({}, this.invoiceItem)
       this.invoiceItems.push(invoiceItem);
       this.calculateTotalCosts(this.invoiceItems);
-    });
+    }));
   }
 
   getSubAmount(rate: number, qty: number): number {
@@ -132,7 +134,7 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   getInvoice(invoiceId: string) {
-    this._invoiceService.getInvoiceById(invoiceId)
+    this.subscriptions.push(this._invoiceService.getInvoiceById(invoiceId)
       .subscribe((response) => {
         this.invoice = new Invoice(
           response.clientId,
@@ -146,7 +148,7 @@ export class NewInvoiceComponent implements OnInit {
         this.populateInvoiceData();
         console.warn(this.invoiceItems);
         this.calculateTotalCosts(this.invoiceItems);
-      })
+      }));
   }
 
   setClientName(event: any) {
@@ -195,7 +197,7 @@ export class NewInvoiceComponent implements OnInit {
     if (invoiceItem) {
       modalRef.componentInstance.invoiceItem = invoiceItem
     }
-    modalRef.componentInstance.editItemEvent.subscribe((response:InvoiceItem) => {
+    this.subscriptions.push(modalRef.componentInstance.editItemEvent.subscribe((response:InvoiceItem) => {
       this.invoiceItem = response;
       for (let invoiceItem of this.invoiceItems) {
         if (this.invoiceItem.itemId == invoiceItem.itemId) {
@@ -205,7 +207,7 @@ export class NewInvoiceComponent implements OnInit {
         }
       }
       this.calculateTotalCosts(this.invoiceItems);
-    });
+    }))
   }
 
   populateInvoiceData() {
@@ -217,4 +219,11 @@ export class NewInvoiceComponent implements OnInit {
       paymentMethod: this.invoice.paymentMethod
     });
   }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
 }

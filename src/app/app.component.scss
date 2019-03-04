@@ -5,24 +5,30 @@
 
 
 
+#login-wrapper{
+	font-family: 'Montserrat', sans-serif;
+	color:$text-color-dark;
+	text-align: center;
+	border: 1px solid $text-color-dark;
+	width:40%;
+	margin: auto;
+	padding:50px;
+
+	.login-content{
+		display: inline-block;
+		padding: 10px;
+	}
+	.login-header{
+		padding: 10px;
+	}
+}
+
 #content{
 	position    :absolute;
 	width       : 100%;
 	padding-left: 250px;
 }
 
-
-
-#login-wrapper{
-	font-family: 'Montserrat', sans-serif;
-	color:$text-color-dark;
-}
-
-.login-menu{
-	margin-top:10%;
-	background: 1px solid $primary-color-dark;
-	text-align: left;
-}
 
 
 .login-list{
