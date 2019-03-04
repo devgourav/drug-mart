@@ -17,20 +17,21 @@ export class AuthService {
   user: Observable<User>;
   roles: Roles;
 
+  credential: auth.AuthCredential;
+  confirmationResult: auth.ConfirmationResult;
+
 
   constructor(private afAuth: AngularFireAuth, private _userService: UserService,
     private router: Router) {
-
-    this.user = this.afAuth.authState.pipe(
-      switchMap(user => {
-        if (user) {
-          return this._userService.getUserById(user.uid);
-        } else {
-          return of(null)
-        }
-      })
-    );
-
+      this.user = this.afAuth.authState.pipe(
+        switchMap(user => {
+          if (user) {
+            return this._userService.getUserById(user.uid);
+          } else {
+            return of(null);
+          }
+        })
+      );
   }
 
 
@@ -42,6 +43,8 @@ export class AuthService {
       (firebaseUser) => {
         this.updateUserData(firebaseUser.user);
       }
+    ).catch(
+      error => console.error("googleLogin",error)
     )
   }
 
@@ -50,7 +53,12 @@ export class AuthService {
     return this.router.navigate(['/']);
   }
 
-  private updateUserData(user: any) {
+  public getUserData(uid: string): Observable<User>{
+    return this._userService.getUserById(uid);
+
+  }
+
+  public updateUserData(user: any) {
     this._userService.getUserById(user.uid).subscribe(
       (existingUser) => {
         if (existingUser) {
@@ -70,7 +78,6 @@ export class AuthService {
       }
     )
   }
-
 
   private checkAuthorization(user: User, allowedRoles: string[]): boolean {
     if (!user) {

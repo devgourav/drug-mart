@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './core/service/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { WindowService } from './core/service/window.service';
 import { auth } from 'firebase';
+import { UserService } from './core/service/user.service';
+import { User, Roles } from './core/model/user.model';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-root',
@@ -12,62 +14,60 @@ import { auth } from 'firebase';
 export class AppComponent implements OnInit {
 
   title = 'drug-mart';
-  phoneNumber: string;
-  verificationCode: string;
+  phoneNumber: string = "";
+  verificationCode: string = "";
   user: any;
   confirmationResult: auth.ConfirmationResult;
   recaptchaVerifier: auth.RecaptchaVerifier;
-  windowRef: Window;
 
-  constructor(public auth: AuthService,private _windowService:WindowService) {
-    this.windowRef = this._windowService.getWindowRef();
+  credential: auth.AuthCredential;
+  roles: Roles;
+
+  constructor(public _authService: AuthService) {
   };
-  ngOnInit(){
+  ngOnInit() {
   }
 
-  ngAfterViewInit(){
-    this.recaptchaVerifier = new auth.RecaptchaVerifier('recaptcha-container',{
-      'size':'invisible',
-      'callback':function(response){
+  ngAfterViewInit() {
+    this.recaptchaVerifier = new auth.RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible',
+      'callback': function(response) {
         this.onSignInSubmit();
       },
-      'expired-callback':()=>{
+      'expired-callback': () => {
         console.error("Recaptcha expired...Solve again")
       }
     })
     this.recaptchaVerifier.render();
   }
 
-  onSignInSubmit(){
-      const appVerifier = this.recaptchaVerifier;
-      const phoneNumber = "+91"+this.phoneNumber;
-
-      auth().signInWithPhoneNumber(phoneNumber,appVerifier)
-      .then((confirmationResult)=>{
-        // this.windowRef.confirmationResult = confirmationResult;
-      }).catch((error)=> console.error(error,))
-
-
-  }
-
-  sendLoginCode(){
+  onSignInSubmit() {
     const appVerifier = this.recaptchaVerifier;
-    const phoneNumber = "+91"+this.phoneNumber;
-    auth().signInWithPhoneNumber(phoneNumber,appVerifier).then(
-      result=>{
-        window
+    const INDIA_COUNTRY_CODE = "91";
+    const phoneNumber = `+${INDIA_COUNTRY_CODE + this.phoneNumber}`
+    console.log(phoneNumber);
+    console.log(appVerifier);
+
+    auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        this.confirmationResult = confirmationResult;
       }).catch(
-        error => console.log(error)
-      );
+        (error) => console.error("onSignInSubmitIn", error)
+      )
   }
 
   verifyLoginCode(){
-    this.confirmationResult.confirm(this.verificationCode)
-    .then( result => {
-      this.user = result.user;
-    }).catch(error => {
-      console.error(error,"Invalid Code Eneterd");
+    this.credential = auth.PhoneAuthProvider.credential
+    (this.confirmationResult.verificationId,this.verificationCode.toString());
+
+    auth().signInAndRetrieveDataWithCredential(this.credential)
+    .then(result => {
+      this.user = this._authService.updateUserData(result.user)
+      console.log(this.user);
+    }).catch( error=> {
+      console.error(error, "Invalid Code Entered");
     })
+
   }
 
 }

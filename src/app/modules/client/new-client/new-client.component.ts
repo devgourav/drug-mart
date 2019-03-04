@@ -4,6 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Client } from 'src/app/core/model/client.model';
 import { ClientService } from 'src/app/core/service/client.service';
+import { Subscription } from 'rxjs';
 
 // TODO: Add A save/Update prompt
 
@@ -17,18 +18,20 @@ export class NewClientComponent implements OnInit {
   client: Client;
   clientId: string;
   addressMap: Map<string,string>;
+  private subscriptions: Array<Subscription> = [];
+
 
   constructor(private location: Location,private _clientService: ClientService,
     private route: ActivatedRoute) {
     this.clientId = "";
   }
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.subscriptions.push(this.route.paramMap.subscribe(params => {
       this.clientId = params.get('id');
       if(this.clientId){
         this.getClient(params.get('id'));
       }
-    });
+    }));
   }
 
   clientInputForm = new FormGroup({
@@ -52,7 +55,7 @@ export class NewClientComponent implements OnInit {
   }
 
   getClient(clientId: string){
-    this._clientService.getClientById(clientId)
+    this.subscriptions.push(this._clientService.getClientById(clientId)
     .subscribe((response) => {
       this.addressMap = new Map();
       this.addressMap.set("streetAddress",response.address["streetAddress"]);
@@ -72,7 +75,7 @@ export class NewClientComponent implements OnInit {
         response.notes
       );
       this.populateClientData();
-    })
+    }))
   }
 
   setClient(){
@@ -150,6 +153,10 @@ export class NewClientComponent implements OnInit {
     this.closeClicked();
   }
 
-
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
+  }
 
 }

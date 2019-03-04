@@ -1,5 +1,5 @@
-<div *ngIf="auth.user | async as user; else login">
-	<div *ngIf="auth.user | async as user">
+<div *ngIf="_authService.user | async as user; else login">
+	<div *ngIf="_authService.user | async as user">
 		<div id="container">
 			<app-sidebar></app-sidebar>
 			<div id="content">
@@ -8,21 +8,57 @@
 		</div>
 	</div>
 </div>
+
+
 <ng-template #login>
-	<button type="button" class="btn btn-primary btn-google" (click)="auth.googleLogin()">
-		Google SignIn
-	</button>
 
-	<div id="recaptcha-container"></div>
-	<input type="number" name="phone_number" class="uk-input uk-form-large" [ngModel]="phoneNumber" placeholder="e.g 9999999999" required>
+	<div id="login-wrapper">
 
-	<button type="submit" class="btn btn-primary" (click)="onSignInSubmit()">Log-In with Mobile Number</button>
+		<div class="login-header">
+			<h2>Login/SignUp</h2>
+		</div>
 
-	<div *ngIf="this.confirmationResult">
-		<label for="">Enter OTP</label>
-		<input type="number" name="phone_number" class="input" [(ngModel)]="phoneNumber" placeholder="e.g 9999999999" required>
-		<button type="submit" class="btn btn-primary" (click)="verifyLoginCode()">Verify OTP</button>
+		<div class="row login-content">
+			<div class="col">
+
+				<div class="form-group">
+					<button type="button" class="btn button-primary" (click)="_authService.googleLogin()">Google Signin</button>
+				</div>
+
+				<div class="form-group row">
+					<div id="recaptcha-container"></div>
+				</div>
+
+				<div *ngIf="!this.confirmationResult">
+					<div class="form-group row">
+						<label class="col-sm-6 col-form-label" for="Enter Phone Number">Phone Number</label>
+						<div class="col-sm-6">
+							<input type="tel" name="phoneNumber" class="input form-control" [(ngModel)]="phoneNumber" placeholder="10 digit mobile no." required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<button type="button" class="btn button-primary" (click)="onSignInSubmit()">Log-In with Mobile Number</button>
+					</div>
+				</div>
+
+				<div *ngIf="this.confirmationResult">
+
+					<div class="form-group row">
+						<label class="col-sm-4 col-form-label" for="">Enter OTP</label>
+						<div class="col-sm-8">
+							<input type="number" name="verificationCode" class="input" [(ngModel)]="verificationCode" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<button type="button" class="btn button-primary" (click)="verifyLoginCode()">Verify OTP</button>
+					</div>
+
+				</div>
+
+
+			</div>
+		</div>
 	</div>
-
-
 </ng-template>
