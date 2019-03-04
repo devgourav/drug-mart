@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './core/service/auth.service';
-import { WindowService } from './core/service/window.service';
 import { auth } from 'firebase';
 import { UserService } from './core/service/user.service';
 import { User, Roles } from './core/model/user.model';

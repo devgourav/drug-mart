@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewItemComponent } from './new-item/new-item.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 import { ItemRoutingModule } from './item-routing.module';
+import { SharedModule } from 'src/app/core/shared/shared.module';
 
 @NgModule({
   declarations: [NewItemComponent, ItemDetailsComponent],
@@ -11,7 +12,9 @@ import { ItemRoutingModule } from './item-routing.module';
     CommonModule,
     ItemRoutingModule,
     FormsModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    SharedModule
+  ],
+  exports:[]
 })
 export class ItemModule { }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Item } from 'src/app/core/model/item.model';
 import { ItemService } from 'src/app/core/service/item.service';
 
@@ -12,13 +12,18 @@ import { ItemService } from 'src/app/core/service/item.service';
   templateUrl: './new-item.component.html',
   styleUrls: ['./new-item.component.scss']
 })
+
 export class NewItemComponent implements OnInit {
   item: Item;
   itemId: string = "";
   itemMap: Map<string,string> = new Map();
+  itemInputForm: FormGroup;
+  submitted = false;
+
 
   constructor(private location: Location, private _itemService: ItemService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,private fb: FormBuilder) {
+
   }
 
   ngOnInit() {
@@ -28,24 +33,27 @@ export class NewItemComponent implements OnInit {
         this.getItem(params.get('id'));
       }
     });
+
+    this.itemInputForm = this.fb.group({
+      name: ['', Validators.required],
+      'description': new FormControl(''),
+      manufacturer: ['',Validators.required],
+      'packType': new FormControl(''),
+      'quantity': new FormControl('',[Validators.required]),
+      'HSNCode': new FormControl('',[Validators.required]),
+      'batchNumber': new FormControl('',[Validators.required]),
+      'expiryDate': new FormControl('',[Validators.required]),
+      'purchaseCost': new FormControl('',[Validators.required]),
+      'itemMRP': new FormControl('',[Validators.required]),
+      'saleCost': new FormControl('',[Validators.required]),
+      'saleDiscount': new FormControl(''),
+      'saleOffers': new FormControl('')
+    })
   }
 
-  itemInputForm = new FormGroup({
-    name: new FormControl(''),
-    description: new FormControl(''),
-    manufacturer: new FormControl(''),
-    packType: new FormControl(''),
-    quantity: new FormControl(''),
-    HSNCode: new FormControl(''),
-    batchNumber: new FormControl(''),
-    expiryDate: new FormControl(''),
-    purchaseCost: new FormControl(''),
-    itemMRP: new FormControl(''),
-    saleCost: new FormControl(''),
-    saleDiscount: new FormControl(''),
-    saleOffers: new FormControl('')
+  get f() { return this.itemInputForm.controls; }
 
-  });
+
 
   getItem(itemId: string) {
     this._itemService.getItemById(itemId)
@@ -95,6 +103,7 @@ export class NewItemComponent implements OnInit {
   }
 
   setItem() {
+    console.log(this.getItemObj());
     this._itemService.setItem(this.getItemObj());
     this.closeClicked();
   }
