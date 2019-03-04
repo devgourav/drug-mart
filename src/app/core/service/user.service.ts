@@ -36,6 +36,8 @@ export class UserService {
 
   setUser(user: User) {
     const id = user.id;
+    user.creationDate = new Date();
+    user.modificationDate = new Date();
     this.userCollection.doc(id).set(user,{ merge: true });
   }
 
@@ -45,6 +47,7 @@ export class UserService {
   }
 
   updateUser(user: User) {
+    user.modificationDate = new Date();
     this.userDocument = this.afs.doc(`users/${user.id}`);
     this.userDocument.update(user);
   }

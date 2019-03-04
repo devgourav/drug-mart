@@ -36,6 +36,8 @@ export class DiscountService {
   setDiscount(discount: Discount) {
     const id = this.afs.createId();
     discount.id = id;
+    discount.creationDate = new Date();
+    discount.modificationDate = new Date();
     this.discountCollection.doc(id).set(discount);
   }
 
@@ -45,6 +47,7 @@ export class DiscountService {
   }
 
   updateDiscount(discount: Discount) {
+    discount.modificationDate = new Date();
     this.discountDocument = this.afs.doc(`discounts/${discount.id}`);
     this.discountDocument.update(discount);
   }

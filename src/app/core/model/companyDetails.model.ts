@@ -1,26 +1,18 @@
 export class CompanyDetails {
   id: string;
-  name: string;
-  phoneNumber: string;
-  altPhoneNumber: string;
-  emailId: string;
-  website: string;
-  GSTNumber: string;
-  serviceTaxNo: string;
-  billingAddress: Map<string, string> = new Map();
-  shippingAddress: Map<string, string> = new Map();
+  creationDate: Date;
+  modificationDate: Date;
 
-  constructor(name: string, phoneNumber: string, altPhoneNumber: string, emailId: string,
-    website: string, GSTNumber: string, serviceTaxNo: string, billingAddress: Map<string, string>,
-    shippingAddress: Map<string, string>) {
-    this.name = name;
-    this.phoneNumber = phoneNumber;
-    this.altPhoneNumber = altPhoneNumber;
-    this.emailId = emailId;
-    this.website = website;
-    this.GSTNumber = GSTNumber;
-    this.serviceTaxNo = serviceTaxNo;
-    this.billingAddress = billingAddress;
-    this.shippingAddress = shippingAddress;
+
+  constructor(
+    public name: string,
+    public phoneNumber: string,
+    public altPhoneNumber: string,
+    public emailId: string,
+    public website: string,
+    public GSTNumber: string,
+    public serviceTaxNo: string,
+    public billingAddress: Map<string, string>,
+    public shippingAddress: Map<string, string>) {
   }
 }

@@ -2,24 +2,19 @@ import { InvoiceItem } from './invoiceItem.model';
 
 export class Invoice {
   id: string;
-  clientId: string;
   clientName: string;
-  invoicedDate: Date;
-  invoiceItems: InvoiceItem[];
   totalTax: number;
   totalDiscount: number;
   totalAmount: number;
-  orderNote: string;
-  paymentMethod: string;
-  amountPaid: number;
+  creationDate: Date;
+  modificationDate: Date;
 
-  constructor(clientId: string, invoicedDate: Date, invoiceItems: InvoiceItem[],
-    orderNote: string,paymentMethod: string, amountPaid: number) {
-    this.clientId = clientId;
-    this.invoicedDate = invoicedDate;
-    this.invoiceItems = invoiceItems;
-    this.orderNote = orderNote;
-    this.paymentMethod = paymentMethod;
-    this.amountPaid = amountPaid;
+  constructor(
+    public clientId: string,
+    public invoicedDate: Date,
+    public invoiceItems: InvoiceItem[],
+    public orderNote: string,
+    public paymentMethod: string,
+    public amountPaid: number) {
   }
 }

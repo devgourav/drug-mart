@@ -37,6 +37,8 @@ export class InvoiceService {
   setInvoice(invoice: Invoice) {
     const id = this.afs.createId();
     invoice.id = id;
+    invoice.creationDate = new Date();
+    invoice.modificationDate = new Date();
     this.invoiceCollection.doc(id).set(invoice);
   }
 
@@ -46,6 +48,7 @@ export class InvoiceService {
   }
 
   updateInvoice(invoice: Invoice) {
+    invoice.modificationDate = new Date();
     this.invoiceDocument = this.afs.doc(`invoices/${invoice.id}`);
     this.invoiceDocument.update(invoice);
   }

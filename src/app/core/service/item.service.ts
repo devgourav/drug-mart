@@ -37,6 +37,8 @@ export class ItemService {
   setItem(item: Item) {
     const id = this.afs.createId();
     item.id = id;
+    item.creationDate = new Date();
+    item.modificationDate = new Date();
     this.itemCollection.doc(id).set(item);
   }
 
@@ -46,6 +48,7 @@ export class ItemService {
   }
 
   updateItem(item: Item) {
+    item.modificationDate = new Date();
     this.itemDocument = this.afs.doc(`items/${item.id}`);
     this.itemDocument.update(item);
   }

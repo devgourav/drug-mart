@@ -1,28 +1,18 @@
 export class Client {
   id: string;
-  name: string;
-  phoneNumber: string;
-  emailId: string;
-  website: string;
-  GSTIN: string;
-  contactPersonName: string;
-  contactPersonPhoneNumber: string;
-  contactPersonEmailId: string;
-  address: Map<string, string> = new Map();
-  notes: string;
+  creationDate: Date;
+  modificationDate: Date;
 
-  constructor(name: string, phoneNumber: string, emailId: string,
-    website: string, GSTIN: string, contactPersonName: string,
-    contactPersonPhoneNumber: string, contactPersonEmailId: string, address: Map<string, string>, notes: string) {
-    this.name = name;
-    this.phoneNumber = phoneNumber;
-    this.emailId = emailId;
-    this.website = website;
-    this.GSTIN = GSTIN;
-    this.contactPersonName = contactPersonName;
-    this.contactPersonPhoneNumber = contactPersonPhoneNumber;
-    this.contactPersonEmailId = contactPersonEmailId;
-    this.notes = notes;
-    this.address = address;
+  constructor(
+    public name: string,
+    public phoneNumber: string,
+    public emailId: string,
+    public website: string,
+    public GSTIN: string,
+    public contactPersonName: string,
+    public contactPersonPhoneNumber: string,
+    public contactPersonEmailId: string,
+    public address: Map<string, string>,
+    public notes: string) {
   }
 }
