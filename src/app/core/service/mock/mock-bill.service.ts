@@ -1,5 +1,6 @@
-import { Bill } from "../model/bill.model";
+
 import { Observable,of } from 'rxjs';
+import { Bill } from '../../model/bill.model';
 
 const BILLS_OBJECT: Bill[] = [];
 export class MockBillService {

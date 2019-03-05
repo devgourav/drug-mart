@@ -1,5 +1,5 @@
-import { Vendor } from '../model/vendor.model';
 import { of, Observable } from 'rxjs';
+import { Vendor } from '../../model/vendor.model';
 
 const VENDORS_OBJECT: Vendor[] = [];
 export class MockVendorService {
