@@ -19,6 +19,8 @@ export class AuthService {
 
   credential: auth.AuthCredential;
   confirmationResult: auth.ConfirmationResult;
+  modifiedDate: Date = new Date();
+  createdDate: Date = new Date();
 
 
   constructor(private afAuth: AngularFireAuth, private _userService: UserService,
@@ -63,6 +65,7 @@ export class AuthService {
       (existingUser) => {
         if (existingUser) {
           this.roles = existingUser.roles;
+          this.createdDate = existingUser.creationDate;
         } else {
           this.roles = { subscriber: true, editor: false, admin: false };
         }
@@ -71,7 +74,9 @@ export class AuthService {
           email: user.email,
           username: user.email,
           displayName: user.displayName,
-          roles: this.roles
+          roles: this.roles,
+          creationDate: this.createdDate,
+          modificationDate: this.modifiedDate
         }
         console.log(data);
         this._userService.setUser(data);
