@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { Tax } from 'src/app/core/model/tax.model';
 import { TaxService } from 'src/app/core/service/tax.service';
@@ -17,7 +17,13 @@ export class TaxDetailsComponent implements OnInit {
   taxes: Tax[] = [];
   tax: Tax;
 
-  constructor(private location: Location, private _taxService: TaxService) { }
+  taxInputForm = this.fb.group({
+    name: ['', Validators.required],
+    rate: ['', [Validators.required,Validators.max(100)]]
+  });
+
+
+  constructor(private location: Location, private _taxService: TaxService,private fb: FormBuilder) { }
 
   taxDetailsTableHeaders = ['Name','Rate','Actions']
 
@@ -25,15 +31,18 @@ export class TaxDetailsComponent implements OnInit {
     this.getTaxDetails();
   }
 
+  get name() {
+    return this.taxInputForm.get('name');
+  }
+
+  get rate() {
+    return this.taxInputForm.get('rate');
+  }
+
   closeClicked() {
     this.location.back();
   }
 
-
-  taxInputForm = new FormGroup({
-    name: new FormControl(''),
-    rate: new FormControl('')
-  });
 
   getTaxDetails() {
     this._taxService.getTaxes()

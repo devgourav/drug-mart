@@ -17,7 +17,7 @@ export class BillItem {
     public itemMRP: number,
     public tax: Map<string, number>,
     public discount: number,
-    public offer: string) {
+    public offer: number) {
   }
 
 }

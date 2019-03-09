@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Vendor } from 'src/app/core/model/vendor.model';
 import { VendorService } from 'src/app/core/service/vendor.service';
@@ -20,8 +20,23 @@ export class NewVendorComponent implements OnInit {
   addressMap: Map<string,string>;
   private subscriptions: Array<Subscription> = [];
 
+  vendorInputForm = this.fb.group({
+    name: ['',Validators.required],
+    phoneNumber: ['',Validators.maxLength(10)],
+    emailId: ['',Validators.email],
+    website: new FormControl(''),
+    GSTIN: new FormControl(''),
+    contactPersonName: ['',Validators.required],
+    contactPersonPhoneNumber: ['',Validators.required],
+    contactPersonEmailId: ['',Validators.email],
+    address:['',[Validators.required,Validators.maxLength(200)]],
+    pincode: ['',Validators.required],
+    notes: ['',Validators.maxLength(200)]
+
+  });
+
   constructor(private location: Location,private _vendorService: VendorService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,private fb: FormBuilder) {
   }
   ngOnInit() {
     this.subscriptions.push(this.route.paramMap.subscribe(params => {
@@ -32,24 +47,36 @@ export class NewVendorComponent implements OnInit {
     }));
   }
 
-  vendorInputForm = new FormGroup({
-    name: new FormControl(''),
-    phoneNumber: new FormControl(''),
-    emailId: new FormControl(''),
-    website: new FormControl(''),
-    GSTIN: new FormControl(''),
-    contactPersonName: new FormControl(''),
-    contactPersonPhoneNumber: new FormControl(''),
-    contactPersonEmailId: new FormControl(''),
-    address: new FormControl(''),
-    pincode: new FormControl(''),
-    notes: new FormControl('')
+  get name(){
+    return this.vendorInputForm.get('name');
+  }
 
-  });
+  get emailId(){
+    return this.vendorInputForm.get('emailId');
+  }
 
-  closeClicked(){
-    this.location.back();
-    this.vendorInputForm.reset();
+  get contactPersonName(){
+    return this.vendorInputForm.get('contactPersonName');
+  }
+
+  get contactPersonPhoneNumber(){
+    return this.vendorInputForm.get('contactPersonPhoneNumber');
+  }
+
+  get contactPersonEmailId(){
+    return this.vendorInputForm.get('contactPersonEmailId');
+  }
+
+  get address(){
+    return this.vendorInputForm.get('address');
+  }
+
+  get pincode(){
+    return this.vendorInputForm.get('pincode');
+  }
+
+  get notes(){
+    return this.vendorInputForm.get('notes');
   }
 
   getVendor(vendorId: string){
@@ -73,6 +100,11 @@ export class NewVendorComponent implements OnInit {
       );
       this.populateVendorData();
     }))
+  }
+
+  closeClicked() {
+    this.location.back();
+    this.vendorInputForm.reset();
   }
 
   setVendor(){

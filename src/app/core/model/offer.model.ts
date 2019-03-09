@@ -1,14 +1,15 @@
-export class Discount{
+export class Offer{
   id: string;
   description: string
   creationDate: Date;
   modificationDate: Date;
 
-
   constructor(
     public name: string,
-    public rate: number,
-    public type: string
+    public minItems: number,
+    public freeItems: number
     ){
   }
+
+
 }

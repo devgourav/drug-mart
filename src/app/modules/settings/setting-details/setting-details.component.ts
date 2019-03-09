@@ -9,7 +9,7 @@ export class SettingDetailsComponent implements OnInit {
 
   constructor() { }
 
-   settingItems = ['Company Details','Tax Details','Discounts'];
+   settingItems = ['Company Details','Tax Details','Offers'];
 
   ngOnInit() {
   }

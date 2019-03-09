@@ -8,13 +8,14 @@ export class Bill {
   totalAmount: number;
   creationDate: Date;
   modificationDate: Date;
+  paymentMethod: string;
+  orderNote: string;
+  paymentRef: string;
 
   constructor(
     public vendorId: string,
     public billItems: BillItem[],
     public billedDate: Date,
-    public orderNote: string,
-    public paymentMethod: string,
     public amountPaid: number) {
   }
 

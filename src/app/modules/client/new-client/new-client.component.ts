@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Client } from 'src/app/core/model/client.model';
 import { ClientService } from 'src/app/core/service/client.service';
@@ -20,9 +20,23 @@ export class NewClientComponent implements OnInit {
   addressMap: Map<string,string>;
   private subscriptions: Array<Subscription> = [];
 
+  clientInputForm = this.fb.group({
+    name: ['',Validators.required],
+    phoneNumber: ['',Validators.maxLength(10)],
+    emailId: ['',Validators.email],
+    website: new FormControl(''),
+    GSTIN: new FormControl(''),
+    contactPersonName: ['',Validators.required],
+    contactPersonPhoneNumber: ['',Validators.required],
+    contactPersonEmailId: ['',Validators.email],
+    address:['',[Validators.required,Validators.maxLength(200)]],
+    pincode: ['',Validators.required],
+    notes: ['',Validators.maxLength(200)]
+  });
+
 
   constructor(private location: Location,private _clientService: ClientService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,private fb: FormBuilder) {
     this.clientId = "";
   }
   ngOnInit() {
@@ -34,20 +48,37 @@ export class NewClientComponent implements OnInit {
     }));
   }
 
-  clientInputForm = new FormGroup({
-    name: new FormControl(''),
-    phoneNumber: new FormControl(''),
-    emailId: new FormControl(''),
-    website: new FormControl(''),
-    GSTIN: new FormControl(''),
-    contactPersonName: new FormControl(''),
-    contactPersonPhoneNumber: new FormControl(''),
-    contactPersonEmailId: new FormControl(''),
-    address: new FormControl(''),
-    pincode: new FormControl(''),
-    notes: new FormControl('')
+  get name(){
+    return this.clientInputForm.get('name');
+  }
 
-  });
+  get emailId(){
+    return this.clientInputForm.get('emailId');
+  }
+
+  get contactPersonName(){
+    return this.clientInputForm.get('contactPersonName');
+  }
+
+  get contactPersonPhoneNumber(){
+    return this.clientInputForm.get('contactPersonPhoneNumber');
+  }
+
+  get contactPersonEmailId(){
+    return this.clientInputForm.get('contactPersonEmailId');
+  }
+
+  get address(){
+    return this.clientInputForm.get('address');
+  }
+
+  get pincode(){
+    return this.clientInputForm.get('pincode');
+  }
+
+  get notes(){
+    return this.clientInputForm.get('notes');
+  }
 
   closeClicked(){
     this.location.back();

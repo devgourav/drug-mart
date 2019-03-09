@@ -5,6 +5,7 @@ import { NewClientComponent } from './new-client/new-client.component';
 
 import { ClientRoutingModule } from './client-routing.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from 'src/app/core/shared/shared.module';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ClientRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class ClientModule { }

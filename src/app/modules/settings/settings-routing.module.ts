@@ -7,6 +7,7 @@ import { TaxDetailsComponent } from './tax-details/tax-details.component';
 import { DiscountDetailsComponent } from './discount-details/discount-details.component';
 import { CanReadGuard } from 'src/app/core/guard/can-read.guard';
 import { CanEditGuard } from 'src/app/core/guard/can-edit.guard';
+import { OfferDetailsComponent } from './offer-details/offer-details.component';
 
 
 
@@ -29,6 +30,11 @@ const routes: Routes = [
   {
     path: 'Settings/Discounts',
     component: DiscountDetailsComponent,
+    canActivate: [CanReadGuard]
+  },
+  {
+    path: 'Settings/Offers',
+    component: OfferDetailsComponent,
     canActivate: [CanReadGuard]
   }
 ];

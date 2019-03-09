@@ -46,7 +46,7 @@ import { SharedModule } from './core/shared/shared.module';
     HttpClientModule,
     AuthModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     SharedModule
   ],

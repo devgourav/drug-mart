@@ -1,4 +1,22 @@
 @import "_colors.scss";
+
+label,select,option,button,input,span{
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 300;
+	color:$text-color-dark;
+}
+
+.btn{
+		color:$text-color-light;
+}
+
+.table{
+	thead{
+		font-family: 'Montserrat', sans-serif;
+		font-weight: bold;
+		color:$text-color-dark;
+	}
+}
 .title-header{
 	font-weight: bold;
 	text-align: left;
@@ -37,8 +55,39 @@
 	overflow-x: hidden;
 }
 
+.has-error {
+	input,textarea,select,option {
+		/* make it glow! */
+		-webkit-box-shadow: 0 0 4px #c62828;
+		-moz-box-shadow: 0 0 4px #c62828;
+		box-shadow: 0 0 4px #c62828;
+	}
+	color: #c62828;
+}
+
+.no-error {
+	input,textarea,select {
+		/* make it glow! */
+		-webkit-box-shadow: 0 0 4px #4caf50;
+		-moz-box-shadow: 0 0 4px #4caf50;
+		box-shadow: 0 0 4px #4caf50;
+	}
+}
 // .address-details{
 // 	border: 1px solid $border-color-dark;
 // 	padding: 20px 10px;
 // 	margin-bottom: 20px;
 // }
+
+.rupeeSymbol{
+		text-align : left;
+		display    : inline-flex;
+		font-size: 1em;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid $border-color-dark;
+}

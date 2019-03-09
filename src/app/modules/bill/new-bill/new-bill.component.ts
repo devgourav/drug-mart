@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +10,8 @@ import { BillService } from 'src/app/core/service/bill.service';
 import { VendorService } from 'src/app/core/service/vendor.service';
 import { BillItem } from 'src/app/core/model/billItem.model';
 import { Vendor } from 'src/app/core/model/vendor.model';
+import { OfferService } from 'src/app/core/service/offer.service';
+import { Offer } from 'src/app/core/model/offer.model';
 
 // TODO: Add A save/Update prompt
 
@@ -26,19 +28,42 @@ export class NewBillComponent implements OnInit {
   billItem: BillItem;
 
   billId: string = "";
-  netAmount: Amount = new Amount();
-  taxRate: number;
-  discountRate: number;
+  vendorId: string = "";
+  paymentSystems: string[] = ['Cash', 'Credit', 'Cheque', 'Bank Transfer'];
 
   vendors: Vendor[];
-  vendorId: string = "";
+  // vendorId: string = "";
   vendorName: string = "";
+
+  billInputForm = this.fb.group({
+    vendorId: ['', Validators.required],
+    billedDate: ['', Validators.required],
+    orderNote: new FormControl(''),
+    amountPaid: ['', Validators.required],
+    paymentMethod: new FormControl(''),
+    paymentRef: new FormControl('')
+  });
+
+  subAmount: number;
+  taxAmount: number;
+  discountAmount: number;
+  offerAmount: number;
+  totalAmount: number;
+  taxRate: number;
+  discountRate: number;
+  offerRate: number;
+
+  subAmountString: string = "";
+  taxAmountString: string = "";
+  discountAmountString: string = "";
+  totalAmountString: string = "";
+
 
 
   constructor(private location: Location, private modalService: NgbModal,
     private _billService: BillService, private _vendorService: VendorService,
-    private route: ActivatedRoute) {
-    this.netAmount = new Amount();
+    private route: ActivatedRoute, private fb: FormBuilder,
+    private _offerService: OfferService) {
   }
 
 
@@ -52,20 +77,20 @@ export class NewBillComponent implements OnInit {
     });
   }
 
-  billInputForm = new FormGroup({
-    vendorId: new FormControl(''),
-    billedDate: new FormControl(''),
-    orderNote: new FormControl(''),
-    amountPaid: new FormControl(''),
-    paymentMethod: new FormControl('')
-  });
+  get billedDate() {
+    return this.billInputForm.get('billedDate');
+  }
+
+  get amountPaid() {
+    return this.billInputForm.get('amountPaid');
+  }
 
   billTableHeaders = ['Particular', 'Manufacturer', 'Quantity', 'Rate', 'Amount',
     'Discount', 'Tax', 'Total', 'Offers', 'M.R.P', 'Actions']
 
   openItemModal() {
     const modalRef = this.modalService.open(BillItemModalComponent, { size: 'lg', keyboard: true });
-    modalRef.componentInstance.addItemEvent.subscribe((response:BillItem) => {
+    modalRef.componentInstance.addItemEvent.subscribe((response: BillItem) => {
       this.billItem = new BillItem(
         response.itemId,
         response.itemName,
@@ -81,7 +106,7 @@ export class NewBillComponent implements OnInit {
         response.discount,
         response.offer
       );
-      const billItem = Object.assign({},this.billItem)
+      const billItem = Object.assign({}, this.billItem)
       this.billItems.push(billItem);
       this.calculateTotalCosts(this.billItems);
     });
@@ -100,24 +125,42 @@ export class NewBillComponent implements OnInit {
   // }
 
   getTotalAmount(rate: number, qty: number, discountRate: number, taxRate: number) {
-    return (1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty);
+    return ((1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty)).toFixed(2);
+  }
+
+  getOfferDiscount(offer: number) {
+    return offer.toFixed(2);
   }
 
   calculateTotalCosts(billItems: BillItem[]) {
-    this.netAmount = new Amount();
-    this.taxRate = this.discountRate = 0;
+
+    this.subAmount = this.taxAmount = this.discountAmount = this.offerAmount = this.totalAmount = this.taxRate
+      = this.discountRate = this.offerRate = 0;
 
     for (let billItem of billItems) {
       this.taxRate = billItem.tax['stateTax'] + billItem.tax['countryTax'];
       this.discountRate = billItem.discount;
+      this.offerRate = billItem.offer;
 
-      this.netAmount.subAmount += (billItem.rate * billItem.quantity);
-      this.netAmount.taxAmount += (this.taxRate * 0.01 * this.netAmount.subAmount);
-      this.netAmount.discountAmount += (this.discountRate * 0.01 * this.netAmount.subAmount);
-      this.netAmount.totalAmount += this.netAmount.subAmount + this.netAmount.taxAmount
-        - this.netAmount.discountAmount;
-
+      const subRate = billItem.rate * billItem.quantity;
+      this.subAmount += (subRate);
+      this.taxAmount += (this.taxRate * 0.01 * subRate);
+      this.offerAmount += (this.offerRate * 0.01 * subRate);
+      this.discountAmount += (this.discountRate * 0.01 * subRate);
+      this.totalAmount += subRate + this.taxAmount
+        - (this.discountAmount + this.offerAmount);
     }
+    this.subAmount = +this.subAmount.toFixed(2);
+    this.taxAmount = +this.taxAmount.toFixed(2);
+    this.offerAmount = +this.offerAmount.toFixed(2);
+    this.discountAmount = +this.discountAmount.toFixed(2) + this.offerAmount;
+    this.totalAmount = +this.totalAmount.toFixed(2);
+
+    this.subAmountString = this.subAmount.toFixed(2);
+    this.taxAmountString = this.taxAmount.toFixed(2);
+    this.discountAmountString = (this.discountAmount + this.offerAmount).toFixed(2);
+    this.totalAmountString = this.subAmount.toFixed(2);
+
   }
 
   openNewVendor() {
@@ -142,20 +185,30 @@ export class NewBillComponent implements OnInit {
           response.vendorId,
           response.billItems,
           response.billedDate,
-          response.orderNote,
-          response.paymentMethod,
           response.amountPaid
         );
-        this.billItems = this.bill.billItems;
-        this.populateBillData();
+        this.bill.orderNote = response.orderNote;
+        this.bill.paymentMethod = response.paymentMethod;
+        this.bill.paymentRef = response.paymentRef,
+
+          this.billItems = this.bill.billItems;
+
+        this.billInputForm.patchValue({
+          vendorId: this.bill.vendorId,
+          billedDate: this.bill.billedDate,
+          orderNote: this.bill.orderNote,
+          amountPaid: this.bill.amountPaid,
+          paymentMethod: this.bill.paymentMethod
+        });
+
         this.calculateTotalCosts(this.billItems);
       })
   }
 
   setVendorName(event: any) {
     this.vendorId = event.target.value;
-    for(let vendor of this.vendors){
-      if(this.vendorId == vendor.id){
+    for (let vendor of this.vendors) {
+      if (this.vendorId == vendor.id) {
         this.vendorName = vendor.name;
       }
     }
@@ -172,18 +225,22 @@ export class NewBillComponent implements OnInit {
     this.closeClicked();
   }
 
-  getBillObj():Bill{
+  getBillObj(): Bill {
     this.bill = new Bill(
       this.vendorId,
       this.billItems,
       this.billInputForm.get("billedDate").value,
-      this.billInputForm.get("orderNote").value,
-      this.billInputForm.get("paymentMethod").value,
-      this.billInputForm.get("amountPaid").value
+      this.billInputForm.get("amountPaid").value,
     );
+
+    this.bill.paymentMethod = this.billInputForm.get("paymentMethod").value;
+    this.bill.paymentRef = this.billInputForm.get("paymentRef").value;
+    this.bill.orderNote = this.billInputForm.get("orderNote").value;
+
+
     this.bill.vendorName = this.vendorName;
     this.bill.id = this.billId;
-    const bill = Object.assign({},this.bill);
+    const bill = Object.assign({}, this.bill);
     return bill;
   }
 
@@ -209,16 +266,6 @@ export class NewBillComponent implements OnInit {
         }
       }
       this.calculateTotalCosts(this.billItems);
-    });
-  }
-
-  populateBillData() {
-    this.billInputForm.setValue({
-      vendorId: this.bill.vendorId,
-      billedDate: this.bill.billedDate,
-      orderNote: this.bill.orderNote,
-      amountPaid: this.bill.amountPaid,
-      paymentMethod: this.bill.paymentMethod
     });
   }
 }

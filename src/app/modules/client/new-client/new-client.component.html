@@ -4,33 +4,37 @@
 	</div>
 
 	<div class="input-form wrapper-content">
-		<form [formGroup]="clientInputForm" >
+		<form [formGroup]="clientInputForm">
 			<div class="row">
 				<div class="col-sm-8">
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientName">Client Name</label>
-						 <div class="col-sm-8">
-						 	<input type="text" id="clientName" class="form-control" formControlName="name">
-						 </div>
+					<div class="form-group row" [ngClass]="{'has-error':name.errors && (name.touched || name.dirty)}"> <label class="col-sm-4 col-form-label" for="clientName">Client Name</label>
+						<div class="col-sm-8">
+							<input maxlength="100" type="text" id="clientName" class="form-control" formControlName="name" appAlphabet>
+						</div>
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-4 col-form-label" for="clientPhoneNumber">Phone Number</label>
-						<div class="col-sm-8">
-							<input type="tel" id="clientPhoneNumber" class="form-control" formControlName="phoneNumber">
+						<div class="col-sm-1">
+							<input class="form-control" id="countryCode" placeholder="+91" disabled>
+						</div>
+						<div class="col-sm-7">
+							<input maxlength="10" type="tel" id="clientPhoneNumber" class="form-control" formControlName="phoneNumber" appQuantity>
 						</div>
 
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-4 col-form-label" for="clientEmailId">Email Id</label>
 						<div class="col-sm-8">
-							<input type="email" id="clientEmailId" class="form-control" formControlName="emailId">
+							<input maxlength="100" type="email" id="clientEmailId" class="form-control" formControlName="emailId">
+							<span class="has-error" *ngIf="emailId.errors && (emailId.touched || emailId.dirty)">
+								Please Enter a valid Email Id.
+							</span>
 						</div>
-
 					</div>
 					<div class="form-group row">
 						<label class="col-sm-4 col-form-label" for="clientWebsite">Website</label>
 						<div class="col-sm-8">
-							<input type="email" id="clientWebsite" class="form-control" formControlName="website">
+							<input maxlength="100" type="email" id="clientWebsite" class="form-control" formControlName="website">
 						</div>
 
 					</div>
@@ -38,21 +42,26 @@
 					<div class="form-group row">
 						<label class="col-sm-4 col-form-label" for="clientGstin">GSTIN</label>
 						<div class="col-sm-8">
-							<input type="text" id="clientGstin" class="form-control" formControlName="GSTIN">
+							<input maxlength="15" type="text" id="clientGstin" class="form-control" formControlName="GSTIN">
 						</div>
 					</div>
 
-					<div class="form-group row">
+					<div class="form-group row" [ngClass]="{'has-error':contactPersonName.errors &&
+					(contactPersonName.touched || contactPersonName.dirty)}">
 						<label class="col-sm-4 col-form-label" for="clientContactPerson">Contact Person</label>
 						<div class="col-sm-8">
-							<input type="text" id="clientContactPerson" class="form-control" formControlName="contactPersonName">
+							<input maxlength="100" type="text" id="clientContactPerson" class="form-control" formControlName="contactPersonName">
 						</div>
 					</div>
 
-					<div class="form-group row">
+					<div class="form-group row" [ngClass]="{'has-error':contactPersonPhoneNumber.errors &&
+					(contactPersonPhoneNumber.touched || contactPersonPhoneNumber.dirty)}">
 						<label class="col-sm-4 col-form-label" for="clientContactPhone">Contact Phone</label>
-						<div class="col-sm-8">
-							<input type="text" id="clientContactPhone" class="form-control" formControlName="contactPersonPhoneNumber">
+						<div class="col-sm-1">
+							<input class="form-control" id="countryCode" placeholder="+91" disabled>
+						</div>
+						<div class="col-sm-7">
+							<input maxlength="10" type="text" id="clientContactPhone" class="form-control" formControlName="contactPersonPhoneNumber" appQuantity>
 						</div>
 					</div>
 
@@ -60,6 +69,9 @@
 						<label class="col-sm-4 col-form-label" for="clientContactEmail">Contact Email</label>
 						<div class="col-sm-8">
 							<input type="text" id="clientContactEmail" class="form-control" formControlName="contactPersonEmailId">
+							<span class="has-error" *ngIf="contactPersonEmailId.errors && (contactPersonEmailId.touched || contactPersonEmailId.dirty)">
+								Please Enter a valid Email Id.
+							</span>
 						</div>
 					</div>
 
@@ -95,27 +107,29 @@
 					</div> -->
 
 
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="clientAddress">Address</label>
-							<div class="col-sm-8">
-								<textarea class="form-control" id="clientAddress" rows="3" formControlName="address"></textarea>
-							</div>
+					<div class="form-group row" [ngClass]="{'has-error':address.errors &&
+					(address.touched || address.dirty)}">
+						<label class="col-sm-4 col-form-label" for="clientAddress">Address</label>
+						<div class="col-sm-8">
+							<textarea class="form-control" id="clientAddress" rows="3" formControlName="address"></textarea>
 						</div>
+					</div>
 
 
 
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="clientAddressPinCode">Pin Code</label>
-							<div class="col-sm-8">
-								<input type="text" id="clientAddressPinCode" class="form-control" formControlName="pincode">
-							</div>
+					<div class="form-group row" [ngClass]="{'has-error':pincode.errors &&
+						(pincode.touched || pincode.dirty)}">
+						<label class="col-sm-4 col-form-label" for="clientAddressPinCode">Pin Code</label>
+						<div class="col-sm-8">
+							<input maxlength="6" type="text" id="clientAddressPinCode" class="form-control" formControlName="pincode" appQuantity>
 						</div>
+					</div>
 
 
 					<div class="form-group row">
 						<label class="col-sm-4 col-form-label" for="clientNotes">Notes</label>
 						<div class="col-sm-8">
-							<textarea class="form-control" id="clientNotes" rows="3" formControlName="notes"></textarea>
+							<textarea maxlength="200" class="form-control" id="clientNotes" rows="3" formControlName="notes"></textarea>
 						</div>
 					</div>
 
@@ -123,8 +137,8 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="button" *ngIf="!clientId" (click)="setClient()" class="btn button-save">Save</button>
-				<button type="button" *ngIf="clientId" (click)="updateClient()" class="btn button-save">Update</button>
+				<button type="button" [disabled]="!clientInputForm.valid" *ngIf="!clientId" (click)="setClient()" class="btn button-save">Save</button>
+				<button type="button" [disabled]="!clientInputForm.valid" *ngIf="clientId" (click)="updateClient()" class="btn button-save">Update</button>
 				<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
 			</div>
 

@@ -8,24 +8,26 @@
 
 			<div class="row">
 				<div class="col col-md-6">
-					<div class=" form-group row">
+					<div class=" form-group row" [ngClass]="{'has-error':name.errors && (name.touched || name.dirty)}">
 						<label class="col-md-4 col-form-label" for="taxName">Tax Name</label>
-							<div class="col-md-8">
-								<input type="text" id="taxName" class="form-control" formControlName="name">
-							</div>
+						<div class="col-md-8">
+							<input type="text" id="taxName" class="form-control" formControlName="name">
+						</div>
 					</div>
 
 					<div class=" form-group row">
 						<label class="col-md-4 col-form-label" for="taxRate">Tax Rate</label>
-							<div class="col-md-4">
-								<input type="number" id="taxRate" class="form-control" formControlName="rate">
-							</div>
-							<div class="col-md-4">
-								<select name="taxUnit" id="taxUnit" class="form-control">
-										<option value="taxInPrecentage" selected>% - Percentage</option>
-										<!-- <option value="taxInCurrency">₹ - Fixed</option> -->
-								</select>
-							</div>
+						<div class="col-md-4" [ngClass]="{'has-error':rate.errors && (rate.touched || rate.dirty)}">
+							<input type="number" id="taxRate" class="form-control" formControlName="rate" appCurrency>
+							<span class="has-error" *ngIf="rate.errors?.max && (rate.touched || rate.dirty)">
+								Tax cannot be more than 100%
+							</span>
+						</div>
+						<div class="col-md-4">
+							<select name="taxUnit" id="taxUnit" class="form-control">
+								<option value="percentage" selected>% - Percentage</option>
+							</select>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -33,32 +35,32 @@
 
 
 			<div id="action-buttons">
-				<button type="submit" class="btn button-save" (click)="setTax()">Add Tax</button>
+				<button type="submit" [disabled]="!taxInputForm.valid" class="btn button-save" (click)="setTax()">Add Tax</button>
 			</div>
 
 		</form>
 	</div>
 
 	<div class="table-wrapper row">
-		<table class="col-sm-6 table table-striped table-dark">
+		<table class="col-sm-6 table table-striped">
 			<thead>
 				<tr>
 					<th *ngFor="let taxDetailsTableHeader of taxDetailsTableHeaders" scope="col">{{taxDetailsTableHeader}}</th>
 				</tr>
 			</thead>
 			<tbody>
-					<tr *ngFor="let tax of taxes">
-							<td>{{ tax?.name }}</td>
-							<td>{{ tax?.rate }}</td>
-							<td>
-								<button type="button" class="btn button-cancel" (click)="deleteTax(tax)">Delete</button>
-							</td>
-					</tr>
+				<tr *ngFor="let tax of taxes">
+					<td>{{ tax?.name }}</td>
+					<td>{{ tax?.rate }}</td>
+					<td>
+						<button type="button" class="btn button-cancel" (click)="deleteTax(tax)">Delete</button>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
 
-	<div id="action-buttons">
+	<div class="action-buttons">
 		<button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
 	</div>
 </div>

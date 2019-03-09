@@ -5,23 +5,33 @@
 
 	<div class="input-form">
 		<form [formGroup]="discountInputForm">
-
 			<div class="row">
 				<div class="col col-md-6">
-					<div class=" form-group row">
+					<div class=" form-group row" [ngClass]="{'has-error':name.errors && (name.touched || name.dirty)}">
 						<label class="col-md-4 col-form-label" for="discountName">Discount Name</label>
 							<div class="col-md-8">
-								<input type="text" id="discountName" class="form-control" formControlName="name">
+								<input maxlength="50" type="text" maxlength="100" id="discountName" class="form-control" formControlName="name">
 							</div>
 					</div>
 
 					<div class=" form-group row">
-						<label class="col-md-4 col-form-label" for="discountRate">Discount Rate</label>
-							<div class="col-md-4">
-								<input type="number" id="discountRate" class="form-control" formControlName="rate">
+						<label class="col-md-4 col-form-label" for="rate">Discount Rate</label>
+							<div class="col-md-4" [ngClass]="{'has-error':
+							(percentRate.errors||fixedRate.errors) && (fixedRate.touched || fixedRate.dirty || percentRate.touched || percentRate.dirty)}">
+
+								<input type="number" *ngIf="discountType==='percentage'" id="rate"
+								class="form-control" formControlName="percentRate" appCurrency>
+
+								<input maxlength="10" type="number" *ngIf="discountType==='fixed'"id="rate"
+								class="form-control" formControlName="fixedRate" appCurrency>
+
+								<span class="has-error" *ngIf="percentRate.errors?.max && (percentRate.touched || percentRate.dirty)">
+									Discount cannot be more than 100%
+								</span>
 							</div>
 							<div class="col-md-4">
-								<select name="discountUnit" id="discountUnit" class="form-control" formControlName="type">
+								<select name="discountType" id="discountType" class="form-control" formControlName="type"
+								(change)="setDiscountType($event)">
 										<option value="percentage" [selected]="true">% - Percentage</option>
 										<option value="fixed">₹ - Fixed</option>
 								</select>
@@ -30,7 +40,7 @@
           <div class="form-group row">
             <label class="col-sm-4 col-form-label" for="description">Description</label>
             <div class="col-sm-8">
-              <textarea class="form-control" id="description" rows="3" formControlName="description"></textarea>
+              <textarea maxlength="200" class="form-control" id="description" rows="3" formControlName="description"></textarea>
             </div>
           </div>
 				</div>
@@ -38,15 +48,17 @@
 
 
 
+
 			<div id="action-buttons">
-				<button type="submit" class="btn button-save" (click)="setDiscount()">Add Discount</button>
+				<button type="submit" [disabled]="!discountInputForm.valid" class="btn button-save"
+				(click)="setDiscount()">Add Discount</button>
 			</div>
 
 		</form>
 	</div>
 
 	<div class="table-wrapper row">
-		<table class="col-sm-6 table table-striped table-dark">
+		<table class="col-sm-6 table table-striped">
 			<thead>
 				<tr>
 					<th *ngFor="let discountDetailsTableHeader of discountDetailsTableHeaders" scope="col">{{discountDetailsTableHeader}}</th>
@@ -58,14 +70,14 @@
 							<td>{{ discount?.rate }}</td>
               <td>{{ discount?.type }}</td>
 							<td>
-								<button type="button" class="btn button-cancel" (click)="deleteDiscount(discount.id)">Delete</button>
+								<button type="button" class="btn button-cancel" (click)="deleteDiscount(discount)">Delete</button>
 							</td>
 					</tr>
 			</tbody>
 		</table>
 	</div>
 
-	<div id="action-buttons">
+	<div class="action-buttons">
 		<button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
 	</div>
 </div>

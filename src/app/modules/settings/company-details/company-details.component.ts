@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { CompanyDetails } from 'src/app/core/model/companyDetails.model';
 import { CompanyDetailsService } from 'src/app/core/service/company-details.service';
@@ -15,11 +15,17 @@ export class CompanyDetailsComponent implements OnInit {
   showBillingAddress: boolean = true;
   addressMap: Map<string, string>;
   companyDetailsId: string = "";
+  states: string[] = [];
 
-  constructor(private location: Location, private _companyDetailsService: CompanyDetailsService) {
+  constructor(private location: Location, private _companyDetailsService: CompanyDetailsService,
+    private fb: FormBuilder) {
+
   }
   ngOnInit() {
     this.getCompanyDetails();
+    if (this.states.length == 0) {
+      this.loadStateData();
+    }
   }
 
   onBillingAddressClick() {
@@ -35,11 +41,13 @@ export class CompanyDetailsComponent implements OnInit {
   }
 
 
-  companyDetailsInputForm = new FormGroup({
+
+
+  companyDetailsInputForm = this.fb.group({
     name: new FormControl(''),
     phoneNumber: new FormControl(''),
     altPhoneNumber: new FormControl(''),
-    emailId: new FormControl(''),
+    emailId: ['', Validators.email],
     website: new FormControl(''),
     GSTNumber: new FormControl(''),
     serviceTaxNo: new FormControl(''),
@@ -58,6 +66,10 @@ export class CompanyDetailsComponent implements OnInit {
       pincode: new FormControl('')
     })
   });
+
+  get emailId(){
+    return this.companyDetailsInputForm.get("emailId");
+  }
 
 
   getCompanyDetails() {
@@ -154,7 +166,7 @@ export class CompanyDetailsComponent implements OnInit {
       shippingAddress
     );
     this.companyDetails.id = this.companyDetailsId;
-    const companyDetails = Object.assign({},this.companyDetails);
+    const companyDetails = Object.assign({}, this.companyDetails);
     return companyDetails;
   }
 
@@ -164,6 +176,46 @@ export class CompanyDetailsComponent implements OnInit {
       objectMap[k] = v;
     }
     return objectMap;
+  }
+
+  loadStateData() {
+
+    this.states.push("Andhra Pradesh (AP)")
+    this.states.push("Arunachal Pradesh (AR)")
+    this.states.push("Assam (AS)")
+    this.states.push("Bihar (BR)")
+    this.states.push("Chhattisgarh (CG)")
+    this.states.push("Goa (GA)")
+    this.states.push("Gujarat (GJ)")
+    this.states.push("Haryana (HR)")
+    this.states.push("Himachal Pradesh (HP)")
+    this.states.push("Jammu and Kashmir (JK)")
+    this.states.push("Jharkhand (JH)")
+    this.states.push("Karnataka (KA)")
+    this.states.push("Kerala (KL)")
+    this.states.push("Madhya Pradesh (MP)")
+    this.states.push("Maharashtra (MH)")
+    this.states.push("Manipur (MN)")
+    this.states.push("Meghalaya (ML)")
+    this.states.push("Mizoram (MZ)")
+    this.states.push("Nagaland (NL)")
+    this.states.push("Odisha(OR)")
+    this.states.push("Punjab (PB)")
+    this.states.push("Rajasthan (RJ)")
+    this.states.push("Sikkim (SK)")
+    this.states.push("Tamil Nadu (TN)")
+    this.states.push("Telangana (TS)")
+    this.states.push("Tripura (TR)")
+    this.states.push("Uttar Pradesh (UP)")
+    this.states.push("Uttarakhand (UK)")
+    this.states.push("West Bengal (WB)")
+    this.states.push("Andaman and Nicobar Islands(AN)")
+    this.states.push("Chandigarh (CH)")
+    this.states.push("Dadra and Nagar Haveli (DN)")
+    this.states.push("Daman and Diu (DD)")
+    this.states.push("National Capital Territory of Delhi (DL)")
+    this.states.push("Lakshadweep (LD)")
+    this.states.push("Pondicherry (PY)")
   }
 
 
