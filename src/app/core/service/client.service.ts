@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Client } from '../model/client.model';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
+const CACHE_SIZE = 1;
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +15,22 @@ export class ClientService {
   clients: Observable<Client[]>;
   client: Observable<Client>;
   clientDocument: AngularFirestoreDocument<Client>;
+  private cache$: Observable<Client[]>;
 
   constructor(private afs: AngularFirestore) {
     this.clientCollection = this.afs.collection('clients');
   }
 
-  getClients(): Observable<Client[]> {
+  // get Clients(): Observable<Client[]>{
+  //   if(!this.cache$){
+  //     this.cache$ = this.getClients().pipe(
+  //       shareReplay(CACHE_SIZE)
+  //     );
+  //   }
+  //   return this.cache$;
+  // }
+
+   getClients(): Observable<Client[]> {
     return this.clients = this.clientCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Client;

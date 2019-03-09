@@ -1,6 +1,7 @@
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/_title-header.scss";
+@import "../../../../assets/styles/common.scss";
 
 
 
@@ -12,7 +13,6 @@
 
 .settings-menu{
 	margin-top:10%;
-	background: 1px solid $primary-color-dark;
 	text-align: left;
 }
 
@@ -26,6 +26,7 @@
 		a{
 			display: block;
 			text-decoration: none;
+			padding: 10;
 		}
 	}
 

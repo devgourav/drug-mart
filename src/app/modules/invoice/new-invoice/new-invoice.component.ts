@@ -124,7 +124,7 @@ export class NewInvoiceComponent implements OnInit {
   }
 
   populateClientDropDown() {
-    this._clientService.getClients()
+    this._clientService.clients
       .subscribe((response) => {
         this.clients = response;
       })

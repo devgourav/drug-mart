@@ -6,15 +6,18 @@ import { TaxDetailsComponent } from './tax-details/tax-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { DiscountDetailsComponent } from './discount-details/discount-details.component';
+import { SharedModule } from 'src/app/core/shared/shared.module';
+import { OfferDetailsComponent } from './offer-details/offer-details.component';
 
 @NgModule({
   declarations: [SettingDetailsComponent,CompanyDetailsComponent,
-    TaxDetailsComponent, DiscountDetailsComponent],
+    TaxDetailsComponent, DiscountDetailsComponent, OfferDetailsComponent],
   imports: [
     CommonModule,
     SettingsRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class SettingsModule { }

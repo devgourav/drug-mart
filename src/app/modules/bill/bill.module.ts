@@ -9,6 +9,7 @@ import { BillItemModalComponent } from './billItem-modal/billItem-modal.componen
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from 'src/app/core/shared/shared.module';
 
 
 
@@ -20,7 +21,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     BillRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    SharedModule
   ],
   entryComponents: [
         BillItemModalComponent,

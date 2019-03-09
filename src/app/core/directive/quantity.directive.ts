@@ -1,18 +1,16 @@
-import { Directive, HostListener, ElementRef } from '@angular/core';
+import { Directive, ElementRef, HostListener } from '@angular/core';
 
 @Directive({
-  selector: '[appCurrency]'
+  selector: '[appQuantity]'
 })
-export class CurrencyDirective {
+export class QuantityDirective {
+
+  constructor(private el: ElementRef) { }
 
   // Allow decimal numbers and negative values
-  private regex: RegExp = new RegExp(/^\d*\.?\d{0,2}$/g);
-  // Allow key codes for special events. Reflect :
-  // Backspace, tab, end, home
+  private regex: RegExp = new RegExp(/^[0-9]*$/g);
   private specialKeys: Array<string> = ['Backspace', 'Tab', 'End', 'Home'];
 
-  constructor(private el: ElementRef) {
-  }
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     console.log(this.el.nativeElement.value);

@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Item } from 'src/app/core/model/item.model';
 import { ItemService } from 'src/app/core/service/item.service';
+import { OfferService } from 'src/app/core/service/offer.service';
+import { Offer } from 'src/app/core/model/offer.model';
 
 // TODO: Add A save/Update prompt
 
@@ -17,16 +19,33 @@ export class NewItemComponent implements OnInit {
   item: Item;
   itemId: string = "";
   itemMap: Map<string,string> = new Map();
-  itemInputForm: FormGroup;
   submitted = false;
+  offers: Offer[] = [];
+
+  itemInputForm = this.fb.group({
+    name: ['', Validators.required],
+    description: new FormControl(''),
+    manufacturer: ['',Validators.required],
+    packType: new FormControl(''),
+    quantity: ['',Validators.required],
+    HSNCode: ['',Validators.required],
+    batchNumber: ['',Validators.required],
+    expiryDate: ['',Validators.required],
+    purchaseCost: ['',Validators.required],
+    itemMRP: ['',Validators.required],
+    saleCost: ['',Validators.required],
+    saleDiscount: ['',Validators.max(100)],
+    saleOffers: new FormControl('')
+  })
 
 
   constructor(private location: Location, private _itemService: ItemService,
-    private route: ActivatedRoute,private fb: FormBuilder) {
+    private route: ActivatedRoute,private fb: FormBuilder,private _offerService: OfferService) {
 
   }
 
   ngOnInit() {
+    this.fetchOffers();
     this.route.paramMap.subscribe(params => {
       this.itemId = params.get('id');
       if (this.itemId) {
@@ -34,24 +53,47 @@ export class NewItemComponent implements OnInit {
       }
     });
 
-    this.itemInputForm = this.fb.group({
-      name: ['', Validators.required],
-      'description': new FormControl(''),
-      manufacturer: ['',Validators.required],
-      'packType': new FormControl(''),
-      'quantity': new FormControl('',[Validators.required]),
-      'HSNCode': new FormControl('',[Validators.required]),
-      'batchNumber': new FormControl('',[Validators.required]),
-      'expiryDate': new FormControl('',[Validators.required]),
-      'purchaseCost': new FormControl('',[Validators.required]),
-      'itemMRP': new FormControl('',[Validators.required]),
-      'saleCost': new FormControl('',[Validators.required]),
-      'saleDiscount': new FormControl(''),
-      'saleOffers': new FormControl('')
-    })
+    console.log("ngOnInit",this.name);
   }
 
-  get f() { return this.itemInputForm.controls; }
+  get name(){
+    return this.itemInputForm.get('name');
+  }
+
+  get manufacturer(){
+    return this.itemInputForm.get('manufacturer');
+  }
+
+  get quantity(){
+    return this.itemInputForm.get('quantity');
+  }
+
+  get HSNCode(){
+    return this.itemInputForm.get('HSNCode');
+  }
+
+  get batchNumber(){
+    return this.itemInputForm.get('batchNumber');
+  }
+
+  get expiryDate(){
+    return this.itemInputForm.get('expiryDate');
+  }
+
+  get purchaseCost(){
+    return this.itemInputForm.get('purchaseCost');
+  }
+
+  get itemMRP(){
+    return this.itemInputForm.get('itemMRP');
+  }
+  get saleCost(){
+    return this.itemInputForm.get('saleCost');
+  }
+  get saleDiscount(){
+    return this.itemInputForm.get('saleDiscount');
+  }
+
 
 
 
@@ -141,5 +183,16 @@ export class NewItemComponent implements OnInit {
     const item = Object.assign({}, this.item);
     return item;
   }
+
+  fetchOffers(){
+    this._offerService.getOffers().subscribe( response => {
+      this.offers = response;
+    })
+  }
+
+  calculatedDiscount(minItems: number,freeItems: number): number{
+    return(freeItems/(minItems + freeItems)) * 100;
+  }
+
 
 }

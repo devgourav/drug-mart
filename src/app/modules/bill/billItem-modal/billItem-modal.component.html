@@ -10,112 +10,126 @@
     <div class="row">
       <div class="col">
 
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemName">Item List</label>
+        <div class="form-group row" [ngClass]="{'has-error':itemId.errors && (itemId.touched || itemId.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemName">Item List</label>
           <div class="col-sm-8">
             <select name="itemName" id="itemPackType" class="form-control"
             (change)="populateOnItemSelectEvent($event)" formControlName="itemId">
-              <option value="default" selected>Select Item</option>
+              <option value="" itemId>Select a Item</option>
               <option *ngFor="let item of items" value="{{ item.id }}">{{ item.name }}</option>
             </select>
           </div>
         </div>
 
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemName">Particular</label>
+          <label class="col-sm-3 col-form-label" for="itemName">Particular</label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="itemName" formControlName="itemName">
+            <input maxlength="100" type="text" class="form-control" id="itemName" formControlName="itemName">
+          </div>
+        </div>
+
+        <div class="form-group row" [ngClass]="{'has-error':manufacturer.errors && (manufacturer.touched || manufacturer.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemMfg">Manufacturer</label>
+          <div class="col-sm-8">
+            <input maxlength="100" type="text" class="form-control" id="itemMfg" formControlName="manufacturer">
           </div>
         </div>
 
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemPackType">Pack type</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" id="packType" formControlName="packType">
+          <label class="col-sm-3 col-form-label" for="itemPackType">Pack type</label>
+          <div class="col-sm-4">
+            <input maxlength="100" type="text" class="form-control" id="packType" formControlName="packType">
           </div>
         </div>
 
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemHSN">HSN</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" id="itemHSN" formControlName="itemHSN">
+        <div class="form-group row" [ngClass]="{'has-error':itemHSN.errors && (itemHSN.touched || itemHSN.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemHSN">HSN</label>
+          <div class="col-sm-4">
+            <input maxlength="20" type="text" class="form-control" id="itemHSN" formControlName="itemHSN">
           </div>
         </div>
 
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemMfg">Manufacturer</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" id="itemMfg" formControlName="manufacturer">
+
+        <div class="form-group row" [ngClass]="{'has-error':batchNumber.errors && (batchNumber.touched || batchNumber.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemBatchNumber">Batch Number</label>
+          <div class="col-sm-4">
+            <input maxlength="20" type="text" class="form-control" id="itemBatchNumber" formControlName="batchNumber">
           </div>
         </div>
 
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemBatchNumber">Batch Number</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control" id="itemBatchNumber" formControlName="batchNumber">
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemExpiryDate">Expiry Date</label>
-          <div class="col-sm-8">
+        <div class="form-group row" [ngClass]="{'has-error':expiryDate.errors && (expiryDate.touched || expiryDate.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemExpiryDate">Expiry Date</label>
+          <div class="col-sm-4">
             <input type="date" class="form-control" id="itemExpiryDate" formControlName="expiryDate">
           </div>
         </div>
 
 
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemQuantity">Quantity</label>
-          <div class="col-sm-8">
-            <input type="number" class="form-control" id="itemQuantity" formControlName="quantity">
+        <div class="form-group row" [ngClass]="{'has-error':quantity.errors && (quantity.touched || quantity.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemQuantity">Quantity</label>
+          <div class="col-sm-4">
+            <input maxlength="10" type="number" class="form-control" id="itemQuantity" formControlName="quantity" appQuantity>
           </div>
         </div>
 
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemRate">Rate</label>
-          <div class="col-sm-8">
-            <input type="number" class="form-control" id="itemRate" formControlName="rate">
+        <div class="form-group row" [ngClass]="{'has-error':rate.errors && (rate.touched || rate.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemRate">Rate</label>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="itemRate" formControlName="rate" appCurrency>
           </div>
+          <span class="rupeeSymbol label col-sm-1">₹</span>
+        </div>
+
+        <div class="form-group row" [ngClass]="{'has-error':itemMRP.errors && (itemMRP.touched || itemMRP.dirty)}">
+          <label class="col-sm-3 col-form-label" for="itemMRP">MRP</label>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="itemMRP" formControlName="itemMRP" appCurrency>
+          </div>
+          <span class="rupeeSymbol label col-sm-1">₹</span>
         </div>
 
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemMRP">MRP</label>
-          <div class="col-sm-8">
-            <input type="number" class="form-control" id="itemMRP" formControlName="itemMRP">
-          </div>
-        </div>
-
-
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemTax1">SGST</label>
-          <div class="col-sm-8">
+          <label class="col-sm-3 col-form-label" for="itemTax1">SGST</label>
+          <div class="col-sm-4">
             <select name="itemTax1" id="itemTax1" class="form-control" formControlName="stateTax">
+              <option value="" [selected]="isSelected">Select a Tax</option>
               <option *ngFor="let tax of taxes" value="{{ tax.rate }}">{{ tax.name }}</option>
             </select>
           </div>
         </div>
 
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemTax2">CGST</label>
-          <div class="col-sm-8">
+          <label class="col-sm-3 col-form-label" for="itemTax2">CGST</label>
+          <div class="col-sm-4">
             <select name="itemTax2" id="itemTax2" class="form-control" formControlName="countryTax">
+              <option value="" [selected]="isSelected">Select a Tax</option>
               <option *ngFor="let tax of taxes" value="{{ tax.rate }}">{{ tax.name }}</option>
             </select>
           </div>
         </div>
 
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemDiscount">Discount</label>
-          <div class="col-sm-8">
-            <input type="number" class="form-control" id="itemDiscount" formControlName="discount">
+          <label class="col-sm-3 col-form-label" for="itemDiscount">Discount</label>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="itemDiscount" formControlName="discount" appCurrency>
+            <span class="has-error" *ngIf="discount.errors?.max && (discount.touched || discount.dirty)">
+              Discount cannot be more than 100%
+            </span>
           </div>
+          <span class="rupeeSymbol label col-sm-1">%</span>
         </div>
 
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label" for="itemOffer">Offers</label>
-          <div class="col-sm-8">
+          <label class="col-sm-3 col-form-label" for="itemOffer">Offers</label>
+          <div class="col-sm-4">
             <select name="itemOffer" id="itemOffer" class="form-control" formControlName="offer">
-              <option value="default" selected>Select Offers</option>
+              <option value="" selected>Select Offers</option>
+              <option *ngFor="let offer of offers" value="{{ calculatedDiscount(offer.minItems,offer.freeItems) }}" selected>
+                {{ offer.name }}
+              </option>
+              <!-- <option *ngFor="let offer of offers" value="{{ offer.id }}" selected>
+                {{ offer.name }}
+              </option> -->
             </select>
           </div>
         </div>
@@ -125,8 +139,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" *ngIf="billItem" class="btn button-primary" (click)="editBillItem();activeModal.close('Close')">Save Item</button>
-    <button type="button" *ngIf="!billItem" class="btn button-primary" (click)="addBillItem();activeModal.close('Close')">Add Item</button>
+    <button type="button" [disabled]="!billItemForm.valid" *ngIf="billItem" class="btn button-primary" (click)="editBillItem();activeModal.close('Close')">Save Item</button>
+    <button type="button" [disabled]="!billItemForm.valid" *ngIf="!billItem" class="btn button-primary" (click)="addBillItem();activeModal.close('Close')">Add Item</button>
     <button type="button" class="btn button-cancel" (click)="activeModal.close('Close')">Cancel</button>
   </div>
 </form>
