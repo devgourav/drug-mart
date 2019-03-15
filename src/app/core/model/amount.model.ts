@@ -1,14 +1,7 @@
-export class Amount{
-  taxAmount: number;
-  discountAmount: number;
-  subAmount: number;//Amount
-  totalAmount:number;//Amount - Discount + Tax
-
-  constructor(){
-    this.taxAmount=0;
-    this.discountAmount=0;
-    this.subAmount=0;
-    this.totalAmount=0;
-  }
-
+export class Amount {
+	taxAmount: string;
+	discountAmount: string;
+	offerAmount: string;
+	subAmount: string; //Amount
+	totalAmount: string; //Amount - Discount + Tax
 }
