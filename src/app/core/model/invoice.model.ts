@@ -1,20 +1,21 @@
-import { InvoiceItem } from './invoiceItem.model';
+import { BillItem } from './billItem.model';
 
 export class Invoice {
-  id: string;
-  clientName: string;
-  totalTax: number;
-  totalDiscount: number;
-  totalAmount: number;
-  creationDate: Date;
-  modificationDate: Date;
+	id: string;
+	clientName: string;
+	totalTax: number;
+	totalDiscount: number;
+	totalAmount: number;
+	creationDate: Date;
+	modificationDate: Date;
+	paymentMethod: string;
+	orderNote: string;
+	paymentRef: string;
 
-  constructor(
-    public clientId: string,
-    public invoicedDate: Date,
-    public invoiceItems: InvoiceItem[],
-    public orderNote: string,
-    public paymentMethod: string,
-    public amountPaid: number) {
-  }
+	constructor(
+		public clientId: string,
+		public invoiceItems: BillItem[],
+		public invoicedDate: Date,
+		public amountPaid: number
+	) {}
 }

@@ -92,7 +92,7 @@
           <label class="col-sm-3 col-form-label" for="itemTax1">SGST</label>
           <div class="col-sm-4">
             <select name="itemTax1" id="itemTax1" class="form-control" formControlName="stateTax">
-              <option value="" [selected]="isSelected">Select a Tax</option>
+              <option value="" [selected]="true">Select a Tax</option>
               <option *ngFor="let tax of taxes" value="{{ tax.rate }}">{{ tax.name }}</option>
             </select>
           </div>
@@ -102,7 +102,7 @@
           <label class="col-sm-3 col-form-label" for="itemTax2">CGST</label>
           <div class="col-sm-4">
             <select name="itemTax2" id="itemTax2" class="form-control" formControlName="countryTax">
-              <option value="" [selected]="isSelected">Select a Tax</option>
+              <option value="" [selected]="true">Select a Tax</option>
               <option *ngFor="let tax of taxes" value="{{ tax.rate }}">{{ tax.name }}</option>
             </select>
           </div>

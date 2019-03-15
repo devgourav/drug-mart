@@ -24,4 +24,11 @@
 		}
 
 	}
+
+	.currencyDisplay::before{
+		content: '\20B9'; //Ruppee symbol for CSS
+	}
+	.currencyDisplay::after{
+		content: '/-';
+	}
 }

@@ -8,15 +8,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceItemModalComponent } from './invoice-item-modal/invoice-item-modal.component';
 
 @NgModule({
-  declarations: [NewInvoiceComponent, InvoiceDetailsComponent, InvoiceItemModalComponent],
-  imports: [
-    CommonModule,
-    InvoiceRoutingModule,
-    FormsModule,
-    ReactiveFormsModule
-  ],
-  entryComponents: [
-    InvoiceItemModalComponent
-  ]
+	declarations: [ NewInvoiceComponent, InvoiceDetailsComponent, InvoiceItemModalComponent ],
+	imports: [ CommonModule, InvoiceRoutingModule, FormsModule, ReactiveFormsModule ],
+	entryComponents: [ InvoiceItemModalComponent ]
 })
-export class InvoiceModule { }
+export class InvoiceModule {}

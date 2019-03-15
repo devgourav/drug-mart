@@ -10,13 +10,13 @@
 						<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
 						<div class="col-sm-5">
 							<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId"
-							(change)="setVendorName($event)">
-								<option value="" [selected]="isSelected">Select a Vendor</option>
+							(change)="fetchVendorName($event)">
+								<option value="" [selected]="true">Select a Vendor</option>
 								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}</option>
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<button type="submit" class="btn button-primary" (click)="openNewVendor()">New Vendor</button>
+							<a routerLink="New Vendor"><button type="submit" class="btn button-primary">New Vendor</button></a>
 						</div>
 					</div>
 					<div class="form-group row" [ngClass]="{'has-error':billedDate.errors && (billedDate.touched || billedDate.dirty)}">
@@ -43,9 +43,9 @@
 							<td scope="col">{{ billItem.rate }}₹</td>
 							<td scope="col">{{ getSubAmount(billItem.rate,billItem.quantity) }}₹</td>
 							<td scope="col">{{ billItem.discount}}%</td>
-							<td scope="col">{{ billItem.tax.stateTax + billItem.tax.countryTax }}₹</td>
+							<td scope="col">{{ billItem.tax["stateTax"] + billItem.tax["countryTax"] }}%</td>
 							<td scope="col">{{ getTotalAmount(billItem.rate,billItem.quantity,billItem.discount+billItem.offer,
-								billItem.tax.stateTax + billItem.tax.countryTax) }}₹</td>
+								billItem.tax["stateTax"] + billItem.tax["countryTax"]) }}₹</td>
 							<td scope="col">{{ getOfferDiscount(billItem.offer) }}%</td>
 							<td scope="col">{{ billItem.itemMRP }}₹</td>
 							<td>
@@ -66,12 +66,12 @@
 					<div class="col cost-details col-md-4">
 						<span class="row cost-row">
 							<label class="col-sm-3" for="subTotalAmount">SubTotal:</label>
-							<span class="amount col-sm-3" id="subTotalAmount">{{ subAmountString }}</span>
+							<span class="amount col-sm-3" id="subTotalAmount">{{ billAmount.subAmount }}</span>
 							<span class="col-sm-1 rupeeSymbol">₹</span>
 						</span>
 						<span class="row cost-row">
 							<label class="col-sm-3" for="totalTax">Tax:</label>
-							<span class="amount col-sm-3" id="totalTax">(+) {{ taxAmountString }}</span>
+							<span class="amount col-sm-3" id="totalTax">(+) {{ billAmount.taxAmount }}</span>
 							<span class="col-sm-1 rupeeSymbol">₹</span>
 						</span>
 						<!-- <span class="cost-row">
@@ -80,7 +80,7 @@
 						</span> -->
 						<span class="row cost-row">
 							<label class="col-sm-3" for="discount">Discount:</label>
-							<span class="amount col-sm-3" id="discount">(-) {{ discountAmountString }}</span>
+							<span class="amount col-sm-3" id="discount">(-) {{ billAmount.discountAmount }}</span>
 							<span class="col-sm-1 rupeeSymbol">₹</span>
 						</span>
 						<!-- <span class="cost-row">
@@ -90,7 +90,7 @@
 					<hr>
 						<span class="row cost-row">
 							<label class="col-sm-3" for="netAmount">Net Amount:</label>
-							<span class="amount totalAmount col-sm-3" id="netAmount">{{ totalAmountString }}</span>
+							<span class="amount totalAmount col-sm-3" id="netAmount">{{ billAmount.totalAmount }}</span>
 							<span class="col-sm-1 rupeeSymbol">₹</span>
 						</span>
 					</div>

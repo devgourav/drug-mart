@@ -1,230 +1,268 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { InvoiceItemModalComponent } from '../invoice-item-modal/invoice-item-modal.component';
 import { Invoice } from 'src/app/core/model/invoice.model';
-import { Client } from 'src/app/core/model/client.model';
 import { Amount } from 'src/app/core/model/amount.model';
 import { InvoiceService } from 'src/app/core/service/invoice.service';
 import { ClientService } from 'src/app/core/service/client.service';
 import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
-import { Subscription } from 'rxjs';
-
+import { Client } from 'src/app/core/model/client.model';
+import { OfferService } from 'src/app/core/service/offer.service';
+import { Offer } from 'src/app/core/model/offer.model';
+import { BillItem } from 'src/app/core/model/billItem.model';
+import { InvoiceItemModalComponent } from '../invoice-item-modal/invoice-item-modal.component';
 
 // TODO: Add A save/Update prompt
 
-
-
 @Component({
-  selector: 'app-new-invoice',
-  templateUrl: './new-invoice.component.html',
-  styleUrls: ['./new-invoice.component.scss']
+	selector: 'app-new-invoice',
+	templateUrl: './new-invoice.component.html',
+	styleUrls: [ './new-invoice.component.scss' ]
 })
 export class NewInvoiceComponent implements OnInit {
+	invoice: Invoice;
+	invoiceItems: BillItem[] = [];
+	invoiceItem: BillItem;
 
-  invoice: Invoice;
-  invoiceItems: InvoiceItem[] = [];
-  invoiceItem: InvoiceItem;
+	invoiceId: string = '';
+	clientId: string = '';
+	paymentSystems: string[] = [ 'Cash', 'Credit', 'Cheque', 'Bank Transfer' ];
 
-  invoiceId: string = "";
-  netAmount: Amount = new Amount();
-  taxRate: number;
-  discountRate: number;
+	clients: Client[];
+	// clientId: string = "";
+	clientName: string = '';
 
-  clients: Client[];
-  clientId: string = "";
-  clientName: string = "";
+	invoiceInputForm = this.fb.group({
+		clientId: [ '', Validators.required ],
+		invoiceedDate: [ '', Validators.required ],
+		orderNote: new FormControl(''),
+		amountPaid: [ '', Validators.required ],
+		paymentMethod: new FormControl(''),
+		paymentRef: new FormControl('')
+	});
 
-    private subscriptions: Array<Subscription> = [];
+	subAmount: number;
+	taxAmount: number;
+	discountAmount: number;
+	offerAmount: number;
+	totalAmount: number;
+	taxRate: number;
+	discountRate: number;
+	offerRate: number;
 
+	invoiceAmount: Amount = new Amount();
+	constructor(
+		private location: Location,
+		private modalService: NgbModal,
+		private _invoiceService: InvoiceService,
+		private _clientService: ClientService,
+		private route: ActivatedRoute,
+		private fb: FormBuilder,
+		private _offerService: OfferService
+	) {}
 
-  constructor(private location: Location, private modalService: NgbModal,
-    private _invoiceService: InvoiceService, private _clientService: ClientService,
-    private route: ActivatedRoute) {
-    this.netAmount = new Amount();
-  }
-  ngOnInit() {
-    this.populateClientDropDown();
-    this.subscriptions.push(this.route.paramMap.subscribe(params => {
-      this.invoiceId = params.get('id');
-      if (this.invoiceId) {
-        this.getInvoice(params.get('id'));
-      }
-    }));
-  }
+	ngOnInit() {
+		this.populateClientDropDown();
+		this.route.paramMap.subscribe((params) => {
+			this.invoiceId = params.get('id');
+			if (this.invoiceId) {
+				this.getInvoice(params.get('id'));
+			}
+		});
+	}
 
-  invoiceInputForm = new FormGroup({
-    clientId: new FormControl(''),
-    invoicedDate: new FormControl(''),
-    orderNote: new FormControl(''),
-    amountPaid: new FormControl(''),
-    paymentMethod: new FormControl('')
-  });
+	get invoiceedDate() {
+		return this.invoiceInputForm.get('invoiceedDate');
+	}
 
-  invoiceTableHeaders = ['Particular', 'Manufacturer', 'Quantity', 'Rate', 'Amount',
-    'Discount', 'Tax', 'Total', 'Offers', 'M.R.P', 'Actions']
+	get amountPaid() {
+		return this.invoiceInputForm.get('amountPaid');
+	}
 
-  openItemModal() {
-    const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
-    this.subscriptions.push(modalRef.componentInstance.addItemEvent.subscribe((response: InvoiceItem) => {
-      this.invoiceItem = new InvoiceItem(
-        response.itemId,
-        response.itemName,
-        response.packType,
-        response.itemHSN,
-        response.manufacturer,
-        response.batchNumber,
-        response.expiryDate,
-        response.quantity,
-        response.rate,
-        response.itemMRP,
-        response.tax,
-        response.discount,
-        response.offer
-      );
-      const invoiceItem = Object.assign({}, this.invoiceItem)
-      this.invoiceItems.push(invoiceItem);
-      this.calculateTotalCosts(this.invoiceItems);
-    }));
-  }
+	invoiceTableHeaders = [
+		'Particular',
+		'Manufacturer',
+		'Quantity',
+		'Rate',
+		'Amount',
+		'Discount',
+		'Tax',
+		'Total',
+		'Offers',
+		'M.R.P',
+		'Actions'
+	];
 
-  getSubAmount(rate: number, qty: number): number {
-    return rate * qty;
-  }
+	openItemModal() {
+		const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
+		modalRef.componentInstance.addItemEvent.subscribe((response: BillItem) => {
+			this.invoiceItem = new BillItem(
+				response.itemId,
+				response.itemName,
+				response.itemHSN,
+				response.manufacturer,
+				response.batchNumber,
+				response.expiryDate,
+				response.quantity,
+				response.rate,
+				response.itemMRP,
+				response.tax
+			);
+			this.invoiceItem.discount = response.discount;
+			this.invoiceItem.offer = response.offer;
+			this.invoiceItem.packType = response.packType;
 
-  // getTaxAmount(rate: number,qty: number,taxRate: number){
-  //   return taxRate*0.1*this.getSubAmount(rate,qty);
-  // }
-  //
-  // getDiscountAmount(rate: number,qty: number,discountRate: number){
-  //   return discountRate*0.1*this.getSubAmount(rate,qty);
-  // }
+			const invoiceItem = Object.assign({}, this.invoiceItem);
+			this.invoiceItems.push(invoiceItem);
+			this.calculateTotalCosts(this.invoiceItems);
+		});
+	}
 
-  getTotalAmount(rate: number, qty: number, discountRate: number, taxRate: number) {
-    return (1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty);
-  }
+	getSubAmount(rate: number, qty: number): number {
+		return rate * qty;
+	}
 
-  calculateTotalCosts(invoiceItems: InvoiceItem[]) {
-    this.netAmount = new Amount();
-    this.taxRate = this.discountRate = 0;
+	// getTaxAmount(rate: number,qty: number,taxRate: number){
+	//   return taxRate*0.1*this.getSubAmount(rate,qty);
+	// }
+	//
+	// getDiscountAmount(rate: number,qty: number,discountRate: number){
+	//   return discountRate*0.1*this.getSubAmount(rate,qty);
+	// }
 
-    for (let invoiceItem of invoiceItems) {
-      this.taxRate = invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"]
-      this.discountRate = invoiceItem.discount;
+	getTotalAmount(rate: number, qty: number, discountRate: number, taxRate: number) {
+		return ((1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty)).toFixed(2);
+	}
 
-      this.netAmount.subAmount += (invoiceItem.rate * invoiceItem.quantity);
-      this.netAmount.taxAmount += (this.taxRate * 0.01 * this.netAmount.subAmount);
-      this.netAmount.discountAmount += (this.discountRate * 0.01 * this.netAmount.subAmount);
-      this.netAmount.totalAmount += this.netAmount.subAmount + this.netAmount.taxAmount
-        - this.netAmount.discountAmount;
+	getOfferDiscount(offer: number) {
+		return offer.toFixed(2);
+	}
 
-    }
-  }
+	calculateTotalCosts(invoiceItems: BillItem[]) {
+		this.subAmount = this.taxAmount = this.discountAmount = this.offerAmount = this.totalAmount = this.taxRate = this.discountRate = this.offerRate = 0;
 
-  populateClientDropDown() {
-    this._clientService.clients
-      .subscribe((response) => {
-        this.clients = response;
-      })
-  }
+		for (let invoiceItem of invoiceItems) {
+			this.taxRate = invoiceItem.tax['stateTax'] + invoiceItem.tax['countryTax'];
+			this.discountRate = invoiceItem.discount;
+			this.offerRate = invoiceItem.offer;
 
-  closeClicked() {
-    this.location.back();
-  }
+			const subRate = invoiceItem.rate * invoiceItem.quantity;
+			this.subAmount += subRate;
+			this.taxAmount += this.taxRate * 0.01 * subRate;
+			this.offerAmount += this.offerRate * 0.01 * subRate;
+			this.discountAmount += this.discountRate * 0.01 * subRate;
+		}
 
-  getInvoice(invoiceId: string) {
-    this.subscriptions.push(this._invoiceService.getInvoiceById(invoiceId)
-      .subscribe((response) => {
-        this.invoice = new Invoice(
-          response.clientId,
-          response.invoicedDate,
-          response.invoiceItems,
-          response.orderNote,
-          response.paymentMethod,
-          response.amountPaid
-        );
-        this.invoiceItems = this.invoice.invoiceItems;
-        this.populateInvoiceData();
-        console.warn(this.invoiceItems);
-        this.calculateTotalCosts(this.invoiceItems);
-      }));
-  }
+		console.log('Discounts:', this.offerAmount + '->' + this.discountAmount);
 
-  setClientName(event: any) {
-    this.clientId = event.target.value;
-    for(let client of this.clients){
-      if(this.clientId == client.id){
-        this.clientName = client.name;
-      }
-    }
-  }
+		this.invoiceAmount.subAmount = this.subAmount.toFixed(2);
+		this.invoiceAmount.taxAmount = this.taxAmount.toFixed(2);
+		this.invoiceAmount.discountAmount = (this.discountAmount + this.offerAmount).toFixed(2);
+		this.invoiceAmount.totalAmount = (+this.invoiceAmount.subAmount +
+			+this.invoiceAmount.taxAmount -
+			+this.invoiceAmount.discountAmount).toFixed(2);
+	}
 
-  setInvoice() {
-    this._invoiceService.setInvoice(this.getInvoiceObj());
-    this.closeClicked();
-  }
+	populateClientDropDown() {
+		this._clientService.getClients().subscribe((response) => {
+			this.clients = response;
+		});
+	}
 
-  updateInvoice() {
-    this._invoiceService.updateInvoice(this.getInvoiceObj());
-    this.closeClicked();
-  }
+	closeClicked() {
+		this.location.back();
+	}
 
-  getInvoiceObj(): Invoice {
-    this.invoice = new Invoice(
-      this.clientId,
-      this.invoiceInputForm.get("invoicedDate").value,
-      this.invoiceItems,
-      this.invoiceInputForm.get("orderNote").value,
-      this.invoiceInputForm.get("paymentMethod").value,
-      this.invoiceInputForm.get("amountPaid").value
-    );
-    this.invoice.clientName = this.clientName;
-    this.invoice.id = this.invoiceId;
-    const bill = Object.assign({}, this.invoice);
-    return bill;
-  }
+	getInvoice(invoiceId: string) {
+		this._invoiceService.getInvoiceById(invoiceId).subscribe((response) => {
+			this.invoice = new Invoice(
+				response.clientId,
+				response.invoiceItems,
+				response.invoicedDate,
+				response.amountPaid
+			);
+			this.invoice.orderNote = response.orderNote;
+			this.invoice.paymentMethod = response.paymentMethod;
+			(this.invoice.paymentRef = response.paymentRef), (this.invoiceItems = this.invoice.invoiceItems);
 
-  deleteItem(invoiceItem: InvoiceItem) {
-    const index: number = this.invoice.invoiceItems.indexOf(invoiceItem);
-    if (index !== -1) {
-      this.invoice.invoiceItems.splice(index, 1);
-    }
-  }
+			this.invoiceInputForm.patchValue({
+				clientId: this.invoice.clientId,
+				invoiceedDate: this.invoice.invoicedDate,
+				orderNote: this.invoice.orderNote,
+				amountPaid: this.invoice.amountPaid,
+				paymentMethod: this.invoice.paymentMethod
+			});
 
-  editItem(invoiceItem: InvoiceItem) {
-    const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
-    if (invoiceItem) {
-      modalRef.componentInstance.invoiceItem = invoiceItem
-    }
-    this.subscriptions.push(modalRef.componentInstance.editItemEvent.subscribe((response:InvoiceItem) => {
-      this.invoiceItem = response;
-      for (let invoiceItem of this.invoiceItems) {
-        if (this.invoiceItem.itemId == invoiceItem.itemId) {
-          const index: number = this.invoiceItems.indexOf(invoiceItem);
-          this.invoiceItems[index] = this.invoiceItem;
-          break;
-        }
-      }
-      this.calculateTotalCosts(this.invoiceItems);
-    }))
-  }
+			this.calculateTotalCosts(this.invoiceItems);
+		});
+	}
 
-  populateInvoiceData() {
-    this.invoiceInputForm.setValue({
-      clientId: this.invoice.clientId,
-      invoicedDate: this.invoice.invoicedDate,
-      orderNote: this.invoice.orderNote,
-      amountPaid: this.invoice.amountPaid,
-      paymentMethod: this.invoice.paymentMethod
-    });
-  }
+	fetchClientName(event: any) {
+		this.clientId = event.target.value;
+		this.setClientName(this.clientId);
+	}
 
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
-  }
+	setClientName(clientId: string): string {
+		for (let client of this.clients) {
+			if (clientId == client.id) {
+				this.clientName = client.name;
+			}
+		}
+		return this.clientName;
+	}
 
+	setInvoice() {
+		this._invoiceService.setInvoice(this.getInvoiceObj());
+		this.closeClicked();
+	}
+
+	updateInvoice() {
+		this._invoiceService.updateInvoice(this.getInvoiceObj());
+		this.closeClicked();
+	}
+
+	getInvoiceObj(): Invoice {
+		this.invoice = new Invoice(
+			this.invoiceInputForm.get('clientId').value,
+			this.invoiceItems,
+			this.invoiceInputForm.get('invoiceedDate').value,
+			this.invoiceInputForm.get('amountPaid').value
+		);
+
+		this.invoice.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
+		this.invoice.paymentRef = this.invoiceInputForm.get('paymentRef').value;
+		this.invoice.orderNote = this.invoiceInputForm.get('orderNote').value;
+
+		this.invoice.clientName = this.setClientName(this.invoiceInputForm.get('clientId').value);
+		this.invoice.id = this.invoiceId;
+		const invoice = Object.assign({}, this.invoice);
+		return invoice;
+	}
+
+	deleteItem(invoiceItem: BillItem) {
+		const index: number = this.invoiceItems.indexOf(invoiceItem);
+		if (index !== -1) {
+			this.invoiceItems.splice(index, 1);
+		}
+	}
+
+	editItem(invoiceItem: BillItem) {
+		const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
+		if (invoiceItem) {
+			modalRef.componentInstance.invoiceItem = invoiceItem;
+		}
+		modalRef.componentInstance.editItemEvent.subscribe((response: BillItem) => {
+			this.invoiceItem = response;
+			for (let invoiceItem of this.invoiceItems) {
+				if (this.invoiceItem.itemId == invoiceItem.itemId) {
+					const index: number = this.invoiceItems.indexOf(invoiceItem);
+					this.invoiceItems[index] = this.invoiceItem;
+					break;
+				}
+			}
+			this.calculateTotalCosts(this.invoiceItems);
+		});
+	}
 }

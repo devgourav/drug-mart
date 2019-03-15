@@ -29,14 +29,14 @@
 			</thead>
 			<tbody>
 				<tr *ngFor="let bill of bills">
-					<td scope="col">{{ bill?.billedDate }}</td>
+					<td scope="col">{{ bill?.billedDate }} 	 </td>
 					<td scope="col">{{ bill?.vendorName }}</td>
-					<td scope="col">{{ getSubAmount(bill.billItems) }}</td>
-					<td scope="col">{{ getTaxAmount(bill.billItems) }}</td>
-					<td scope="col">{{ getDiscountAmount(bill.billItems) }}</td>
-					<td scope="col">{{ getTotalAmount((bill.billItems)) }}</td>
+					<td scope="col" class="currencyDisplay"> {{ getSubAmount(bill.billItems)}}</td>
+					<td scope="col" class="currencyDisplay"> {{ getTaxAmount(bill.billItems) }}</td>
+					<td scope="col" class="currencyDisplay"> {{ getDiscountAmount(bill.billItems) }}</td>
+					<td scope="col" class="currencyDisplay"> {{ getTotalAmount((bill.billItems)) }}</td>
 					<td scope="col">{{ bill?.orderNote }}</td>
-					<td scope="col">{{ bill?.amountPaid }}</td>
+					<td scope="col" class="currencyDisplay"> {{ getPendingAmount(bill?.amountPaid)}}</td>
 					<td>
 						<button type="button" class="btn button-primary" (click)="editBill(bill.id)">View/Edit</button>
 						<button type="button" class="btn button-cancel" (click)="deleteBill(bill)">Delete</button>
@@ -46,6 +46,4 @@
 			</tbody>
 		</table>
 	</div>
-
-
 </div>
