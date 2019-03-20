@@ -1,4 +1,4 @@
- import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -25,34 +25,29 @@ import { AuthService } from './core/service/auth.service';
 import { ClientService } from './core/service/client.service';
 import { SharedModule } from './core/shared/shared.module';
 
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    SidebarComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    VendorModule,
-    BillModule,
-    ClientModule,
-    InvoiceModule,
-    ItemModule,
-    SettingsModule,
-    NgbModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    AuthModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule,
-    SharedModule
-  ],
-  providers: [ VendorService, BillService, ItemService,InvoiceService, AuthService, ClientService ],
-  bootstrap: [AppComponent],
-  exports:[SidebarComponent]
-
+	declarations: [ AppComponent, SidebarComponent ],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		VendorModule,
+		BillModule,
+		ClientModule,
+		InvoiceModule,
+		ItemModule,
+		SettingsModule,
+		NgbModule,
+		FormsModule,
+		ReactiveFormsModule,
+		HttpClientModule,
+		AuthModule,
+		AngularFireModule.initializeApp(environment.firebase),
+		AngularFirestoreModule.enablePersistence(),
+		AngularFireAuthModule,
+		SharedModule
+	],
+	providers: [ VendorService, BillService, ItemService, InvoiceService, AuthService, ClientService ],
+	bootstrap: [ AppComponent ],
+	exports: [ SidebarComponent ]
 })
-export class AppModule { }
+export class AppModule {}

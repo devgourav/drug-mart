@@ -3,31 +3,26 @@
 @import "../../../../assets/styles/_title-header.scss";
 @import "../../../../assets/styles/common.scss";
 
-
-
-
-#settings-wrapper{
+#settings-wrapper {
 	font-family: 'Montserrat', sans-serif;
-	color:$text-color-dark;
+	color: $text-color-dark;
 }
 
-.settings-menu{
-	margin-top:10%;
+.settings-menu {
+	margin-top: 10%;
 	text-align: left;
 }
 
-
-.settings-list{
+.settings-list {
 	list-style: none;
 	padding: 0;
 
-	li{
+	li {
 		margin-bottom: 20px;
-		a{
+		a {
 			display: block;
 			text-decoration: none;
 			padding: 10;
 		}
 	}
-
 }

@@ -1,23 +1,23 @@
 @import "_colors.scss";
 
-.wrapper-content{
+.wrapper-content {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 300;
-	color:$text-color-dark;
+	color: $text-color-dark;
 }
 
-.btn{
-		color:$text-color-light;
+.btn {
+	color: $text-color-light;
 }
 
-.table{
-	thead{
+.table {
+	thead {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: bold;
-		color:$text-color-dark;
+		color: $text-color-light;
 	}
 }
-.title-header{
+.title-header {
 	font-weight: bold;
 	text-align: left;
 	padding: 17px 5px;
@@ -25,38 +25,40 @@
 	font-size: 20px;
 }
 
-.search-header{
+.search-header {
 	margin: 10px auto;
 
-	.input-form{
+	.input-form {
 		padding-left: 40px;
 		font-weight: bold;
 
-		.search-area{
+		.search-area {
 			text-align: left;
 
-			.search-box{
+			.search-box {
 				height: 44px;
 				text-align: left;
-				padding:5px;
+				padding: 5px;
 				border-radius: 4px;
 			}
 		}
 	}
-	.new-item-area{
+	.new-item-area {
 		text-align: right;
 	}
 }
 
-
-.wrapper-content{
+.wrapper-content {
 	padding: 10px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
 
 .has-error {
-	input,textarea,select,option {
+	input,
+	textarea,
+	select,
+	option {
 		/* make it glow! */
 		-webkit-box-shadow: 0 0 4px #c62828;
 		-moz-box-shadow: 0 0 4px #c62828;
@@ -66,7 +68,9 @@
 }
 
 .no-error {
-	input,textarea,select {
+	input,
+	textarea,
+	select {
 		/* make it glow! */
 		-webkit-box-shadow: 0 0 4px #4caf50;
 		-moz-box-shadow: 0 0 4px #4caf50;
@@ -79,15 +83,26 @@
 // 	margin-bottom: 20px;
 // }
 
-.rupeeSymbol{
-		text-align : left;
-		display    : inline-flex;
-		font-size: 1em;
+.rupeeSymbol {
+	text-align: left;
+	display: inline-flex;
+	font-size: 1em;
 }
 
 hr {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border: 0;
-  border-top: 1px solid $border-color-dark;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	border: 0;
+	border-top: 1px solid $border-color-dark;
+}
+
+.table-wrapper {
+	tbody {
+		.form-control {
+			font-size: 12px;
+		}
+	}
+}
+.export-table {
+	opacity: 0.0;
 }
