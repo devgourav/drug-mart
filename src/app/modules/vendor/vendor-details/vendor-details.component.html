@@ -11,8 +11,7 @@
 			</div>
 			<div class="new-item-area col">
 				<a routerLink="New Vendor"><button class="btn button-save">New Vendor</button></a>
-				<button class="btn button-filter">Export</button>
-				<!-- <button class="btn button-filter">Import</button> -->
+				<button class="btn button-filter" (click)="saveAsPDF()">Export</button>
 			</div>
 		</div>
 	</div>
@@ -21,7 +20,7 @@
 		<span id="header-text">Vendor Details</span>
 	</div>
 
-	<div class="table-wrapper">
+	<div class="table-wrapper" #screen>
 		<table class="table table-striped table-dark">
 			<thead>
 				<tr>
@@ -32,18 +31,17 @@
 					<tr *ngFor="let vendor of vendors">
 							<td>{{ vendor?.name }}</td>
 							<td>{{ vendor?.contactPersonName }}</td>
-							<td>{{ vendor?.address.streetAddress }}</td>
+							<td>{{ vendor?.address['streetAddress'] }}</td>
 							<td>{{ vendor?.emailId }}</td>
 							<td>{{ vendor?.phoneNumber }}</td>
 							<td>{{ vendor?.contactPersonPhoneNumber }}</td>
-							<td>
-								<button type="button" class="btn button-primary" (click)="editVendor(vendor.id)">View/Edit</button>
-								<button type="button" class="btn button-cancel" (click)="deleteVendor(vendor)">Delete</button>
+							<td data-html2canvas-ignore>
+								<button  type="button" class="btn button-primary" (click)="editVendor(vendor.id)">View/Edit</button>
+								<button  type="button" class="btn button-cancel" (click)="deleteVendor(vendor)">Delete</button>
 							</td>
 					</tr>
 			</tbody>
 		</table>
 	</div>
-
 
 </div>
