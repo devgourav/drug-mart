@@ -5,16 +5,11 @@ import { NewItemComponent } from './new-item/new-item.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 import { ItemRoutingModule } from './item-routing.module';
 import { SharedModule } from 'src/app/core/shared/shared.module';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
-  declarations: [NewItemComponent, ItemDetailsComponent],
-  imports: [
-    CommonModule,
-    ItemRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule
-  ],
-  exports:[]
+	declarations: [ NewItemComponent, ItemDetailsComponent ],
+	imports: [ CommonModule, ItemRoutingModule, FormsModule, ReactiveFormsModule, TableModule, SharedModule ],
+	exports: []
 })
-export class ItemModule { }
+export class ItemModule {}

@@ -3,19 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ClientDetailsComponent } from './client-details/client-details.component';
 import { NewClientComponent } from './new-client/new-client.component';
 
-import { ClientRoutingModule } from './client-routing.module'
+import { ClientRoutingModule } from './client-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/core/shared/shared.module';
-
+import { TableModule } from 'primeng/table';
 
 @NgModule({
-  declarations: [ClientDetailsComponent, NewClientComponent],
-  imports: [
-    CommonModule,
-    ClientRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule
-  ]
+	declarations: [ ClientDetailsComponent, NewClientComponent ],
+	imports: [ CommonModule, ClientRoutingModule, FormsModule, ReactiveFormsModule, TableModule, SharedModule ]
 })
-export class ClientModule { }
+export class ClientModule {}

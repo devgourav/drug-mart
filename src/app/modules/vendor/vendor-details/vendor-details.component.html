@@ -1,14 +1,14 @@
 <div id="vendor-details-wrapper">
 	<div class="search-header">
 		<div class="row">
-			<div class="search-area col">
+			<!-- <div class="search-area col">
 				<div class="input-form">
 					<div class="input-group">
-						<input type="text"placeholder="Search Vendors" class="search-box form-control">
+						<input type="text" (keydown)="searchVendor($event)" placeholder="Search Vendors" class="search-box form-control">
 						<button type="submit" class="btn button-filter">Filter Options</button>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="new-item-area col">
 				<a routerLink="New Vendor"><button class="btn button-save">New Vendor</button></a>
 				<button class="btn button-filter" (click)="saveAsPDF()">Export</button>
@@ -21,27 +21,45 @@
 	</div>
 
 	<div class="table-wrapper" #screen>
-		<table class="table table-striped table-dark">
-			<thead>
+
+
+
+		<p-table #dt [columns]="tableHeaders" [value]="vendors">
+
+			<ng-template pTemplate="caption">
+				<div style="text-align: right">
+					<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+					<input type="text" pInputText size="50" placeholder="Search Vendors"
+						(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+				</div>
+			</ng-template>
+			<ng-template pTemplate="header">
 				<tr>
-					<th *ngFor="let vendorDetailsTableHeader of vendorDetailsTableHeaders" scope="col">{{vendorDetailsTableHeader}}</th>
+					<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+						{{tableHeader.header}}
+						<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+					</th>
+					<th>Actions</th>
 				</tr>
-			</thead>
-			<tbody>
-					<tr *ngFor="let vendor of vendors">
-							<td>{{ vendor?.name }}</td>
-							<td>{{ vendor?.contactPersonName }}</td>
-							<td>{{ vendor?.address['streetAddress'] }}</td>
-							<td>{{ vendor?.emailId }}</td>
-							<td>{{ vendor?.phoneNumber }}</td>
-							<td>{{ vendor?.contactPersonPhoneNumber }}</td>
-							<td data-html2canvas-ignore>
-								<button  type="button" class="btn button-primary" (click)="editVendor(vendor.id)">View/Edit</button>
-								<button  type="button" class="btn button-cancel" (click)="deleteVendor(vendor)">Delete</button>
-							</td>
-					</tr>
-			</tbody>
-		</table>
+			</ng-template>
+			<ng-template pTemplate="body" let-vendor>
+				<tr>
+					<td>{{ vendor?.name }}</td>
+					<td>{{ vendor?.contactPersonName }}</td>
+					<td>{{ vendor?.address['streetAddress'] }}</td>
+					<td>{{ vendor?.emailId }}</td>
+					<td>{{ vendor?.phoneNumber }}</td>
+					<td>{{ vendor?.contactPersonPhoneNumber }}</td>
+					<td data-html2canvas-ignore>
+						<button type="button" class="btn button-primary"
+							(click)="editVendor(vendor.id)">View/Edit</button>
+						<button type="button" class="btn button-cancel" (click)="deleteVendor(vendor)">Delete</button>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+
+
 	</div>
 
 </div>

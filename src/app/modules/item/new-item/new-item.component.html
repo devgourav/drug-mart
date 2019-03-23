@@ -3,7 +3,7 @@
 		<span id="header-text">Add New Item</span>
 	</div>
 
-	<div class="input-form wrapper-content">
+	<div class="input-form wrapper-content" #screen>
 		<form [formGroup]="itemInputForm" (ngSubmit)="setItem()">
 			<div class="row">
 				<div class="col">
@@ -130,6 +130,7 @@
 			<div id="action-buttons">
 				<button type="submit" [disabled]="!itemInputForm.valid" *ngIf="!itemId" class="btn button-save">Save</button>
 				<button type="button" [disabled]="!itemInputForm.valid" *ngIf="itemId" (click)="updateItem()" class="btn button-save">Update</button>
+				<button type="button" [disabled]="!itemInputForm.valid" *ngIf="itemId" (click)="printItem()" class="btn button-save">Print</button>
 				<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
 			</div>
 

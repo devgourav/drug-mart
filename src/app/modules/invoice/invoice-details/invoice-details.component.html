@@ -1,50 +1,65 @@
 <div id="invoice-details-wrapper">
-		<div class="search-header">
-			<div class="row">
-				<div class="search-area col">
-					<div class="input-form">
-						<div class="input-group">
-							<input type="text"placeholder="Search Invoices" class="search-box form-control">
-							<button type="submit" class="btn button-filter">Filter Options</button>
-						</div>
+	<div class="search-header">
+		<div class="row">
+			<div class="search-area col">
+				<div class="input-form">
+					<div class="input-group">
+						<input type="text" placeholder="Search Invoices" class="search-box form-control">
+						<button type="submit" class="btn button-filter">Filter Options</button>
 					</div>
 				</div>
-				<div class="new-item-area col">
-					<a routerLink="New Invoice"><button class="btn button-save">New Invoice</button></a>
-					<button class="btn button-filter">Export</button>
-				</div>
+			</div>
+			<div class="new-item-area col">
+				<a routerLink="New Invoice"><button class="btn button-save">New Invoice</button></a>
+				<button class="btn button-filter">Export</button>
 			</div>
 		</div>
-	
-		<div class="title-header">
-			<span id="header-text">Recent Invoices</span>
-		</div>
-	
-		<div class="table-wrapper">
-			<table class="table table-striped table-dark">
-				<thead>
-					<tr>
-						<th *ngFor="let invoiceDetailsTableHeader of invoiceDetailsTableHeaders" scope="col">{{invoiceDetailsTableHeader}}</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr *ngFor="let invoice of invoices">
-						<td scope="col">{{ invoice?.invoicedDate }} 	 </td>
-						<td scope="col">{{ invoice?.clientName }}</td>
-						<td scope="col" class="currencyDisplay"> {{ getSubAmount(invoice.invoiceItems)}}</td>
-						<td scope="col" class="currencyDisplay"> {{ getTaxAmount(invoice.invoiceItems) }}</td>
-						<td scope="col" class="currencyDisplay"> {{ getDiscountAmount(invoice.invoiceItems) }}</td>
-						<td scope="col" class="currencyDisplay"> {{ getTotalAmount((invoice.invoiceItems)) }}</td>
-						<td scope="col">{{ invoice?.orderNote }}</td>
-						<td scope="col" class="currencyDisplay"> {{ getPendingAmount(invoice?.amountPaid)}}</td>
-						<td>
-							<button type="button" class="btn button-primary" (click)="editInvoice(invoice.id)">View/Edit</button>
-							<button type="button" class="btn button-cancel" (click)="deleteInvoice(invoice)">Delete</button>
-						</td>
-					</tr>
-	
-				</tbody>
-			</table>
-		</div>
 	</div>
-	
+
+	<div class="title-header">
+		<span id="header-text">Recent Invoices</span>
+	</div>
+
+	<div class="table-wrapper">
+
+		<p-table #dt [columns]="tableHeaders" [value]="invoices">
+			<ng-template pTemplate="caption">
+				<div style="text-align: right">
+					<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+					<input type="text" pInputText size="50" placeholder="Search Vendors"
+						(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+				</div>
+			</ng-template>
+			<ng-template pTemplate="header">
+				<tr>
+					<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+						{{tableHeader.header}}
+						<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+					</th>
+					<th>Actions</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-invoice>
+				<tr>
+					<td>{{ invoice?.invoicedDate }}</td>
+					<td>{{ invoice?.clientName }}</td>
+					<td class="currencyDisplay"> {{ getSubAmount(invoice.invoiceItems)}}</td>
+					<td class="currencyDisplay"> {{ getTaxAmount(invoice.invoiceItems) }}</td>
+					<td class="currencyDisplay"> {{ getDiscountAmount(invoice.invoiceItems) }}</td>
+					<td class="currencyDisplay"> {{ getTotalAmount((invoice.invoiceItems)) }}</td>
+					<td>{{ invoice?.orderNote }}</td>
+					<td class="currencyDisplay"> {{ getPendingAmount(invoice?.amountPaid)}}</td>
+					<td>
+						<button type="button" class="btn button-primary"
+							(click)="editInvoice(invoice.id)"><i class="pi pi-pencil"></i>
+						</button>
+						<button type="button" class="btn button-cancel" (click)="deleteInvoice(invoice)">
+								<i class="pi pi-trash"></i>
+						</button>
+					</td>
+				</tr>
+
+			</ng-template>
+		</p-table>
+	</div>
+</div>
