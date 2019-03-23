@@ -1,14 +1,14 @@
 <div id="client-details-wrapper">
 	<div class="search-header">
 		<div class="row">
-			<div class="search-area col">
+			<!-- <div class="search-area col">
 				<div class="input-form">
 					<div class="input-group">
-						<input type="text"placeholder="Search Clients" class="search-box form-control">
+						<input type="text" placeholder="Search Clients" class="search-box form-control">
 						<button type="submit" class="btn button-filter">Filter Options</button>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="new-item-area col">
 				<a routerLink="New Client"><button class="btn button-save">New Client</button></a>
 				<button class="btn button-filter">Export</button>
@@ -22,28 +22,41 @@
 	</div>
 
 	<div class="table-wrapper">
-		<table class="table table-striped table-dark">
-			<thead>
+		<p-table #dt [columns]="tableHeaders" [value]="clients">
+			<ng-template pTemplate="caption">
+				<div style="text-align: right">
+					<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+					<input type="text" pInputText size="50" placeholder="Search Clients"
+						(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+				</div>
+			</ng-template>
+
+			<ng-template pTemplate="header">
 				<tr>
-					<th *ngFor="let clientDetailsTableHeader of clientDetailsTableHeaders" scope="col">{{clientDetailsTableHeader}}</th>
+					<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+						{{tableHeader.header}}
+						<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+					</th>
+					<th>Actions</th>
 				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let client of clients">
+			</ng-template>
+			<ng-template pTemplate="body" let-client>
+				<tr>
 					<td>{{ client?.name }}</td>
 					<td>{{ client?.contactPersonName }}</td>
 					<td>{{ client?.address.streetAddress }}</td>
 					<td>{{ client?.emailId }}</td>
 					<td>{{ client?.phoneNumber }}</td>
 					<td>{{ client?.contactPersonPhoneNumber }}</td>
-					<td>
-						<button type="button" class="btn button-primary" (click)="editClient(client.id)">View/Edit</button>
+					<td data-html2canvas-ignore>
+						<button type="button" class="btn button-primary"
+							(click)="editClient(client.id)">View/Edit</button>
 						<button type="button" class="btn button-cancel" (click)="deleteClient(client)">Delete</button>
 					</td>
 				</tr>
 
-			</tbody>
-		</table>
+			</ng-template>
+		</p-table>
 	</div>
 
 

@@ -14,32 +14,25 @@ const confirmMsg = 'Do you want to delete this vendor?';
 	styleUrls: [ './vendor-details.component.scss' ]
 })
 export class VendorDetailsComponent implements OnInit {
-	vendors: Vendor[] = [];
+	vendors: Vendor[];
 	private subscriptions: Array<Subscription> = [];
+	tableHeaders: any[];
 
 	constructor(private _vendorService: VendorService, private router: Router) {}
 
-	vendorDetailsTableHeaders = [
-		'Vendor Name',
-		'Contact Name',
-		'Address',
-		'Email',
-		'Vendor Phone',
-		'Contact Phone',
-		'Actions'
-	];
-
-	exportVendorDetailsTableHeaders = [
-		'Vendor Name',
-		'Contact Name',
-		'Address',
-		'Email',
-		'Vendor Phone',
-		'Contact Phone'
-	];
+	// tableHeaders = [ 'Vendor Name', 'Contact Name', 'Address', 'Email', 'Vendor Phone', 'Contact Phone', 'Actions' ];
 
 	ngOnInit() {
 		this.getVendors();
+
+		this.tableHeaders = [
+			{ field: 'name', header: 'Vendor Name' },
+			{ field: 'contactPersonName', header: 'Contact Name' },
+			{ field: 'address.streetAddress', header: 'Address' },
+			{ field: 'emailId', header: 'Email' },
+			{ field: 'phoneNumber', header: 'Vendor Phone' },
+			{ field: 'contactPersonPhoneNumber', header: 'Contact Phone' }
+		];
 	}
 
 	getVendors() {

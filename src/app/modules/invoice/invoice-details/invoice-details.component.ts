@@ -5,6 +5,7 @@ import { InvoiceService } from 'src/app/core/service/invoice.service';
 import { Amount } from 'src/app/core/model/amount.model';
 import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
 import { BillItem } from 'src/app/core/model/billItem.model';
+import { Subscription } from 'rxjs';
 
 const confirmMsg = 'Do you want to delete this Invoice?';
 
@@ -15,6 +16,8 @@ const confirmMsg = 'Do you want to delete this Invoice?';
 })
 export class InvoiceDetailsComponent implements OnInit {
 	invoices: Invoice[] = [];
+	private subscriptions: Array<Subscription> = [];
+	tableHeaders: any[];
 
 	taxRate: number;
 	discountRate: number;
@@ -27,20 +30,31 @@ export class InvoiceDetailsComponent implements OnInit {
 		this.invoiceAmount = new Amount();
 	}
 
-	invoiceDetailsTableHeaders = [
-		'InvoiceDate',
-		'Vendor',
-		'Sub Amount',
-		'Tax',
-		'Discount',
-		'Total Amount',
-		'Order Notes',
-		'Amount Pending',
-		'Actions'
-	];
+	// invoiceDetailsTableHeaders = [
+	// 	'InvoiceDate',
+	// 	'Vendor',
+	// 	'Sub Amount',
+	// 	'Tax',
+	// 	'Discount',
+	// 	'Total Amount',
+	// 	'Order Notes',
+	// 	'Amount Pending',
+	// 	'Actions'
+	// ];
 
 	ngOnInit() {
 		this.getInvoices();
+
+		this.tableHeaders = [
+			{ field: 'invoicedDate', header: 'InvoiceDate' },
+			{ field: 'clientName', header: 'Client' },
+			{ field: '', header: 'Sub Amount' },
+			{ field: '', header: 'Tax' },
+			{ field: '', header: 'Discount' },
+			{ field: '', header: 'Total Amount' },
+			{ field: 'orderNote', header: 'Order Notes' },
+			{ field: '', header: 'Amount Pending' }
+		];
 	}
 
 	getInvoices() {
