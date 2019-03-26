@@ -51,7 +51,7 @@
 					<td class="currencyDisplay"> {{ getSubAmount(invoice.invoiceItems)}}</td>
 					<td class="currencyDisplay"> {{ getTaxAmount(invoice.invoiceItems) }}</td>
 					<td class="currencyDisplay"> {{ getDiscountAmount(invoice.invoiceItems) }}</td>
-					<td class="currencyDisplay"> {{ getTotalAmount((invoice.invoiceItems)) }}</td>
+					<td class="currencyDisplay"> {{ getTotalAmount((invoice.id)) }}</td>
 					<td>{{ invoice?.orderNote }}</td>
 					<td class="currencyDisplay"> {{ getPendingAmount(invoice?.amountPaid)}}</td>
 					<td>
