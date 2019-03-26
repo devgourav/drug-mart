@@ -123,11 +123,16 @@ export class InvoiceDetailsComponent implements OnInit {
 		return this.invoiceAmount.discountAmount;
 	}
 
-	getTotalAmount(invoiceItems: BillItem[]): string {
-		this.totalAmount = 0;
-		this.totalAmount =
-			+this.getSubAmount(invoiceItems) + +this.getTaxAmount(invoiceItems) - +this.getDiscountAmount(invoiceItems);
-		return this.totalAmount.toFixed(2);
+	getTotalAmount(id: string): string {
+		// this.totalAmount = 0;
+		// this.totalAmount =
+		// 	+this.getSubAmount(invoiceItems) + +this.getTaxAmount(invoiceItems) - +this.getDiscountAmount(invoiceItems);
+		// return this.totalAmount.toFixed(2);
+		for (let invoice of this.invoices) {
+			if (id == invoice.id) {
+				return invoice.totalAmount.toString();
+			}
+		}
 	}
 
 	getPendingAmount(amountPaid: number): string {
