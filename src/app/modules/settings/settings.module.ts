@@ -8,16 +8,16 @@ import { SettingsRoutingModule } from './settings-routing.module';
 import { DiscountDetailsComponent } from './discount-details/discount-details.component';
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { OfferDetailsComponent } from './offer-details/offer-details.component';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
-  declarations: [SettingDetailsComponent,CompanyDetailsComponent,
-    TaxDetailsComponent, DiscountDetailsComponent, OfferDetailsComponent],
-  imports: [
-    CommonModule,
-    SettingsRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    SharedModule
-  ]
+	declarations: [
+		SettingDetailsComponent,
+		CompanyDetailsComponent,
+		TaxDetailsComponent,
+		DiscountDetailsComponent,
+		OfferDetailsComponent
+	],
+	imports: [ CommonModule, SettingsRoutingModule, FormsModule, ReactiveFormsModule, ButtonModule, SharedModule ]
 })
-export class SettingsModule { }
+export class SettingsModule {}

@@ -8,10 +8,23 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceItemModalComponent } from './invoice-item-modal/invoice-item-modal.component';
 import { TableModule } from 'primeng/table';
 import { SharedModule } from 'src/app/core/shared/shared.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
 	declarations: [ NewInvoiceComponent, InvoiceDetailsComponent, InvoiceItemModalComponent ],
-	imports: [ CommonModule, InvoiceRoutingModule, FormsModule, ReactiveFormsModule, TableModule, SharedModule ],
+	imports: [
+		CommonModule,
+		InvoiceRoutingModule,
+		FormsModule,
+		ReactiveFormsModule,
+		TableModule,
+		SharedModule,
+		ConfirmDialogModule,
+		BrowserAnimationsModule,
+		ToastModule
+	],
 	entryComponents: [ InvoiceItemModalComponent ]
 })
 export class InvoiceModule {}

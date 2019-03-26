@@ -5,20 +5,28 @@ import { VendorService } from 'src/app/core/service/vendor.service';
 import { Subscription } from 'rxjs';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 
 const confirmMsg = 'Do you want to delete this vendor?';
 
 @Component({
 	selector: 'app-vendor-details',
 	templateUrl: './vendor-details.component.html',
-	styleUrls: [ './vendor-details.component.scss' ]
+	styleUrls: [ './vendor-details.component.scss' ],
+	providers: [ ConfirmationService, MessageService ]
 })
 export class VendorDetailsComponent implements OnInit {
 	vendors: Vendor[];
 	private subscriptions: Array<Subscription> = [];
 	tableHeaders: any[];
+	msgs: Message[] = [];
 
-	constructor(private _vendorService: VendorService, private router: Router) {}
+	constructor(
+		private _vendorService: VendorService,
+		private router: Router,
+		private confirmationService: ConfirmationService,
+		private messageService: MessageService
+	) {}
 
 	// tableHeaders = [ 'Vendor Name', 'Contact Name', 'Address', 'Email', 'Vendor Phone', 'Contact Phone', 'Actions' ];
 
@@ -44,9 +52,20 @@ export class VendorDetailsComponent implements OnInit {
 	}
 
 	deleteVendor(vendor: Vendor) {
-		if (confirm(confirmMsg)) {
-			this._vendorService.deleteVendor(vendor);
-		}
+		this.confirmationService.confirm({
+			message: 'Do you want to delete this record?',
+			header: 'Delete Confirmation',
+			icon: 'pi pi-info-circle',
+			reject: () => {
+				this.msgs = [ { severity: 'info', summary: 'Rejected', detail: 'You have rejected' } ];
+			},
+			accept: () => {
+				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Record deleted' } ];
+				this.messageService.add({ severity: 'success', summary: 'Vendor Deleted', detail: 'Vendor Deleted' });
+
+				this._vendorService.deleteVendor(vendor);
+			}
+		});
 	}
 
 	editVendor(vendorId: string) {

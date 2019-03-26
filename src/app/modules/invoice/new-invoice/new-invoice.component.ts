@@ -234,6 +234,11 @@ export class NewInvoiceComponent implements OnInit {
 		this.invoice.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
 		this.invoice.paymentRef = this.invoiceInputForm.get('paymentRef').value;
 		this.invoice.orderNote = this.invoiceInputForm.get('orderNote').value;
+		if (this.invoiceAmount != null) {
+			this.invoice.totalAmount = +this.invoiceAmount.totalAmount;
+			this.invoice.totalTax = +this.invoiceAmount.taxAmount;
+			this.invoice.totalDiscount = +this.invoiceAmount.discountAmount;
+		}
 
 		this.invoice.clientName = this.setClientName(this.invoiceInputForm.get('clientId').value);
 		this.invoice.id = this.invoiceId;

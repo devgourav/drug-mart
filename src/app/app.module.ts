@@ -24,6 +24,7 @@ import { environment } from '../environments/environment';
 import { AuthService } from './core/service/auth.service';
 import { ClientService } from './core/service/client.service';
 import { SharedModule } from './core/shared/shared.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @NgModule({
 	declarations: [ AppComponent, SidebarComponent ],
@@ -36,6 +37,7 @@ import { SharedModule } from './core/shared/shared.module';
 		InvoiceModule,
 		ItemModule,
 		SettingsModule,
+		DashboardModule,
 		NgbModule,
 		FormsModule,
 		ReactiveFormsModule,
