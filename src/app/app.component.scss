@@ -1,46 +1,43 @@
 @import "../assets/styles/_colors.scss";
 @import "../assets/styles/_button.scss";
 @import "../assets/styles/_title-header.scss";
+@import "../assets/styles/common.scss";
 
-
-
-
-#login-wrapper{
-	font-family: 'Montserrat', sans-serif;
-	color:$text-color-dark;
-	text-align: center;
-	border: 1px solid $text-color-dark;
-	width:40%;
+#login-wrapper {
+	// background-color: $primary-color;
+	width: 60vw;
 	margin: auto;
-	padding:50px;
+	padding: 50px;
+	text-align: center;
 
-	.login-content{
+	.login-content {
 		display: inline-block;
 		padding: 10px;
+
+		label {
+			text-align: right;
+		}
 	}
-	.login-header{
+	.text-header {
 		padding: 10px;
 	}
 }
 
-#content{
-	position    :absolute;
-	width       : 100%;
+#content {
+	position: absolute;
+	width: 100%;
 	padding-left: 250px;
 }
 
-
-
-.login-list{
+.login-list {
 	list-style: none;
 	padding: 0;
 
-	li{
+	li {
 		margin-bottom: 20px;
-		a{
+		a {
 			display: block;
 			text-decoration: none;
 		}
 	}
-
 }

@@ -6,18 +6,21 @@ import { Amount } from 'src/app/core/model/amount.model';
 import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
 import { BillItem } from 'src/app/core/model/billItem.model';
 import { Subscription } from 'rxjs';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 
 const confirmMsg = 'Do you want to delete this Invoice?';
 
 @Component({
 	selector: 'app-invoice-details',
 	templateUrl: './invoice-details.component.html',
-	styleUrls: [ './invoice-details.component.scss' ]
+	styleUrls: [ './invoice-details.component.scss' ],
+	providers: [ ConfirmationService, MessageService ]
 })
 export class InvoiceDetailsComponent implements OnInit {
 	invoices: Invoice[] = [];
 	private subscriptions: Array<Subscription> = [];
 	tableHeaders: any[];
+	msgs: Message[] = [];
 
 	taxRate: number;
 	discountRate: number;
@@ -26,7 +29,12 @@ export class InvoiceDetailsComponent implements OnInit {
 	anyAmount: number = 0;
 	totalAmount: number = 0;
 
-	constructor(private _invoiceService: InvoiceService, private router: Router) {
+	constructor(
+		private _invoiceService: InvoiceService,
+		private router: Router,
+		private confirmationService: ConfirmationService,
+		private messageService: MessageService
+	) {
 		this.invoiceAmount = new Amount();
 	}
 
@@ -64,9 +72,19 @@ export class InvoiceDetailsComponent implements OnInit {
 	}
 
 	deleteInvoice(invoice: Invoice) {
-		if (confirm(confirmMsg)) {
-			this._invoiceService.deleteInvoice(invoice);
-		}
+		this.confirmationService.confirm({
+			message: 'Do you want to delete this item?',
+			header: 'Delete Confirmation',
+			icon: 'pi pi-info-circle',
+			reject: () => {
+				this.msgs = [ { severity: 'info', summary: 'Rejected', detail: 'You have rejected' } ];
+			},
+			accept: () => {
+				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Invoice Deleted' } ];
+				this._invoiceService.deleteInvoice(invoice);
+				this.messageService.add({ severity: 'success', summary: 'Invoice Deleted', detail: 'Invoice Deleted' });
+			}
+		});
 	}
 
 	editInvoice(invoiceId: string) {

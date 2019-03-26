@@ -1,19 +1,21 @@
 <div id="invoice-details-wrapper">
 	<div class="search-header">
 		<div class="row">
-			<div class="search-area col">
+			<!-- <div class="search-area col">
 				<div class="input-form">
 					<div class="input-group">
 						<input type="text" placeholder="Search Invoices" class="search-box form-control">
 						<button type="submit" class="btn button-filter">Filter Options</button>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="new-item-area col">
 				<a routerLink="New Invoice"><button class="btn button-save">New Invoice</button></a>
 				<button class="btn button-filter">Export</button>
 			</div>
 		</div>
+		<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
+
 	</div>
 
 	<div class="title-header">
@@ -22,11 +24,14 @@
 
 	<div class="table-wrapper">
 
+		<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+
 		<p-table #dt [columns]="tableHeaders" [value]="invoices">
 			<ng-template pTemplate="caption">
 				<div style="text-align: right">
 					<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-					<input type="text" pInputText size="50" placeholder="Search Vendors"
+					<input type="text" pInputText size="50" placeholder="Search Invoices"
 						(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
 				</div>
 			</ng-template>
@@ -50,11 +55,11 @@
 					<td>{{ invoice?.orderNote }}</td>
 					<td class="currencyDisplay"> {{ getPendingAmount(invoice?.amountPaid)}}</td>
 					<td>
-						<button type="button" class="btn button-primary"
-							(click)="editInvoice(invoice.id)"><i class="pi pi-pencil"></i>
+						<button type="button" class="btn button-primary" (click)="editInvoice(invoice.id)"><i
+								class="pi pi-pencil"></i>
 						</button>
 						<button type="button" class="btn button-cancel" (click)="deleteInvoice(invoice)">
-								<i class="pi pi-trash"></i>
+							<i class="pi pi-trash"></i>
 						</button>
 					</td>
 				</tr>

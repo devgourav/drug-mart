@@ -6,6 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
+import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
 	providedIn: 'root'
@@ -20,7 +21,12 @@ export class AuthService {
 	modifiedDate: Date = new Date();
 	createdDate: Date = new Date();
 
-	constructor(private afAuth: AngularFireAuth, private _userService: UserService, private router: Router) {
+	constructor(
+		private afAuth: AngularFireAuth,
+		private _userService: UserService,
+		private router: Router,
+		private angularFirestore: AngularFirestore
+	) {
 		this.user = this.afAuth.authState.pipe(
 			switchMap((user) => {
 				if (user) {
@@ -53,6 +59,11 @@ export class AuthService {
 	}
 
 	public updateUserData(user: any) {
+		const userData = user['user'];
+		console.log('updateUserData', userData);
+		console.log('updateUserData', userData['email']);
+		console.log('updateUserData', userData.uid);
+		console.log('updateUserData', userData.email);
 		this._userService.getUserById(user.uid).subscribe((existingUser) => {
 			if (existingUser) {
 				this.roles = existingUser.roles;
@@ -61,16 +72,18 @@ export class AuthService {
 				this.roles = { subscriber: true, editor: false, admin: false };
 			}
 			const data = {
-				id: user.uid,
-				email: user.email,
-				username: user.email,
-				displayName: user.displayName,
+				id: userData.uid,
+				email: userData.email,
+				phoneNumber: ' ',
+				username: userData.email,
+				displayName: userData.email,
 				roles: this.roles,
 				creationDate: this.createdDate,
 				modificationDate: this.modifiedDate
 			};
 			console.log(data);
 			this._userService.setUser(data);
+			this.router.navigateByUrl('/Dashboard');
 		});
 	}
 
@@ -85,6 +98,21 @@ export class AuthService {
 		}
 		return false;
 	}
+
+	// private setUserDoc(user) {
+	// 	const userRef = this._userService.getUserById(user.id);
+
+	// 	const data = {
+	// 		id: user.uid,
+	// 		email: user.email,
+	// 		phoneNumber: user.phoneNumber,
+	// 		username: user.email,
+	// 		displayName: user.displayName,
+	// 		roles: this.roles,
+	// 		creationDate: this.createdDate,
+	// 		modificationDate: this.modifiedDate
+	// 	};
+	// }
 
 	//Abilities
 	canRead(user: User): boolean {

@@ -1,0 +1,15 @@
+@import "../../../../assets/styles/_search-header.scss";
+@import "../../../../assets/styles/_colors.scss";
+@import "../../../../assets/styles/_button.scss";
+@import "../../../../assets/styles/common.scss";
+
+#dashboard-details-wrapper {
+	font-family: 'Montserrat', sans-serif;
+	color: $text-color-dark;
+}
+
+.title-header {
+	margin-top: 50px;
+	font-weight: bold;
+	padding: 10px;
+}

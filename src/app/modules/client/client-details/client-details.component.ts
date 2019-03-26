@@ -3,20 +3,28 @@ import { Router } from '@angular/router';
 import { Client } from 'src/app/core/model/client.model';
 import { ClientService } from 'src/app/core/service/client.service';
 import { Subscription } from 'rxjs';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 
 const confirmMsg = 'Do you want to delete this client?';
 
 @Component({
 	selector: 'app-client-details',
 	templateUrl: './client-details.component.html',
-	styleUrls: [ './client-details.component.scss' ]
+	styleUrls: [ './client-details.component.scss' ],
+	providers: [ ConfirmationService, MessageService ]
 })
 export class ClientDetailsComponent implements OnInit, OnDestroy {
 	clients: Client[] = [];
 	private subscriptions: Array<Subscription> = [];
 	tableHeaders: any[];
+	msgs: Message[] = [];
 
-	constructor(private _clientService: ClientService, private router: Router) {}
+	constructor(
+		private _clientService: ClientService,
+		private router: Router,
+		private confirmationService: ConfirmationService,
+		private messageService: MessageService
+	) {}
 
 	clientDetailsTableHeaders = [
 		'Client Name',
@@ -51,9 +59,20 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
 	}
 
 	deleteClient(client: Client) {
-		if (confirm(confirmMsg)) {
-			this._clientService.deleteClient(client);
-		}
+		this.confirmationService.confirm({
+			message: 'Do you want to delete this record?',
+			header: 'Delete Confirmation',
+			icon: 'pi pi-info-circle',
+			reject: () => {
+				this.msgs = [ { severity: 'info', summary: 'Rejected', detail: 'You have rejected' } ];
+			},
+			accept: () => {
+				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Record deleted' } ];
+				this.messageService.add({ severity: 'success', summary: 'Vendor Deleted', detail: 'Vendor Deleted' });
+
+				this._clientService.deleteClient(client);
+			}
+		});
 	}
 
 	editClient(clientId: string) {

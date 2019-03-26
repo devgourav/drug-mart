@@ -14,6 +14,8 @@
 				<button class="btn button-filter" (click)="saveAsPDF()">Export</button>
 			</div>
 		</div>
+		<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
+
 	</div>
 
 	<div class="title-header">
@@ -21,6 +23,10 @@
 	</div>
 
 	<div class="table-wrapper" #screen>
+
+		<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+
 
 
 
@@ -51,9 +57,12 @@
 					<td>{{ vendor?.phoneNumber }}</td>
 					<td>{{ vendor?.contactPersonPhoneNumber }}</td>
 					<td data-html2canvas-ignore>
-						<button type="button" class="btn button-primary"
-							(click)="editVendor(vendor.id)">View/Edit</button>
-						<button type="button" class="btn button-cancel" (click)="deleteVendor(vendor)">Delete</button>
+						<button pButton (click)="editVendor(vendor.id)" type="button" label="View/Edit"
+							class="ui-button-raised ui-button-primary"></button>
+						<button pButton (click)="deleteVendor(vendor)" type="button" label="Delete"
+							class="ui-button-raised ui-button-danger"></button>
+
+
 					</td>
 				</tr>
 			</ng-template>

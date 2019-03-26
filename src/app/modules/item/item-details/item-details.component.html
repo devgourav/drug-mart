@@ -1,20 +1,21 @@
 <div id="item-details-wrapper">
 	<div class="search-header">
 		<div class="row">
-			<div class="search-area col">
+			<!-- <div class="search-area col">
 				<div class="input-form">
 					<div class="input-group">
-						<input type="text"placeholder="Search Items" class="search-box form-control">
+						<input type="text" placeholder="Search Items" class="search-box form-control">
 						<button type="submit" class="btn button-filter">Filter Options</button>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="new-item-area col">
 				<a routerLink="New Item"><button class="btn button-save">New Item</button></a>
 				<button class="btn button-filter">Export</button>
 				<!-- <button class="btn button-filter">Import</button> -->
 			</div>
 		</div>
+		<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
 	</div>
 
 	<div class="title-header">
@@ -23,22 +24,26 @@
 
 	<div class="table-wrapper">
 
+		<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+
 		<p-table #dt [columns]="tableHeaders" [value]="items">
-				<ng-template pTemplate="caption">
-						<div style="text-align: right">        
-							<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-							<input type="text" pInputText size="50" placeholder="Search Items" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-						</div>
-					</ng-template>
+			<ng-template pTemplate="caption">
+				<div style="text-align: right">
+					<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+					<input type="text" pInputText size="50" placeholder="Search Items"
+						(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+				</div>
+			</ng-template>
 
 			<ng-template pTemplate="header">
 				<tr>
-						<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
-								{{tableHeader.header}}
-								<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
-							</th>
-							<th>Actions</th>			
-						</tr>
+					<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+						{{tableHeader.header}}
+						<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+					</th>
+					<th>Actions</th>
+				</tr>
 			</ng-template>
 			<ng-template pTemplate="body" let-item>
 				<tr>

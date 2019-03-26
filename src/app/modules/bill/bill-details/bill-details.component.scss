@@ -1,34 +1,33 @@
 @import "../../../../assets/styles/_search-header.scss";
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
+@import "../../../../assets/styles/common.scss";
 
-
-#bill-details-wrapper{
+#bill-details-wrapper {
 	font-family: 'Montserrat', sans-serif;
-	color:$text-color-dark;
+	color: $text-color-dark;
 }
 
-#action-buttons{
+#action-buttons {
 	text-align: center;
-	margin:auto;
+	margin: auto;
 }
-.title-header{
+.title-header {
 	margin-top: 50px;
 	font-weight: bold;
 	padding: 10px;
 }
-.table-wrapper{
-	tbody{
-		.form-control{
+.table-wrapper {
+	tbody {
+		.form-control {
 			font-size: 12px;
 		}
-
 	}
 
-	.currencyDisplay::before{
+	.currencyDisplay::before {
 		content: '\20B9'; //Ruppee symbol for CSS
 	}
-	.currencyDisplay::after{
+	.currencyDisplay::after {
 		content: '/-';
 	}
 }

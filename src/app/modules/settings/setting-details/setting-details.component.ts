@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-setting-details',
-  templateUrl: './setting-details.component.html',
-  styleUrls: ['./setting-details.component.scss']
+	selector: 'app-setting-details',
+	templateUrl: './setting-details.component.html',
+	styleUrls: [ './setting-details.component.scss' ]
 })
 export class SettingDetailsComponent implements OnInit {
+	constructor() {}
 
-  constructor() { }
+	settingItems = [ 'Company Details', 'Tax Details', 'Offers' ];
 
-   settingItems = ['Company Details','Tax Details','Offers'];
-
-  ngOnInit() {
-  }
-
+	ngOnInit() {}
 }

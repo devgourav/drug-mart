@@ -2,19 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Item } from 'src/app/core/model/item.model';
 import { ItemService } from 'src/app/core/service/item.service';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 
 const confirmMsg = 'Do you want to delete this item?';
 
 @Component({
 	selector: 'app-item-details',
 	templateUrl: './item-details.component.html',
-	styleUrls: [ './item-details.component.scss' ]
+	styleUrls: [ './item-details.component.scss' ],
+	providers: [ ConfirmationService, MessageService ]
 })
 export class ItemDetailsComponent implements OnInit {
 	items: Item[] = [];
 	tableHeaders: any[];
+	msgs: Message[] = [];
 
-	constructor(private _itemService: ItemService, private router: Router) {}
+	constructor(
+		private _itemService: ItemService,
+		private router: Router,
+		private confirmationService: ConfirmationService,
+		private messageService: MessageService
+	) {}
 
 	// itemDetailsTableHeaders = [
 	// 	'Name',
@@ -50,9 +58,19 @@ export class ItemDetailsComponent implements OnInit {
 	}
 
 	deleteItem(item: Item) {
-		if (confirm(confirmMsg)) {
-			this._itemService.deleteItem(item);
-		}
+		this.confirmationService.confirm({
+			message: 'Do you want to delete this item?',
+			header: 'Delete Confirmation',
+			icon: 'pi pi-info-circle',
+			reject: () => {
+				this.msgs = [ { severity: 'info', summary: 'Rejected', detail: 'You have rejected' } ];
+			},
+			accept: () => {
+				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Item Deleted' } ];
+				this._itemService.deleteItem(item);
+				this.messageService.add({ severity: 'success', summary: 'Item Deleted', detail: 'Item Deleted' });
+			}
+		});
 	}
 
 	editItem(itemId: string) {
