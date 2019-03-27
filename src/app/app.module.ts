@@ -25,6 +25,7 @@ import { AuthService } from './core/service/auth.service';
 import { ClientService } from './core/service/client.service';
 import { SharedModule } from './core/shared/shared.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
 	declarations: [ AppComponent, SidebarComponent ],
@@ -43,6 +44,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 		ReactiveFormsModule,
 		HttpClientModule,
 		AuthModule,
+		ChartModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFirestoreModule.enablePersistence(),
 		AngularFireAuthModule,

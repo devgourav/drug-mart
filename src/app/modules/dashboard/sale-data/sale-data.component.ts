@@ -10,6 +10,7 @@ import { Invoice } from 'src/app/core/model/invoice.model';
 export class SaleDataComponent implements OnInit {
 	invoices: Invoice[] = [];
 	totalSale: string = '';
+	noOfSales: string = '';
 	constructor(private _invoiceService: InvoiceService) {}
 
 	ngOnInit() {
@@ -19,15 +20,18 @@ export class SaleDataComponent implements OnInit {
 	getInvoices() {
 		this._invoiceService.getInvoices().subscribe((response) => {
 			this.invoices = response;
+			this.getTotalSale();
 		});
 	}
 
 	getTotalSale() {
-		let totalSaleNumber = 0;
+		let totalSale = 0;
+		let noOfSales = 0;
 		for (let invoice of this.invoices) {
-			totalSaleNumber += invoice.totalAmount;
+			totalSale += invoice.totalAmount;
+			noOfSales++;
 		}
-		this.totalSale = totalSaleNumber.toString();
-		return this.totalSale;
+		this.totalSale = totalSale.toFixed(2).toString();
+		this.noOfSales = noOfSales.toString();
 	}
 }

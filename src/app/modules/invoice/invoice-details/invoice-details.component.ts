@@ -88,7 +88,7 @@ export class InvoiceDetailsComponent implements OnInit {
 	}
 
 	editInvoice(invoiceId: string) {
-		this.router.navigate([ 'Invoices/New Invoice', invoiceId ]);
+		this.router.navigate([ 'Invoice/New Invoice', invoiceId ]);
 	}
 
 	getSubAmount(invoiceItems: BillItem[]): string {
@@ -124,15 +124,14 @@ export class InvoiceDetailsComponent implements OnInit {
 	}
 
 	getTotalAmount(id: string): string {
-		// this.totalAmount = 0;
-		// this.totalAmount =
-		// 	+this.getSubAmount(invoiceItems) + +this.getTaxAmount(invoiceItems) - +this.getDiscountAmount(invoiceItems);
-		// return this.totalAmount.toFixed(2);
+		this.totalAmount = 0;
 		for (let invoice of this.invoices) {
 			if (id == invoice.id) {
-				return invoice.totalAmount.toString();
+				this.totalAmount += invoice.totalAmount;
 			}
 		}
+
+		return this.totalAmount.toFixed(2).toString();
 	}
 
 	getPendingAmount(amountPaid: number): string {
