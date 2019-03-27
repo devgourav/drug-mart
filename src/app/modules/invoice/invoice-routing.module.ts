@@ -15,15 +15,15 @@ const routes: Routes = [
 		component: NewInvoiceComponent
 	},
 	{
-		path: 'Invoices/New Invoice/:id',
+		path: 'Invoice/New Invoice/:id',
 		component: NewInvoiceComponent
 	},
 	{
-		path: 'Invoices/New Invoice/New Invoice/New Client',
+		path: 'Invoice/New Invoice/New Client/New Client',
 		component: NewClientComponent
 	},
 	{
-		path: 'Invoices/New Invoice/:id/New Client',
+		path: 'Invoice/New Invoice/:id/New Client',
 		component: NewClientComponent
 	}
 ];

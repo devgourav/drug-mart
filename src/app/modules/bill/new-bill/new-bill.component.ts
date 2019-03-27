@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BillItemModalComponent } from '../billItem-modal/billItem-modal.component';
 import { Bill } from 'src/app/core/model/bill.model';
 import { Amount } from 'src/app/core/model/amount.model';
@@ -23,7 +23,6 @@ import { Offer } from 'src/app/core/model/offer.model';
 export class NewBillComponent implements OnInit {
 	bill: Bill;
 	billItems: BillItem[] = [];
-
 	billItem: BillItem;
 
 	billId: string = '';
@@ -31,12 +30,12 @@ export class NewBillComponent implements OnInit {
 	paymentSystems: string[] = [ 'Cash', 'Credit', 'Cheque', 'Bank Transfer' ];
 
 	vendors: Vendor[];
-	// vendorId: string = "";
 	vendorName: string = '';
+	currDate: Date = new Date();
 
 	billInputForm = this.fb.group({
 		vendorId: [ '', Validators.required ],
-		billedDate: [ '', Validators.required ],
+		billedDate: [ this.currDate, Validators.required ],
 		orderNote: new FormControl(''),
 		amountPaid: [ '', Validators.required ],
 		paymentMethod: new FormControl(''),
@@ -59,6 +58,7 @@ export class NewBillComponent implements OnInit {
 		private _billService: BillService,
 		private _vendorService: VendorService,
 		private route: ActivatedRoute,
+		private router: Router,
 		private fb: FormBuilder,
 		private _offerService: OfferService
 	) {}
@@ -148,17 +148,12 @@ export class NewBillComponent implements OnInit {
 			this.discountRate = billItem.discount;
 			this.offerRate = billItem.offer;
 
-			const subRate = billItem.rate * billItem.quantity;
-			this.subAmount += subRate;
-			this.taxAmount += this.taxRate * 0.01 * subRate;
-			this.offerAmount += this.offerRate * 0.01 * subRate;
-			this.discountAmount += this.discountRate * 0.01 * subRate;
+			this.subAmount += billItem.rate * billItem.quantity;
 		}
 
-		console.log('Discounts:', this.discountAmount + this.offerAmount);
-		console.log('subAmount:', this.subAmount);
-		console.log('taxAmount:', this.taxAmount);
-		console.log('totalAmount:', this.totalAmount);
+		this.taxAmount += this.taxRate * 0.01 * this.subAmount;
+		this.offerAmount += this.offerRate * 0.01 * this.subAmount;
+		this.discountAmount += this.discountRate * 0.01 * this.subAmount;
 
 		this.billAmount.subAmount = this.subAmount.toFixed(2);
 		this.billAmount.taxAmount = this.taxAmount.toFixed(2);
@@ -232,6 +227,11 @@ export class NewBillComponent implements OnInit {
 		this.bill.paymentMethod = this.billInputForm.get('paymentMethod').value;
 		this.bill.paymentRef = this.billInputForm.get('paymentRef').value;
 		this.bill.orderNote = this.billInputForm.get('orderNote').value;
+		if (this.billAmount != null) {
+			this.bill.totalAmount = +this.billAmount.totalAmount;
+			this.bill.totalTax = +this.billAmount.taxAmount;
+			this.bill.totalDiscount = +this.billAmount.discountAmount;
+		}
 
 		this.bill.vendorName = this.setVendorName(this.billInputForm.get('vendorId').value);
 		this.bill.id = this.billId;
@@ -262,5 +262,9 @@ export class NewBillComponent implements OnInit {
 			}
 			this.calculateTotalCosts(this.billItems);
 		});
+	}
+
+	navigateNewVendor() {
+		this.router.navigateByUrl('/Bills/New Bill/New Vendor/New Vendor');
 	}
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Invoice } from 'src/app/core/model/invoice.model';
 import { Amount } from 'src/app/core/model/amount.model';
 import { InvoiceService } from 'src/app/core/service/invoice.service';
@@ -59,6 +59,7 @@ export class NewInvoiceComponent implements OnInit {
 		private _invoiceService: InvoiceService,
 		private _clientService: ClientService,
 		private route: ActivatedRoute,
+		private router: Router,
 		private fb: FormBuilder,
 		private _offerService: OfferService
 	) {}
@@ -148,14 +149,12 @@ export class NewInvoiceComponent implements OnInit {
 			this.discountRate = invoiceItem.discount;
 			this.offerRate = invoiceItem.offer;
 
-			const subRate = invoiceItem.rate * invoiceItem.quantity;
-			this.subAmount += subRate;
-			this.taxAmount += this.taxRate * 0.01 * subRate;
-			this.offerAmount += this.offerRate * 0.01 * subRate;
-			this.discountAmount += this.discountRate * 0.01 * subRate;
+			this.subAmount += invoiceItem.rate * invoiceItem.quantity;
 		}
 
-		console.log('Discounts:', this.offerAmount + '->' + this.discountAmount);
+		this.taxAmount += this.taxRate * 0.01 * this.subAmount;
+		this.offerAmount += this.offerRate * 0.01 * this.subAmount;
+		this.discountAmount += this.discountRate * 0.01 * this.subAmount;
 
 		this.invoiceAmount.subAmount = this.subAmount.toFixed(2);
 		this.invoiceAmount.taxAmount = this.taxAmount.toFixed(2);
@@ -269,5 +268,9 @@ export class NewInvoiceComponent implements OnInit {
 			}
 			this.calculateTotalCosts(this.invoiceItems);
 		});
+	}
+
+	navigateNewClient() {
+		this.router.navigateByUrl('/Invoice/New Invoice/New Client/New Client');
 	}
 }

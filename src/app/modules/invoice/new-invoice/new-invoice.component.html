@@ -16,7 +16,7 @@
 								</select>
 							</div>
 							<div class="col-sm-4">
-								<a routerLink="New Client"><button type="submit" class="btn button-primary">New Client</button></a>
+								<button type="button" (click)="navigateNewClient()" class="btn button-primary">New Client</button>
 							</div>
 						</div>
 						<div class="form-group row" [ngClass]="{'has-error':invoiceedDate.errors && (invoiceedDate.touched || invoiceedDate.dirty)}">
