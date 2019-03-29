@@ -22,7 +22,9 @@
 					<div class="form-group row" [ngClass]="{'has-error':billedDate.errors && (billedDate.touched || billedDate.dirty)}">
 						<label class="col-sm-3 col-form-label" for="billDate">Bill Date</label>
 						<div class="col-sm-5">
-							<input type="date" class="form-control" id="billDate" formControlName="billedDate">
+							<!-- <input type="date" class="form-control" id="billDate" formControlName="billedDate"> -->
+							<p-calendar formControlName="billedDate" dateFormat="dd.mm.yy" [showIcon]="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="2018:2035"></p-calendar>
+
 						</div>
 					</div>
 				</div>

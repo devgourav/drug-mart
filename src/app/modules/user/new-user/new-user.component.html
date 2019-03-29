@@ -1,0 +1,89 @@
+<div id="user-details-wrapper">
+  <div class="title-header">
+    <span id="header-text">Add New User</span>
+  </div>
+
+  <div class="input-form wrapper-content">
+    <form [formGroup]="userInputForm">
+      <div class="row">
+        <div class="col-sm-8">
+
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label" for="email">Email Id</label>
+            <div class="col-sm-8">
+              <input maxlength="100" type="email" id="email" class="form-control" formControlName="email">
+              <span class=" has-error" *ngIf="email.errors && (email.touched || email.dirty)">
+                Please Enter a valid Email Id.
+              </span>
+            </div>
+          </div>
+
+
+          <div class="form-group row" [ngClass]="{'has-error':password.errors && (password.touched || password.dirty)}">
+            <label class="col-sm-4 col-form-label" for="password">Password</label>
+            <div class="col-sm-8">
+              <input maxlength="100" type="password" id="password" class="form-control" formControlName="password">
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label" for="phoneNumber">Phone Number</label>
+            <div class="col-sm-1">
+              <input class="form-control" id="countryCode" placeholder="+91" disabled>
+            </div>
+            <div class="col-sm-7">
+              <input maxlength="10" type="tel" id="phoneNumber" class="form-control" formControlName="phoneNumber"
+                appQuantity>
+            </div>
+
+          </div>
+
+          <div class="form-group row"
+            [ngClass]="{'has-error':displayName.errors && (displayName.touched || displayName.dirty)}">
+            <label class="col-sm-4 col-form-label" for="username">Display Name</label>
+            <div class="col-sm-8">
+              <input maxlength="100" type="text" id="displayName" class="form-control" formControlName="displayName">
+            </div>
+          </div>
+
+          <div class="form-group row">
+
+            <label class="col-sm-4 col-form-label" for="roles">Roles</label>
+            <div class="col-sm-8">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <p-checkbox [formControl]="userInputForm.controls['isSubscriber']" label="Subscriber" binary="true">
+                  </p-checkbox>
+                </li>
+                <li class="list-group-item">
+                  <p-checkbox [formControl]="userInputForm.controls['isAdmin']" label="Admin" binary="true">
+                  </p-checkbox>
+                </li>
+                <li class="list-group-item">
+                  <p-checkbox [formControl]="userInputForm.controls['isEditor']" label="Editor" binary="true">
+                  </p-checkbox>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+      </div>
+      <div class="action-buttons">
+        <button type="button" [disabled]="!userInputForm.valid" *ngIf="!userId" (click)="setUser()"
+          class="btn button-save">Create User</button>
+        <button type="button" [disabled]="!userInputForm.valid" *ngIf="userId" (click)="updateUser()"
+          class="btn button-save">Update User</button>
+        <button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>

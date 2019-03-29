@@ -14,7 +14,10 @@ import { AngularFirestoreDocument, AngularFirestore } from '@angular/fire/firest
 export class AuthService {
 	response: any;
 	user: Observable<User>;
+	newUser: User;
 	roles: Roles;
+	phoneNumber: string = '';
+	displayName: string = '';
 
 	credential: auth.AuthCredential;
 	confirmationResult: auth.ConfirmationResult;
@@ -58,12 +61,27 @@ export class AuthService {
 		return this._userService.getUserById(uid);
 	}
 
+	public onEmailandPasswordRegister(emailID, newPassword) {
+		auth()
+			.createUserWithEmailAndPassword(emailID, newPassword)
+			.then((user) => {
+				return this.updateUserData(user);
+			})
+			.catch((error) => console.error('onRegisterSubmit', error));
+	}
+
+	public onEmailandPasswordSignIn(emailID, password) {
+		auth()
+			.signInWithEmailAndPassword(emailID, password)
+			.then((user) => {
+				this.updateUserData(user);
+				return user;
+			})
+			.catch((error) => console.error('onEmailSignInSubmit', error));
+	}
+
 	public updateUserData(user: any) {
 		const userData = user['user'];
-		console.log('updateUserData', userData);
-		console.log('updateUserData', userData['email']);
-		console.log('updateUserData', userData.uid);
-		console.log('updateUserData', userData.email);
 		this._userService.getUserById(user.uid).subscribe((existingUser) => {
 			if (existingUser) {
 				this.roles = existingUser.roles;
@@ -98,21 +116,6 @@ export class AuthService {
 		}
 		return false;
 	}
-
-	// private setUserDoc(user) {
-	// 	const userRef = this._userService.getUserById(user.id);
-
-	// 	const data = {
-	// 		id: user.uid,
-	// 		email: user.email,
-	// 		phoneNumber: user.phoneNumber,
-	// 		username: user.email,
-	// 		displayName: user.displayName,
-	// 		roles: this.roles,
-	// 		creationDate: this.createdDate,
-	// 		modificationDate: this.modifiedDate
-	// 	};
-	// }
 
 	//Abilities
 	canRead(user: User): boolean {

@@ -2,57 +2,55 @@
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
 
-textarea{
-	 resize: none;
+textarea {
+	resize: none;
 }
 
-.wrapper-content{
-	padding   : 10px;
+.wrapper-content {
+	padding: 10px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
 
-
-.row{
+.row {
 	margin-bottom: 20px;
 }
 
-.table-wrapper{
-	tbody{
-		.form-control{
+.table-wrapper {
+	tbody {
+		.form-control {
 			font-size: 12px;
 		}
-
 	}
 }
-.itemEntry{
-	thead{
+.itemEntry {
+	thead {
 		display: none;
 	}
 }
-.cost-details{
-	.span{
-		label{
+.cost-details {
+	.span {
+		label {
 			text-align: right;
 		}
 	}
 }
-.order-notes{
-	.row{
+.order-notes {
+	.row {
 		display: flex;
-  		align-items: center;
+		align-items: center;
 	}
 }
-.reverse-charge{
+.reverse-charge {
 	text-align: center;
 }
-.payment-details{
-	label{
+.payment-details {
+	label {
 		text-align: left;
 	}
 }
-.rupeeSymbol{
-		text-align : left;
-		display    : inline-flex;
-		align-items: center;
+.rupeeSymbol {
+	text-align: left;
+	display: inline-flex;
+	align-items: center;
 }
