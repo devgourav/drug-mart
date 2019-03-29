@@ -33,10 +33,11 @@ export class NewInvoiceComponent implements OnInit {
 	clients: Client[];
 	// clientId: string = "";
 	clientName: string = '';
+	currDate: Date = new Date();
 
 	invoiceInputForm = this.fb.group({
 		clientId: [ '', Validators.required ],
-		invoiceedDate: [ '', Validators.required ],
+		invoicedDate: [ this.currDate, Validators.required ],
 		orderNote: new FormControl(''),
 		amountPaid: [ '', Validators.required ],
 		paymentMethod: new FormControl(''),
@@ -74,8 +75,8 @@ export class NewInvoiceComponent implements OnInit {
 		});
 	}
 
-	get invoiceedDate() {
-		return this.invoiceInputForm.get('invoiceedDate');
+	get invoicedDate() {
+		return this.invoiceInputForm.get('invoicedDate');
 	}
 
 	get amountPaid() {
@@ -188,7 +189,7 @@ export class NewInvoiceComponent implements OnInit {
 
 			this.invoiceInputForm.patchValue({
 				clientId: this.invoice.clientId,
-				invoiceedDate: this.invoice.invoicedDate,
+				invoicedDate: this.invoice.invoicedDate,
 				orderNote: this.invoice.orderNote,
 				amountPaid: this.invoice.amountPaid,
 				paymentMethod: this.invoice.paymentMethod
@@ -226,7 +227,7 @@ export class NewInvoiceComponent implements OnInit {
 		this.invoice = new Invoice(
 			this.invoiceInputForm.get('clientId').value,
 			this.invoiceItems,
-			this.invoiceInputForm.get('invoiceedDate').value,
+			this.invoiceInputForm.get('invoicedDate').value,
 			this.invoiceInputForm.get('amountPaid').value
 		);
 

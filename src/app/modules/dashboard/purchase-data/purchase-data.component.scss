@@ -2,5 +2,23 @@
 @import "../../../../assets/styles/_button.scss";
 
 .sale-widget {
-	border: 1px solid $text-color-dark;
+}
+
+.dash-widget {
+	display: block;
+	width: 20vw;
+	background-color: $negative-color;
+	padding: 1vw;
+	margin: 1vw;
+	color: $text-color-light;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 800;
+	box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.2);
+	.widget-data {
+		text-align: center;
+		vertical-align: middle;
+	}
+	.widget-title {
+		text-align: center;
+	}
 }

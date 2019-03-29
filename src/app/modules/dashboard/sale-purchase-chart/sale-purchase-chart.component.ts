@@ -22,11 +22,11 @@ export class SalePurchaseChartComponent implements OnInit {
 		private _invoiceService: InvoiceService,
 		private _billService: BillService,
 		private messageService: MessageService
-	) {
+	) {}
+
+	ngOnInit() {
 		this.getDatasets();
 	}
-
-	ngOnInit() {}
 
 	getDatasets() {
 		this._invoiceService.getInvoices().subscribe((response) => {
@@ -50,13 +50,13 @@ export class SalePurchaseChartComponent implements OnInit {
 			datasets: [
 				{
 					label: 'Sale Data',
-					data: this.invoiceAmounts,
+					data: [ 0, 10, 20, 30, 40, 50 ],
 					fill: false,
 					borderColor: '#4bc0c0'
 				},
 				{
 					label: 'Purchase Data',
-					data: this.billAmounts,
+					data: [ 0, 10, 20, 30, 40, 50 ],
 					fill: false,
 					borderColor: '#4bc0c0'
 				}

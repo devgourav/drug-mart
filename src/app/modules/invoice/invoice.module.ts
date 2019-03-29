@@ -11,6 +11,7 @@ import { SharedModule } from 'src/app/core/shared/shared.module';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
 	declarations: [ NewInvoiceComponent, InvoiceDetailsComponent, InvoiceItemModalComponent ],
@@ -23,7 +24,8 @@ import { ToastModule } from 'primeng/toast';
 		SharedModule,
 		ConfirmDialogModule,
 		BrowserAnimationsModule,
-		ToastModule
+		ToastModule,
+		CalendarModule
 	],
 	entryComponents: [ InvoiceItemModalComponent ]
 })

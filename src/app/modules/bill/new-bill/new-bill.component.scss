@@ -1,7 +1,6 @@
 @import "../../../../assets/styles/_title-header.scss";
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
-@import "../../../../assets/styles/common.scss";
 
 textarea {
 	resize: none;
@@ -32,7 +31,7 @@ textarea {
 }
 
 .cost-details {
-	.amount{
+	.amount {
 		text-align: right;
 	}
 	.span {
@@ -59,6 +58,6 @@ textarea {
 	}
 }
 
-.totalAmount{
+.totalAmount {
 	font-weight: bold;
 }
