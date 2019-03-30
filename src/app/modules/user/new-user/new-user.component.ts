@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { User, Roles } from 'src/app/core/model/user.model';
 import { UserService } from 'src/app/core/service/user.service';
 import { Subscription } from 'rxjs';
-import * as admin from 'firebase-admin';
 
 // TODO: Add A save/Update prompt
 
@@ -108,15 +107,15 @@ export class NewUserComponent implements OnInit {
 			})
 		);
 
-		admin
-			.auth()
-			.getUser(userId)
-			.then((userRecord) => {
-				console.log('Successfully fetched user data:', userRecord.toJSON());
-			})
-			.catch((error) => {
-				console.log('Error fetching user data:', error);
-			});
+		// admin
+		// 	.auth()
+		// 	.getUser(userId)
+		// 	.then((userRecord) => {
+		// 		console.log('Successfully fetched user data:', userRecord.toJSON());
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log('Error fetching user data:', error);
+		// 	});
 	}
 
 	// setUser() {

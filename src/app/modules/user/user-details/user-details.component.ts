@@ -39,7 +39,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
 
 		this.tableHeaders = [
 			{ field: 'username', header: 'User Name' },
-			{ field: 'email', header: 'Email' },
 			{ field: 'phoneNumber', header: 'Phone Number' },
 			{ field: 'admin', header: 'Admin' },
 			{ field: 'editor', header: 'Editor' },

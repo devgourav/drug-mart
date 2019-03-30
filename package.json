@@ -28,6 +28,7 @@
 		"core-js": "^2.5.4",
 		"cors": "^2.8.5",
 		"firebase": "^5.8.5",
+		"firebase-admin": "^7.2.0",
 		"font-awesome": "^4.7.0",
 		"html2canvas": "^1.0.0-alpha.12",
 		"jquery": "^3.3.1",
