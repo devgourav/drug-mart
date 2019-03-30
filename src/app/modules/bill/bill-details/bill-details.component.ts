@@ -51,13 +51,12 @@ export class BillDetailsComponent implements OnInit {
 		this.getBills();
 
 		this.tableHeaders = [
+			{ field: 'billId', header: 'Bill Id' },
 			{ field: 'billedDate', header: 'Billed Date' },
 			{ field: 'vendorName', header: 'Vendor' },
-			{ field: '', header: 'Sub Amount' },
+			// { field: '', header: 'Sub Amount' },
 			{ field: '', header: 'Tax' },
-			{ field: '', header: 'Discount' },
 			{ field: '', header: 'Total Amount' },
-			{ field: 'orderNote', header: 'Order Notes' },
 			{ field: '', header: 'Amount Pending' }
 		];
 	}
