@@ -6,27 +6,42 @@
 		<form [formGroup]="billInputForm">
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="form-group row" [ngClass]="{'has-error':vendorId.errors && (vendorId.touched || vendorId.dirty)}">
+					<div class="form-group row"
+						[ngClass]="{'has-error':vendorId.errors && (vendorId.touched || vendorId.dirty)}">
 						<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
 						<div class="col-sm-5">
 							<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId"
-							(change)="fetchVendorName($event)">
+								(change)="fetchVendorName($event)">
 								<option value="" [selected]="true">Select a Vendor</option>
-								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}</option>
+								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}
+								</option>
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<button type="button" (click)="navigateNewVendor()" class="btn button-primary">New Vendor</button>
+							<button type="button" (click)="navigateNewVendor()" class="btn button-primary">New
+								Vendor</button>
 						</div>
 					</div>
-					<div class="form-group row" [ngClass]="{'has-error':billedDate.errors && (billedDate.touched || billedDate.dirty)}">
+					<div class="form-group row"
+						[ngClass]="{'has-error':billedDate.errors && (billedDate.touched || billedDate.dirty)}">
 						<label class="col-sm-3 col-form-label" for="billDate">Bill Date</label>
 						<div class="col-sm-5">
 							<!-- <input type="date" class="form-control" id="billDate" formControlName="billedDate"> -->
-							<p-calendar formControlName="billedDate" dateFormat="dd.mm.yy" [showIcon]="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="2018:2035"></p-calendar>
+							<p-calendar formControlName="billedDate" dateFormat="dd.mm.yy" [showIcon]="true"
+								[monthNavigator]="true" [yearNavigator]="true" yearRange="2018:2035"></p-calendar>
 
 						</div>
 					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group row"
+						[ngClass]="{'has-error':billId.errors && (billId.touched || billId.dirty)}">
+						<label class="col-sm-3 col-form-label" for="billId">Bill Number</label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control" id="billId" formControlName="billId">
+						</div>
+					</div>
+
 				</div>
 			</div>
 
@@ -51,8 +66,10 @@
 							<td scope="col">{{ getOfferDiscount(billItem.offer) }}%</td>
 							<td scope="col">{{ billItem.itemMRP }}₹</td>
 							<td>
-								<button type="button" class="btn button-primary" (click)="editItem(billItem)">View/Edit</button>
-								<button type="button" class="btn button-cancel" (click)="deleteItem(billItem)">Delete</button>
+								<button type="button" class="btn button-primary"
+									(click)="editItem(billItem)">View/Edit</button>
+								<button type="button" class="btn button-cancel"
+									(click)="deleteItem(billItem)">Delete</button>
 							</td>
 						</tr>
 					</tbody>
@@ -89,7 +106,7 @@
 							<label class="col-sm-6" for="priceRoundedOff">Rounded Off:</label>
 							<span class="col-sm-6" id="priceRoundedOff"></span>
 						</span> -->
-					<hr>
+						<hr>
 						<span class="row cost-row">
 							<label class="col-sm-3" for="netAmount">Net Amount:</label>
 							<span class="amount totalAmount col-sm-3" id="netAmount">{{ billAmount.totalAmount }}</span>
@@ -102,24 +119,29 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label" for="orderNote">Order Notes</label>
 							<div class="col-sm-8">
-								<textarea class="form-control" formControlName="orderNote" id="orderNote" rows="3"></textarea>
+								<textarea class="form-control" formControlName="orderNote" id="orderNote"
+									rows="3"></textarea>
 							</div>
 						</div>
 					</div>
 					<div class="col payment-details">
-						<div class="form-group row" [ngClass]="{'has-error':amountPaid.errors && (amountPaid.touched || amountPaid.dirty)}">
+						<div class="form-group row"
+							[ngClass]="{'has-error':amountPaid.errors && (amountPaid.touched || amountPaid.dirty)}">
 							<label class="col-sm-3 col-form-label" for="amountPaid">Amount Paid</label>
 							<div class="col-sm-3">
-								<input type="number" class="form-control" formControlName="amountPaid" id="billAmountPaid" appCurrency>
+								<input type="number" class="form-control" formControlName="amountPaid"
+									id="billAmountPaid" appCurrency>
 							</div>
 							<span class="rupeeSymbol label col-sm-5">₹</span>
 						</div>
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label" for="paymentMethod">Payment Method</label>
 							<div class="col-sm-3">
-								<select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod" class="form-control">
+								<select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod"
+									class="form-control">
 									<option value="" [selected]="isSelected">Payment Method</option>
-									<option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">{{paymentSystem}}</option>
+									<option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">
+										{{paymentSystem}}</option>
 								</select>
 							</div>
 						</div>
@@ -127,7 +149,8 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label" for="amountPaid">Payment Ref. Number</label>
 							<div class="col-sm-3">
-								<input type="text" class="form-control" formControlName="paymentRef" id="paymentRef" appCurrency>
+								<input type="text" class="form-control" formControlName="paymentRef" id="paymentRef"
+									appCurrency>
 							</div>
 						</div>
 
@@ -135,9 +158,12 @@
 				</div>
 			</div>
 			<div class="action-buttons">
-				<button type="submit" [disabled]="!billInputForm.valid" *ngIf="billId" id="billUpdateButton" class="btn button-save" (click)="updateBill()" >Update</button>
-				<button type="submit" [disabled]="!billInputForm.valid" *ngIf="!billId" id="billSaveButton" class="btn button-save" (click)="setBill()" >Save</button>
-				<button type="button" id="billCancelButton" class="btn button-cancel" (click)="closeClicked()">Cancel</button>
+				<button type="submit" [disabled]="!billInputForm.valid" *ngIf="billId" id="billUpdateButton"
+					class="btn button-save" (click)="updateBill()">Update</button>
+				<button type="submit" [disabled]="!billInputForm.valid" *ngIf="!billId" id="billSaveButton"
+					class="btn button-save" (click)="setBill()">Save</button>
+				<button type="button" id="billCancelButton" class="btn button-cancel"
+					(click)="closeClicked()">Cancel</button>
 			</div>
 		</form>
 	</div>

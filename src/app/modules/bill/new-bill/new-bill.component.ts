@@ -25,7 +25,7 @@ export class NewBillComponent implements OnInit {
 	billItems: BillItem[] = [];
 	billItem: BillItem;
 
-	billId: string = '';
+	billedId: string = '';
 	vendorId: string = '';
 	paymentSystems: string[] = [ 'Cash', 'Credit', 'Cheque', 'Bank Transfer' ];
 
@@ -36,6 +36,7 @@ export class NewBillComponent implements OnInit {
 	billInputForm = this.fb.group({
 		vendorId: [ '', Validators.required ],
 		billedDate: [ this.currDate, Validators.required ],
+		billId: [ '' ],
 		orderNote: new FormControl(''),
 		amountPaid: [ '', Validators.required ],
 		paymentMethod: new FormControl(''),
@@ -66,8 +67,8 @@ export class NewBillComponent implements OnInit {
 	ngOnInit() {
 		this.populateVendorDropDown();
 		this.route.paramMap.subscribe((params) => {
-			this.billId = params.get('id');
-			if (this.billId) {
+			this.billedId = params.get('id');
+			if (this.billedId) {
 				this.getBill(params.get('id'));
 			}
 		});
@@ -79,6 +80,10 @@ export class NewBillComponent implements OnInit {
 
 	get amountPaid() {
 		return this.billInputForm.get('amountPaid');
+	}
+
+	get billId() {
+		return this.billInputForm.get('billId');
 	}
 
 	billTableHeaders = [
@@ -183,6 +188,7 @@ export class NewBillComponent implements OnInit {
 			this.billInputForm.patchValue({
 				vendorId: this.bill.vendorId,
 				billedDate: this.bill.billedDate,
+				billId: this.bill.billId,
 				orderNote: this.bill.orderNote,
 				amountPaid: this.bill.amountPaid,
 				paymentMethod: this.bill.paymentMethod
@@ -227,6 +233,7 @@ export class NewBillComponent implements OnInit {
 		this.bill.paymentMethod = this.billInputForm.get('paymentMethod').value;
 		this.bill.paymentRef = this.billInputForm.get('paymentRef').value;
 		this.bill.orderNote = this.billInputForm.get('orderNote').value;
+		this.bill.billId = this.billInputForm.get('billId').value;
 		if (this.billAmount != null) {
 			this.bill.totalAmount = +this.billAmount.totalAmount;
 			this.bill.totalTax = +this.billAmount.taxAmount;
@@ -234,7 +241,7 @@ export class NewBillComponent implements OnInit {
 		}
 
 		this.bill.vendorName = this.setVendorName(this.billInputForm.get('vendorId').value);
-		this.bill.id = this.billId;
+		this.bill.id = this.billedId;
 		const bill = Object.assign({}, this.bill);
 		return bill;
 	}
