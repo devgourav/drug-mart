@@ -45,13 +45,14 @@
 			</ng-template>
 			<ng-template pTemplate="body" let-bill>
 				<tr>
+					<td>{{ bill?.billId }}</td>
 					<td>{{ bill?.billedDate }}</td>
 					<td>{{ bill?.vendorName }}</td>
-					<td class="currencyDisplay"> {{ getSubAmount(bill.billItems)}}</td>
+					<!-- <td class="currencyDisplay"> {{ getSubAmount(bill.billItems)}}</td> -->
 					<td class="currencyDisplay"> {{ getTaxAmount(bill.billItems) }}</td>
-					<td class="currencyDisplay"> {{ getDiscountAmount(bill.billItems) }}</td>
+					<!-- <td class="currencyDisplay"> {{ getDiscountAmount(bill.billItems) }}</td> -->
 					<td class="currencyDisplay"> {{ getTotalAmount((bill.billItems)) }}</td>
-					<td>{{ bill?.orderNote }}</td>
+					<!-- <td>{{ bill?.orderNote }}</td> -->
 					<td class="currencyDisplay"> {{ getPendingAmount(bill?.amountPaid)}}</td>
 					<td>
 						<button type="button" class="btn button-primary" (click)="editBill(bill.id)"><i

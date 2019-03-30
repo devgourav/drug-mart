@@ -26,7 +26,7 @@ export class NewInvoiceComponent implements OnInit {
 	invoiceItems: BillItem[] = [];
 	invoiceItem: BillItem;
 
-	invoiceId: string = '';
+	invoicedId: string = '';
 	clientId: string = '';
 	paymentSystems: string[] = [ 'Cash', 'Credit', 'Cheque', 'Bank Transfer' ];
 
@@ -36,6 +36,7 @@ export class NewInvoiceComponent implements OnInit {
 	currDate: Date = new Date();
 
 	invoiceInputForm = this.fb.group({
+		invoiceId: [ this.generateInvoiceId() ],
 		clientId: [ '', Validators.required ],
 		invoicedDate: [ this.currDate, Validators.required ],
 		orderNote: new FormControl(''),
@@ -68,8 +69,8 @@ export class NewInvoiceComponent implements OnInit {
 	ngOnInit() {
 		this.populateClientDropDown();
 		this.route.paramMap.subscribe((params) => {
-			this.invoiceId = params.get('id');
-			if (this.invoiceId) {
+			this.invoicedId = params.get('id');
+			if (this.invoicedId) {
 				this.getInvoice(params.get('id'));
 			}
 		});
@@ -81,6 +82,10 @@ export class NewInvoiceComponent implements OnInit {
 
 	get amountPaid() {
 		return this.invoiceInputForm.get('amountPaid');
+	}
+
+	get invoiceId() {
+		return this.invoiceInputForm.get('invoiceId');
 	}
 
 	invoiceTableHeaders = [
@@ -171,6 +176,38 @@ export class NewInvoiceComponent implements OnInit {
 		});
 	}
 
+	generateInvoiceId() {
+		let date = new Date();
+		let invoices: Invoice[] = [];
+
+		this._invoiceService.getInvoices().subscribe((response) => {
+			invoices = response;
+		});
+		let counter = 0;
+
+		let invoiceId =
+			date.getFullYear().toString() +
+			date.getMonth().toString() +
+			date.getDate().toString() +
+			date.getHours().toString() +
+			counter;
+
+		for (let invoice of invoices) {
+			if (invoice.invoiceId == invoiceId) {
+				counter++;
+				invoiceId =
+					date.getFullYear().toString() +
+					date.getMonth().toString() +
+					date.getDate().toString() +
+					date.getHours().toString() +
+					counter;
+			}
+		}
+
+		console.log('InvoiceId:', invoiceId);
+		return invoiceId;
+	}
+
 	closeClicked() {
 		this.location.back();
 	}
@@ -185,7 +222,9 @@ export class NewInvoiceComponent implements OnInit {
 			);
 			this.invoice.orderNote = response.orderNote;
 			this.invoice.paymentMethod = response.paymentMethod;
-			(this.invoice.paymentRef = response.paymentRef), (this.invoiceItems = this.invoice.invoiceItems);
+			this.invoice.invoiceId = response.invoiceId;
+			this.invoice.paymentRef = response.paymentRef;
+			this.invoiceItems = this.invoice.invoiceItems;
 
 			this.invoiceInputForm.patchValue({
 				clientId: this.invoice.clientId,
@@ -234,6 +273,8 @@ export class NewInvoiceComponent implements OnInit {
 		this.invoice.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
 		this.invoice.paymentRef = this.invoiceInputForm.get('paymentRef').value;
 		this.invoice.orderNote = this.invoiceInputForm.get('orderNote').value;
+		this.invoice.invoiceId = this.invoiceInputForm.get('invoiceId').value;
+
 		if (this.invoiceAmount != null) {
 			this.invoice.totalAmount = +this.invoiceAmount.totalAmount;
 			this.invoice.totalTax = +this.invoiceAmount.taxAmount;
@@ -241,7 +282,7 @@ export class NewInvoiceComponent implements OnInit {
 		}
 
 		this.invoice.clientName = this.setClientName(this.invoiceInputForm.get('clientId').value);
-		this.invoice.id = this.invoiceId;
+		this.invoice.id = this.invoicedId;
 		const invoice = Object.assign({}, this.invoice);
 		return invoice;
 	}

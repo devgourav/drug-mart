@@ -1,145 +1,171 @@
 <div id="new-invoice-wrapper make-scrollable">
-		<div class="title-header">
-			<span id="header-text">Add New Invoice</span>
-		</div>
-		<div class="wrapper-content input-form">
-			<form [formGroup]="invoiceInputForm">
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group row" [ngClass]="{'has-error':clientId.errors && (clientId.touched || clientId.dirty)}">
-							<label class="col-sm-3 col-form-label" for="clientName">Client Name</label>
-							<div class="col-sm-5">
-								<select name="clientId" id="clientId" class="form-control" formControlName="clientId"
+	<div class="title-header">
+		<span id="header-text">Add New Invoice</span>
+	</div>
+	<div class="wrapper-content input-form">
+		<form [formGroup]="invoiceInputForm">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group row"
+						[ngClass]="{'has-error':clientId.errors && (clientId.touched || clientId.dirty)}">
+						<label class="col-sm-3 col-form-label" for="clientName">Client Name</label>
+						<div class="col-sm-5">
+							<select name="clientId" id="clientId" class="form-control" formControlName="clientId"
 								(change)="fetchClientName($event)">
-									<option value="" [selected]="true">Select a Client</option>
-									<option *ngFor="let client of clients" value="{{ client.id }}">{{ client.name }}</option>
-								</select>
-							</div>
-							<div class="col-sm-4">
-								<button type="button" (click)="navigateNewClient()" class="btn button-primary">New Client</button>
-							</div>
+								<option value="" [selected]="true">Select a Client</option>
+								<option *ngFor="let client of clients" value="{{ client.id }}">{{ client.name }}
+								</option>
+							</select>
 						</div>
-						<div class="form-group row" [ngClass]="{'has-error':invoicedDate.errors && (invoicedDate.touched || invoicedDate.dirty)}">
-							<label class="col-sm-3 col-form-label" for="invoiceDate">Invoice Date</label>
-							<div class="col-sm-5">
-								<!-- <input type="date" class="form-control" id="invoiceDate" formControlName="invoicedDate"> -->
-								<p-calendar formControlName="invoicedDate" dateFormat="dd.mm.yy" [showIcon]="true" [monthNavigator]="true" [yearNavigator]="true" yearRange="2018:2035"></p-calendar>
+						<div class="col-sm-4">
+							<button type="button" (click)="navigateNewClient()" class="btn button-primary">New
+								Client</button>
+						</div>
+					</div>
+					<div class="form-group row"
+						[ngClass]="{'has-error':invoicedDate.errors && (invoicedDate.touched || invoicedDate.dirty)}">
+						<label class="col-sm-3 col-form-label" for="invoiceDate">Invoice Date</label>
+						<div class="col-sm-5">
+							<input type="date" class="form-control" id="invoiceDate" formControlName="invoicedDate">
+							<!-- <p-calendar formControlName="invoicedDate" dateFormat="dd.mm.yy" [showIcon]="true"
+								[monthNavigator]="true" [yearNavigator]="true" yearRange="2018:2035"></p-calendar> -->
 
-							</div>
 						</div>
 					</div>
 				</div>
-	
-				<div class="table-wrapper">
-					<table class="itemDetails table table-striped">
-						<thead>
-							<tr>
-								<th *ngFor="let invoiceTableHeader of invoiceTableHeaders" scope="col">{{invoiceTableHeader}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngFor="let invoiceItem of invoiceItems">
-								<td scope="col">{{ invoiceItem.itemName }}</td>
-								<td scope="col">{{ invoiceItem.manufacturer }}</td>
-								<td scope="col">{{ invoiceItem.quantity }}</td>
-								<td scope="col">{{ invoiceItem.rate }}₹</td>
-								<td scope="col">{{ getSubAmount(invoiceItem.rate,invoiceItem.quantity) }}₹</td>
-								<td scope="col">{{ invoiceItem.discount}}%</td>
-								<td scope="col">{{ invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"] }}%</td>
-								<td scope="col">{{ getTotalAmount(invoiceItem.rate,invoiceItem.quantity,invoiceItem.discount+invoiceItem.offer,
-									invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"]) }}₹</td>
-								<td scope="col">{{ getOfferDiscount(invoiceItem.offer) }}%</td>
-								<td scope="col">{{ invoiceItem.itemMRP }}₹</td>
-								<td>
-									<button type="button" class="btn button-primary" (click)="editItem(invoiceItem)">View/Edit</button>
-									<button type="button" class="btn button-cancel" (click)="deleteItem(invoiceItem)">Delete</button>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-	
-				<button type="button" class="btn button-primary" (click)="openItemModal()">Add New Item</button>
-	
-				<div class="afterTable">
-					<div class="row">
-						<div class="col col-md-8">
+				<div class="col-sm-6">
+					<div class="form-group row"
+						[ngClass]="{'has-error':invoiceId.errors && (invoiceId.touched || invoiceId.dirty)}">
+						<label class="col-sm-3 col-form-label" for="invoiceId">Invoice Id</label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control" id="invoiceId" formControlName="invoiceId" disabled>
 						</div>
-						<div class="col cost-details col-md-4">
-							<span class="row cost-row">
-								<label class="col-sm-3" for="subTotalAmount">SubTotal:</label>
-								<span class="amount col-sm-3" id="subTotalAmount">{{ invoiceAmount.subAmount }}</span>
-								<span class="col-sm-1 rupeeSymbol">₹</span>
-							</span>
-							<span class="row cost-row">
-								<label class="col-sm-3" for="totalTax">Tax:</label>
-								<span class="amount col-sm-3" id="totalTax">(+) {{ invoiceAmount.taxAmount }}</span>
-								<span class="col-sm-1 rupeeSymbol">₹</span>
-							</span>
-							<!-- <span class="cost-row">
+					</div>
+				</div>
+			</div>
+
+			<div class="table-wrapper">
+				<table class="itemDetails table table-striped">
+					<thead>
+						<tr>
+							<th *ngFor="let invoiceTableHeader of invoiceTableHeaders" scope="col">
+								{{invoiceTableHeader}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let invoiceItem of invoiceItems">
+							<td scope="col">{{ invoiceItem.itemName }}</td>
+							<td scope="col">{{ invoiceItem.manufacturer }}</td>
+							<td scope="col">{{ invoiceItem.quantity }}</td>
+							<td scope="col">{{ invoiceItem.rate }}₹</td>
+							<td scope="col">{{ getSubAmount(invoiceItem.rate,invoiceItem.quantity) }}₹</td>
+							<td scope="col">{{ invoiceItem.discount}}%</td>
+							<td scope="col">{{ invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"] }}%</td>
+							<td scope="col">{{ getTotalAmount(invoiceItem.rate,invoiceItem.quantity,invoiceItem.discount+invoiceItem.offer,
+									invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"]) }}₹</td>
+							<td scope="col">{{ getOfferDiscount(invoiceItem.offer) }}%</td>
+							<td scope="col">{{ invoiceItem.itemMRP }}₹</td>
+							<td>
+								<button type="button" class="btn button-primary"
+									(click)="editItem(invoiceItem)">View/Edit</button>
+								<button type="button" class="btn button-cancel"
+									(click)="deleteItem(invoiceItem)">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<button type="button" class="btn button-primary" (click)="openItemModal()">Add New Item</button>
+
+			<div class="afterTable">
+				<div class="row">
+					<div class="col col-md-8">
+					</div>
+					<div class="col cost-details col-md-4">
+						<span class="row cost-row">
+							<label class="col-sm-3" for="subTotalAmount">SubTotal:</label>
+							<span class="amount col-sm-3" id="subTotalAmount">{{ invoiceAmount.subAmount }}</span>
+							<span class="col-sm-1 rupeeSymbol">₹</span>
+						</span>
+						<span class="row cost-row">
+							<label class="col-sm-3" for="totalTax">Tax:</label>
+							<span class="amount col-sm-3" id="totalTax">(+) {{ invoiceAmount.taxAmount }}</span>
+							<span class="col-sm-1 rupeeSymbol">₹</span>
+						</span>
+						<!-- <span class="cost-row">
 								<label class="col-sm-6" for="shippingCharge">Shipping Charge:</label>-
 								<span class="col-sm-6" id="shippingCharge"></span>
 							</span> -->
-							<span class="row cost-row">
-								<label class="col-sm-3" for="discount">Discount:</label>
-								<span class="amount col-sm-3" id="discount">(-) {{ invoiceAmount.discountAmount }}</span>
-								<span class="col-sm-1 rupeeSymbol">₹</span>
-							</span>
-							<!-- <span class="cost-row">
+						<span class="row cost-row">
+							<label class="col-sm-3" for="discount">Discount:</label>
+							<span class="amount col-sm-3" id="discount">(-) {{ invoiceAmount.discountAmount }}</span>
+							<span class="col-sm-1 rupeeSymbol">₹</span>
+						</span>
+						<!-- <span class="cost-row">
 								<label class="col-sm-6" for="priceRoundedOff">Rounded Off:</label>
 								<span class="col-sm-6" id="priceRoundedOff"></span>
 							</span> -->
 						<hr>
-							<span class="row cost-row">
-								<label class="col-sm-3" for="netAmount">Net Amount:</label>
-								<span class="amount totalAmount col-sm-3" id="netAmount">{{ invoiceAmount.totalAmount }}</span>
-								<span class="col-sm-1 rupeeSymbol">₹</span>
-							</span>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col order-notes">
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label" for="orderNote">Order Notes</label>
-								<div class="col-sm-8">
-									<textarea class="form-control" formControlName="orderNote" id="orderNote" rows="3"></textarea>
-								</div>
-							</div>
-						</div>
-						<div class="col payment-details">
-							<div class="form-group row" [ngClass]="{'has-error':amountPaid.errors && (amountPaid.touched || amountPaid.dirty)}">
-								<label class="col-sm-3 col-form-label" for="amountPaid">Amount Paid</label>
-								<div class="col-sm-3">
-									<input type="number" class="form-control" formControlName="amountPaid" id="invoiceAmountPaid" appCurrency>
-								</div>
-								<span class="rupeeSymbol label col-sm-5">₹</span>
-							</div>
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label" for="paymentMethod">Payment Method</label>
-								<div class="col-sm-3">
-									<select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod" class="form-control">
-										<option value="" [selected]="isSelected">Payment Method</option>
-										<option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">{{paymentSystem}}</option>
-									</select>
-								</div>
-							</div>
-	
-							<div class="form-group row">
-								<label class="col-sm-3 col-form-label" for="amountPaid">Payment Ref. Number</label>
-								<div class="col-sm-3">
-									<input type="text" class="form-control" formControlName="paymentRef" id="paymentRef" appCurrency>
-								</div>
-							</div>
-	
-						</div>
+						<span class="row cost-row">
+							<label class="col-sm-3" for="netAmount">Net Amount:</label>
+							<span class="amount totalAmount col-sm-3"
+								id="netAmount">{{ invoiceAmount.totalAmount }}</span>
+							<span class="col-sm-1 rupeeSymbol">₹</span>
+						</span>
 					</div>
 				</div>
-				<div class="action-buttons">
-					<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="invoiceId" id="invoiceUpdateButton" class="btn button-save" (click)="updateInvoice()" >Update</button>
-					<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="!invoiceId" id="invoiceSaveButton" class="btn button-save" (click)="setInvoice()" >Save</button>
-					<button type="button" id="invoiceCancelButton" class="btn button-cancel" (click)="closeClicked()">Cancel</button>
+				<div class="row">
+					<div class="col order-notes">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label" for="orderNote">Order Notes</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" formControlName="orderNote" id="orderNote"
+									rows="3"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="col payment-details">
+						<div class="form-group row"
+							[ngClass]="{'has-error':amountPaid.errors && (amountPaid.touched || amountPaid.dirty)}">
+							<label class="col-sm-3 col-form-label" for="amountPaid">Amount Paid</label>
+							<div class="col-sm-3">
+								<input type="number" class="form-control" formControlName="amountPaid"
+									id="invoiceAmountPaid" appCurrency>
+							</div>
+							<span class="rupeeSymbol label col-sm-5">₹</span>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label" for="paymentMethod">Payment Method</label>
+							<div class="col-sm-3">
+								<select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod"
+									class="form-control">
+									<option value="" [selected]="isSelected">Payment Method</option>
+									<option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">
+										{{paymentSystem}}</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label" for="amountPaid">Payment Ref. Number</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" formControlName="paymentRef" id="paymentRef"
+									appCurrency>
+							</div>
+						</div>
+
+					</div>
 				</div>
-			</form>
-		</div>
+			</div>
+			<div class="action-buttons">
+				<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="invoiceId" id="invoiceUpdateButton"
+					class="btn button-save" (click)="updateInvoice()">Update</button>
+				<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="!invoiceId" id="invoiceSaveButton"
+					class="btn button-save" (click)="setInvoice()">Save</button>
+				<button type="button" id="invoiceCancelButton" class="btn button-cancel"
+					(click)="closeClicked()">Cancel</button>
+			</div>
+		</form>
 	</div>
-	
+</div>
