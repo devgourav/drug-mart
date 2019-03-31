@@ -2,7 +2,7 @@ export interface User {
 	id: string;
 	email: string;
 	phoneNumber: string;
-	displayName?: string;
+	displayName: string;
 	roles: Roles;
 	creationDate: Date;
 	modificationDate: Date;
