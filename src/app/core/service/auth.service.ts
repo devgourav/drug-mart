@@ -98,36 +98,36 @@ export class AuthService {
 		});
 	}
 
-	// private checkAuthorization(user: User, allowedRoles: string[]): boolean {
-	// 	if (!user) {
-	// 		return false;
-	// 	}
-	// 	for (const role of allowedRoles) {
-	// 		if (user.roles[role]) {
-	// 			return true;
-	// 		}
-	// 	}
-	// 	return false;
-	// }
+	private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+		if (!user) {
+			return false;
+		}
+		for (const role of allowedRoles) {
+			if (user.roles[role]) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-	//Abilities
-	// canRead(user: User): boolean {
-	// 	const allowed = [ 'admin', 'editor', 'subscriber' ];
-	// 	return this.checkAuthorization(user, allowed);
-	// }
+	Abilities;
+	canRead(user: User): boolean {
+		const allowed = [ 'admin', 'editor', 'subscriber' ];
+		return this.checkAuthorization(user, allowed);
+	}
 
-	// canWrite(user: User): boolean {
-	// 	const allowed = [ 'admin', 'editor' ];
-	// 	return this.checkAuthorization(user, allowed);
-	// }
+	canWrite(user: User): boolean {
+		const allowed = [ 'admin', 'editor' ];
+		return this.checkAuthorization(user, allowed);
+	}
 
-	// canUpdate(user: User): boolean {
-	// 	const allowed = [ 'admin', 'editor' ];
-	// 	return this.checkAuthorization(user, allowed);
-	// }
+	canUpdate(user: User): boolean {
+		const allowed = [ 'admin', 'editor' ];
+		return this.checkAuthorization(user, allowed);
+	}
 
-	// canDelete(user: User): boolean {
-	// 	const allowed = [ 'admin' ];
-	// 	return this.checkAuthorization(user, allowed);
-	// }
+	canDelete(user: User): boolean {
+		const allowed = [ 'admin' ];
+		return this.checkAuthorization(user, allowed);
+	}
 }
