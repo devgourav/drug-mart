@@ -54,9 +54,9 @@ export class AppComponent implements OnInit {
 		this.user = this._authService.onEmailandPasswordSignIn(this.emailID, this.password);
 	}
 
-	onEmailandPasswordRegister() {
-		this._authService.onEmailandPasswordRegister(this.emailID, this.password);
-	}
+	// onEmailandPasswordRegister() {
+	// 	this._authService.onEmailandPasswordRegister(this.emailID, this.password);
+	// }
 
 	// verifyLoginCode() {
 	// 	this.credential = auth.PhoneAuthProvider.credential(

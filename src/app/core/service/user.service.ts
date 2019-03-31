@@ -18,15 +18,18 @@ export class UserService {
 	}
 
 	getUsers(): Observable<User[]> {
-		return (this.users = this.userCollection.snapshotChanges().pipe(
-			map((actions) =>
-				actions.map((a) => {
-					const data = a.payload.doc.data() as User;
-					data.id = a.payload.doc.id;
-					return data;
-				})
-			)
-		));
+		// return (this.users = this.userCollection.snapshotChanges().pipe(
+		// 	map((actions) =>
+		// 		actions.map((a) => {
+		// 			const data = a.payload.doc.data() as User;
+		// 			data.id = a.payload.doc.id;
+		// 			return data;
+		// 		})
+		// 	)
+		// ));
+
+		this.userCollection = this.afs.collection('users', (ref) => ref.orderBy('creationDate'));
+		return (this.users = this.userCollection.valueChanges());
 	}
 
 	getUserById(id: string): Observable<User> {
@@ -35,9 +38,9 @@ export class UserService {
 	}
 
 	setUser(user: User) {
-		const id = user.id;
 		user.modificationDate = new Date();
-		this.userCollection.doc(id).set(user, { merge: true });
+		this.userDocument = this.afs.doc(`users/${user.id}`);
+		this.userDocument.set(user, { merge: true });
 	}
 
 	deleteUser(user: User) {

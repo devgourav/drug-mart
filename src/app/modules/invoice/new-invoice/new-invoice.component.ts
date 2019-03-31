@@ -13,6 +13,7 @@ import { OfferService } from 'src/app/core/service/offer.service';
 import { Offer } from 'src/app/core/model/offer.model';
 import { BillItem } from 'src/app/core/model/billItem.model';
 import { InvoiceItemModalComponent } from '../invoice-item-modal/invoice-item-modal.component';
+import { Observable, of } from 'rxjs';
 
 // TODO: Add A save/Update prompt
 
@@ -23,8 +24,10 @@ import { InvoiceItemModalComponent } from '../invoice-item-modal/invoice-item-mo
 })
 export class NewInvoiceComponent implements OnInit {
 	invoice: Invoice;
+	invoices: Invoice[] = [];
 	invoiceItems: BillItem[] = [];
 	invoiceItem: BillItem;
+	invoiceId: string = '';
 
 	invoicedId: string = '';
 	clientId: string = '';
@@ -36,7 +39,7 @@ export class NewInvoiceComponent implements OnInit {
 	currDate: Date = new Date();
 
 	invoiceInputForm = this.fb.group({
-		invoiceId: [ this.generateInvoiceId() ],
+		invoiceId: [ '' ],
 		clientId: [ '', Validators.required ],
 		invoicedDate: [ this.currDate, Validators.required ],
 		orderNote: new FormControl(''),
@@ -67,6 +70,11 @@ export class NewInvoiceComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		this._invoiceService.getInvoices().subscribe((response) => {
+			this.invoices = response;
+			this.generateInvoiceId();
+		});
+
 		this.populateClientDropDown();
 		this.route.paramMap.subscribe((params) => {
 			this.invoicedId = params.get('id');
@@ -82,10 +90,6 @@ export class NewInvoiceComponent implements OnInit {
 
 	get amountPaid() {
 		return this.invoiceInputForm.get('amountPaid');
-	}
-
-	get invoiceId() {
-		return this.invoiceInputForm.get('invoiceId');
 	}
 
 	invoiceTableHeaders = [
@@ -178,21 +182,17 @@ export class NewInvoiceComponent implements OnInit {
 
 	generateInvoiceId() {
 		let date = new Date();
-		let invoices: Invoice[] = [];
 
-		this._invoiceService.getInvoices().subscribe((response) => {
-			invoices = response;
-		});
 		let counter = 0;
-
 		let invoiceId =
 			date.getFullYear().toString() +
 			date.getMonth().toString() +
 			date.getDate().toString() +
 			date.getHours().toString() +
 			counter;
+		console.log('Invoices:', this.invoices);
 
-		for (let invoice of invoices) {
+		for (let invoice of this.invoices) {
 			if (invoice.invoiceId == invoiceId) {
 				counter++;
 				invoiceId =
@@ -203,9 +203,11 @@ export class NewInvoiceComponent implements OnInit {
 					counter;
 			}
 		}
-
 		console.log('InvoiceId:', invoiceId);
-		return invoiceId;
+		this.invoiceId = invoiceId;
+		this.invoiceInputForm.patchValue({
+			invoiceId: this.invoiceId
+		});
 	}
 
 	closeClicked() {
@@ -226,7 +228,14 @@ export class NewInvoiceComponent implements OnInit {
 			this.invoice.paymentRef = response.paymentRef;
 			this.invoiceItems = this.invoice.invoiceItems;
 
+			if (this.invoice.invoiceId == '') {
+				this.invoice.invoiceId = this.invoiceId;
+			} else {
+				this.invoice.invoiceId = response.invoiceId;
+			}
+
 			this.invoiceInputForm.patchValue({
+				invoiceId: this.invoice.invoiceId,
 				clientId: this.invoice.clientId,
 				invoicedDate: this.invoice.invoicedDate,
 				orderNote: this.invoice.orderNote,

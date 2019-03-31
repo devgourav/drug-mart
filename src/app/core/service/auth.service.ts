@@ -18,11 +18,10 @@ export class AuthService {
 	roles: Roles;
 	phoneNumber: string = '';
 	displayName: string = '';
+	currentUser: any;
 
 	credential: auth.AuthCredential;
 	confirmationResult: auth.ConfirmationResult;
-	modifiedDate: Date = new Date();
-	createdDate: Date = new Date();
 
 	constructor(
 		private afAuth: AngularFireAuth,
@@ -41,100 +40,94 @@ export class AuthService {
 		);
 	}
 
-	async googleLogin() {
-		console.log('Google login');
-		const provider = new auth.GoogleAuthProvider();
-		await this.afAuth.auth
-			.signInWithPopup(provider)
-			.then((firebaseUser) => {
-				this.updateUserData(firebaseUser.user);
-			})
-			.catch((error) => console.error('googleLogin', error));
-	}
+	// async googleLogin() {
+	// 	console.log('Google login');
+	// 	const provider = new auth.GoogleAuthProvider();
+	// 	await this.afAuth.auth
+	// 		.signInWithPopup(provider)
+	// 		.then((firebaseUser) => {
+	// 			this.updateUserData(firebaseUser.user);
+	// 		})
+	// 		.catch((error) => console.error('googleLogin', error));
+	// }
 
 	async logout() {
 		await this.afAuth.auth.signOut();
 		return this.router.navigate([ '/' ]);
 	}
 
-	public getUserData(uid: string): Observable<User> {
-		return this._userService.getUserById(uid);
-	}
-
-	public onEmailandPasswordRegister(emailID, newPassword) {
-		auth()
-			.createUserWithEmailAndPassword(emailID, newPassword)
-			.then((user) => {
-				return this.updateUserData(user);
-			})
-			.catch((error) => console.error('onRegisterSubmit', error));
-	}
+	// public onEmailandPasswordRegister(emailID, newPassword) {
+	// 	auth()
+	// 		.createUserWithEmailAndPassword(emailID, newPassword)
+	// 		.then((user) => {
+	// 			return this.updateUserData(user);
+	// 		})
+	// 		.catch((error) => console.error('onRegisterSubmit', error));
+	// }
 
 	public onEmailandPasswordSignIn(emailID, password) {
 		auth()
 			.signInWithEmailAndPassword(emailID, password)
-			.then((user) => {
-				this.updateUserData(user);
-				return user;
+			.then((firebaseUser) => {
+				if (firebaseUser) {
+					this.updateUserData(firebaseUser.user);
+				}
 			})
 			.catch((error) => console.error('onEmailSignInSubmit', error));
 	}
 
 	public updateUserData(user: any) {
-		const userData = user['user'];
-		this._userService.getUserById(user.uid).subscribe((existingUser) => {
-			if (existingUser) {
-				this.roles = existingUser.roles;
-				this.createdDate = existingUser.creationDate;
+		this._userService.getUserById(user.uid).subscribe((response) => {
+			console.log('Response:', response);
+			if (response.roles != '') {
+				this.roles = response.roles;
 			} else {
 				this.roles = { subscriber: true, editor: false, admin: false };
 			}
-			const data = {
-				id: userData.uid,
-				email: userData.email,
+			var data: User = {
+				id: user.uid,
+				email: user.email,
 				phoneNumber: ' ',
-				username: userData.email,
-				displayName: userData.email,
+				displayName: user.displayName,
 				roles: this.roles,
-				creationDate: this.createdDate,
-				modificationDate: this.modifiedDate
+				creationDate: response.creationDate,
+				modificationDate: response.modificationDate
 			};
-			console.log(data);
-			this._userService.setUser(data);
+			// this._userService.setUser(data);
 			this.router.navigateByUrl('/Dashboard');
 		});
 	}
 
-	private checkAuthorization(user: User, allowedRoles: string[]): boolean {
-		if (!user) {
-			return false;
-		}
-		for (const role of allowedRoles) {
-			if (user.roles[role]) {
-				return true;
-			}
-		}
-		return false;
-	}
+	// private checkAuthorization(user: User, allowedRoles: string[]): boolean {
+	// 	if (!user) {
+	// 		return false;
+	// 	}
+	// 	for (const role of allowedRoles) {
+	// 		if (user.roles[role]) {
+	// 			return true;
+	// 		}
+	// 	}
+	// 	return false;
+	// }
 
 	//Abilities
-	canRead(user: User): boolean {
-		const allowed = [ 'admin', 'editor', 'subscriber' ];
-		return this.checkAuthorization(user, allowed);
-	}
+	// canRead(user: User): boolean {
+	// 	const allowed = [ 'admin', 'editor', 'subscriber' ];
+	// 	return this.checkAuthorization(user, allowed);
+	// }
 
-	canWrite(user: User): boolean {
-		const allowed = [ 'admin', 'editor' ];
-		return this.checkAuthorization(user, allowed);
-	}
+	// canWrite(user: User): boolean {
+	// 	const allowed = [ 'admin', 'editor' ];
+	// 	return this.checkAuthorization(user, allowed);
+	// }
 
-	canUpdate(user: User): boolean {
-		const allowed = [ 'admin', 'editor' ];
-		return this.checkAuthorization(user, allowed);
-	}
+	// canUpdate(user: User): boolean {
+	// 	const allowed = [ 'admin', 'editor' ];
+	// 	return this.checkAuthorization(user, allowed);
+	// }
 
-	canDelete(user: User): boolean {
-		const allowed = [ 'admin' ];
-		return this.checkAuthorization(user, allowed);
-	}
+	// canDelete(user: User): boolean {
+	// 	const allowed = [ 'admin' ];
+	// 	return this.checkAuthorization(user, allowed);
+	// }
 }
