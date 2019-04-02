@@ -3,13 +3,11 @@
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
 
-#dashboard-details-wrapper {
-	font-family: 'Montserrat', sans-serif;
-	color: $text-color-dark;
-}
-
-.title-header {
-	margin-top: 50px;
-	font-weight: bold;
-	padding: 10px;
+#dashboard-wrapper {
+	.content-wrapper {
+		display: flex;
+		justify-content: left;
+		margin-left: 40px;
+		margin-top: 40px;
+	}
 }

@@ -1,52 +1,59 @@
 <div id="company-details-wrapper">
 
 	<div class="title-header">
-		<span id="header-text">Company Details</span>
+		<span class="header-text">Company Details</span>
 	</div>
 
-	<div class="input-form wrapper-content">
-		<form [formGroup]="companyDetailsInputForm" >
-			<div class="row">
-				<div class="col">
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="companyName">Company Name</label>
-						<div class="col-sm-8">
-							<input maxlength="100" type="text" id="companyName" class="form-control" formControlName="name">
+	<div class="wrapper-content">
+		<div class="input-form">
+			<form [formGroup]="companyDetailsInputForm">
+				<div class="row">
+					<div class="col">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyName">Company Name</label>
+							<div class="col-sm-8">
+								<input maxlength="100" type="text" id="companyName" class="form-control"
+									formControlName="name">
+							</div>
 						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="companyPhoneNumber">Phone Number</label>
-						<div class="col-sm-8">
-							<input maxlength="12" type="tel" id="companyPhoneNumber" class="form-control" formControlName="phoneNumber" appQuantity>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyPhoneNumber">Phone Number</label>
+							<div class="col-sm-8">
+								<input maxlength="12" type="tel" id="companyPhoneNumber" class="form-control"
+									formControlName="phoneNumber" appQuantity>
+							</div>
+
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="altCompanyPhoneNumber">Alternate Phone
+								Number</label>
+							<div class="col-sm-8">
+								<input maxlength="12" type="tel" id="altCompanyPhoneNumber" class="form-control"
+									formControlName="altPhoneNumber" appQuantity>
+							</div>
+
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyEmailId">Email Id</label>
+							<div class="col-sm-8">
+								<input maxlength="100" type="email" id="companyEmailId" class="form-control"
+									formControlName="emailId">
+								<span class="has-error" *ngIf="emailId.errors && (emailId.touched || emailId.dirty)">
+									Please Enter a valid Email Id.
+								</span>
+							</div>
+
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label" for="companyWebsite">Website</label>
+							<div class="col-sm-8">
+								<input maxlength="100" type="website" id="companyWebsite" class="form-control"
+									formControlName="website">
+							</div>
+
 						</div>
 
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="altCompanyPhoneNumber">Alternate Phone Number</label>
-						<div class="col-sm-8">
-							<input maxlength="12" type="tel" id="altCompanyPhoneNumber" class="form-control" formControlName="altPhoneNumber" appQuantity>
-						</div>
-
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="companyEmailId">Email Id</label>
-						<div class="col-sm-8">
-							<input maxlength="100" type="email" id="companyEmailId" class="form-control" formControlName="emailId">
-							<span class="has-error" *ngIf="emailId.errors && (emailId.touched || emailId.dirty)">
-								Please Enter a valid Email Id.
-							</span>
-						</div>
-
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="companyWebsite">Website</label>
-						<div class="col-sm-8">
-							<input maxlength="100" type="website" id="companyWebsite" class="form-control" formControlName="website">
-						</div>
-
-					</div>
-
-					<!-- <div class="form-group row">
+						<!-- <div class="form-group row">
 						<label class="col-sm-4 col-form-label" for="taxationType">Taxation Type</label>
 						<div class="col-sm-8">
 							<select name="taxationType" id="taxationType" class="form-control">
@@ -55,114 +62,131 @@
 						</div>
 					</div> -->
 
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="companyGstin">GSTIN</label>
-						<div class="col-sm-8">
-							<input maxlength="20" type="text" id="companyGstin" class="form-control" formControlName="GSTNumber">
-						</div>
-
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="companyServiceTaxNo">Service Tax Number</label>
-						<div class="col-sm-8">
-							<input maxlength="20" type="text" id="companyServiceTaxNo" class="form-control" formControlName="serviceTaxNo">
-						</div>
-					</div>
-				</div>
-				<div class="col">
-					<div class="form-group row">
-						<button type="button" (click)="onBillingAddressClick()" class="btn button-primary">Billing Address</button>
-						<button type="button" (click)="onShippingAddressClick()" class="btn button-primary">Shipping Address</button>
-					</div>
-					<div formGroupName="billingAddress" class="address-details" *ngIf="showBillingAddress">
 						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyBillingAddress">Billing Address</label>
+							<label class="col-sm-4 col-form-label" for="companyGstin">GSTIN</label>
 							<div class="col-sm-8">
-								<textarea maxlength="200" class="form-control" id="companyBillingAddress" rows="3" formControlName="streetAddress"></textarea>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyBillingCountry">Country </label>
-							<div class="col-sm-8">
-								<select name="companyBillingCountry" id="companyBillingCountry" class="form-control" formControlName="country">
-									<option selected>India</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyBillingState">State</label>
-							<div class="col-sm-8">
-								<select name="companyBillingState" id="companyBillingState" class="form-control" formControlName="state">
-									<option value="" selected>Select State</option>
-									<option *ngFor="let state of states" value="{{state}}">{{state}}</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyBillingCity">City</label>
-							<div class="col-sm-8">
-								<input type="text" id="companyBillingCity" class="form-control" formControlName="city">
+								<input maxlength="20" type="text" id="companyGstin" class="form-control"
+									formControlName="GSTNumber">
 							</div>
 
 						</div>
 						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyBillingPinCode">Pin Code</label>
+							<label class="col-sm-4 col-form-label" for="companyServiceTaxNo">Service Tax Number</label>
 							<div class="col-sm-8">
-								<input type="text" id="companyBillingPinCode" class="form-control" formControlName="pincode">
+								<input maxlength="20" type="text" id="companyServiceTaxNo" class="form-control"
+									formControlName="serviceTaxNo">
 							</div>
-
 						</div>
-						<!-- <div class="custom-control custom-checkbox">
+					</div>
+					<div class="col">
+						<div class="form-group row">
+							<button type="button" (click)="onBillingAddressClick()" class="btn button-primary">Billing
+								Address</button>
+							<button type="button" (click)="onShippingAddressClick()" class="btn button-primary">Shipping
+								Address</button>
+						</div>
+						<div formGroupName="billingAddress" class="address-details" *ngIf="showBillingAddress">
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyBillingAddress">Billing
+									Address</label>
+								<div class="col-sm-8">
+									<textarea maxlength="200" class="form-control" id="companyBillingAddress" rows="3"
+										formControlName="streetAddress"></textarea>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyBillingCountry">Country </label>
+								<div class="col-sm-8">
+									<select name="companyBillingCountry" id="companyBillingCountry" class="form-control"
+										formControlName="country">
+										<option selected>India</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyBillingState">State</label>
+								<div class="col-sm-8">
+									<select name="companyBillingState" id="companyBillingState" class="form-control"
+										formControlName="state">
+										<option value="" selected>Select State</option>
+										<option *ngFor="let state of states" value="{{state}}">{{state}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyBillingCity">City</label>
+								<div class="col-sm-8">
+									<input type="text" id="companyBillingCity" class="form-control"
+										formControlName="city">
+								</div>
+
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyBillingPinCode">Pin Code</label>
+								<div class="col-sm-8">
+									<input type="text" id="companyBillingPinCode" class="form-control"
+										formControlName="pincode">
+								</div>
+
+							</div>
+							<!-- <div class="custom-control custom-checkbox">
 							<input type="checkbox" id="companyShippingAddressFlag" class="custom-control-input">
 							<label class="custom-control-label" for="companyShippingAddressFlag">Copy to Shipping Address</label>
 						</div> -->
-					</div>
+						</div>
 
-					<div formGroupName="shippingAddress" class="address-details" *ngIf="!showBillingAddress">
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyShippingAddress">Shipping Address</label>
-							<div class="col-sm-8">
-								<textarea class="form-control" id="companyShippingAddress" rows="3" formControlName="streetAddress"></textarea>
+						<div formGroupName="shippingAddress" class="address-details" *ngIf="!showBillingAddress">
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyShippingAddress">Shipping
+									Address</label>
+								<div class="col-sm-8">
+									<textarea class="form-control" id="companyShippingAddress" rows="3"
+										formControlName="streetAddress"></textarea>
+								</div>
 							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyShippingCountry">Country </label>
-							<div class="col-sm-8">
-								<select name="companyBillingCountry" id="companyShippingCountry" class="form-control" formControlName="country">
-									<option selected>India</option>
-								</select>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyShippingCountry">Country </label>
+								<div class="col-sm-8">
+									<select name="companyBillingCountry" id="companyShippingCountry"
+										class="form-control" formControlName="country">
+										<option selected>India</option>
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyShippingState">State</label>
-							<div class="col-sm-8">
-								<select name="companyBillingState" id="companyShippingState" class="form-control" formControlName="state">
-									<option value="" selected>Select State</option>
-									<option *ngFor="let state of states" value="{{state}}">{{state}}</option>
-								</select>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyShippingState">State</label>
+								<div class="col-sm-8">
+									<select name="companyBillingState" id="companyShippingState" class="form-control"
+										formControlName="state">
+										<option value="" selected>Select State</option>
+										<option *ngFor="let state of states" value="{{state}}">{{state}}</option>
+									</select>
+								</div>
 							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyShippingCity">City</label>
-							<div class="col-sm-8">
-								<input type="text" id="companyShippingCity" class="form-control" formControlName="city">
-							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyShippingCity">City</label>
+								<div class="col-sm-8">
+									<input type="text" id="companyShippingCity" class="form-control"
+										formControlName="city">
+								</div>
 
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-4 col-form-label" for="companyShippingPinCode">Pin Code</label>
-							<div class="col-sm-8">
-								<input type="text" id="companyShippingPinCode" class="form-control" formControlName="pincode">
 							</div>
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label" for="companyShippingPinCode">Pin Code</label>
+								<div class="col-sm-8">
+									<input type="text" id="companyShippingPinCode" class="form-control"
+										formControlName="pincode">
+								</div>
 
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="action-buttons">
-				<button type="submit"  class="btn button-save" (click)="saveCompanyDetails()">Save</button>
-				<button type="submit" class="btn button-cancel" (click)="closeClicked()">Back</button>
-			</div>
-		</form>
+				<div class="action-buttons">
+					<button type="submit" class="btn button-save" (click)="saveCompanyDetails()">Save</button>
+					<button type="submit" class="btn button-cancel" (click)="closeClicked()">Back</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </div>

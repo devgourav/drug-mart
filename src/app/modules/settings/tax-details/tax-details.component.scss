@@ -1,24 +1,34 @@
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
-@import "../../../../assets/styles/_title-header.scss";
 @import "../../../../assets/styles/common.scss";
 
-#tax-details-wrapper{
-	font-family: 'Montserrat', sans-serif;
-	color:$text-color-dark;
-}
-.input-form{
-	padding: 5px;
-	padding-left: 40px;
-	text-align: left;
-	margin: 0 auto;
-	font-weight: bold;
-}
+#tax-details-wrapper {
+	width: 100%;
+	font-family: 'IBM Plex Sans', sans-serif;
+	color: $text-color-dark;
 
-.table{
-	margin: 0 auto !important;
-	th,td{
+	.input-form {
+		font-weight: bold;
+		margin-top: 40px;
 		text-align: center;
-	}
+		margin-left: 40px;
+		padding: 10px;
+		width: 30vw;
 
+		label {
+			text-align: right;
+		}
+
+		.error-message {
+			text-align: left;
+		}
+
+		.action-button {
+			display: flex;
+			justify-content: center;
+			button {
+				width: 30%;
+			}
+		}
+	}
 }

@@ -15,6 +15,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
 	declarations: [ BillDetailsComponent, NewBillComponent, BillItemModalComponent ],
@@ -29,7 +30,8 @@ import { CalendarModule } from 'primeng/calendar';
 		ConfirmDialogModule,
 		BrowserAnimationsModule,
 		ToastModule,
-		CalendarModule
+		CalendarModule,
+		TooltipModule
 	],
 	entryComponents: [ BillItemModalComponent ]
 })

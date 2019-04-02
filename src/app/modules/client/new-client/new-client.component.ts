@@ -21,7 +21,7 @@ export class NewClientComponent implements OnInit {
 
 	clientInputForm = this.fb.group({
 		name: [ '', Validators.required ],
-		phoneNumber: [ '', Validators.maxLength(10) ],
+		phoneNumber: [ '', Validators.required ],
 		emailId: [ '', Validators.email ],
 		website: new FormControl(''),
 		GSTIN: new FormControl(''),
@@ -54,6 +54,10 @@ export class NewClientComponent implements OnInit {
 
 	get name() {
 		return this.clientInputForm.get('name');
+	}
+
+	get phoneNumber() {
+		return this.clientInputForm.get('phoneNumber');
 	}
 
 	get emailId() {

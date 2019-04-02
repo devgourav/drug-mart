@@ -3,25 +3,25 @@
 @import "../../../../assets/styles/common.scss";
 @import "../../../../assets/styles/_title-header.scss";
 
-#company-details-wrapper{
+#company-details-wrapper {
 	font-family: 'Montserrat', sans-serif;
-	color:$text-color-dark;
+	color: $text-color-dark;
 }
-.input-form{
+.input-form {
 	padding: 5px;
 	padding-left: 40px;
 	text-align: left;
 	margin: 0 auto;
 	font-weight: bold;
 }
-.address-label{
+.address-label {
 	background-color: $primary-color;
 	color: $text-color-light;
 
 	text-align: center;
-	padding:10px;
+	padding: 10px;
 	border-radius: 4px;
-	border:none;
+	border: none;
 	z-index: 1;
-	margin:0 5px;
+	margin: 0 5px;
 }

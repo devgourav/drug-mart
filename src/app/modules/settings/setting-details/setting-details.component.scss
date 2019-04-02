@@ -9,16 +9,21 @@
 }
 
 .settings-menu {
+	display: flex;
 	margin-top: 10%;
-	text-align: left;
+	text-align: center;
+	justify-content: center;
 }
 
 .settings-list {
 	list-style: none;
 	padding: 10px;
+	width: 15vw;
 
 	li {
 		margin-bottom: 20px;
+		width: 100%;
+
 		a {
 			display: block;
 			text-decoration: none;

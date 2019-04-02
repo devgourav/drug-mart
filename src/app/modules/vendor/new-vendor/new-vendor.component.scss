@@ -2,25 +2,31 @@
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
 
-#vendor-details-wrapper{
-	font-family: 'Montserrat', sans-serif;
-	color:$text-color-dark;
-}
-.input-form{
-	padding     : 5px;
-	padding-left: 40px;
-	text-align  : left;
-	margin      : 0 auto;
-	font-weight : bold;
-}
-.address-label{
-	background-color: $primary-color;
-	color: $text-color-light;
+#new-vendor-wrapper {
+	font-family: 'IBM Plex Sans', sans-serif;
+	color: $text-color-dark;
 
-	text-align   :center;
-	padding      :10px;
-	border-radius:4px;
-	border       :none;
-	z-index      :1;
-	margin       :0 5px;
+	.wrapper-content {
+		display: flex;
+		width: 100%;
+		height: 100vh;
+
+		.input-form {
+			text-align: left;
+			font-weight: bold;
+			text-align: center;
+			margin-top: 40px;
+			margin-left: 40px;
+			padding: 10px;
+			width: 70vw;
+
+			label {
+				text-align: right;
+			}
+
+			.error-message {
+				text-align: left;
+			}
+		}
+	}
 }

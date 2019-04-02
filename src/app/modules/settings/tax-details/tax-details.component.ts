@@ -3,67 +3,63 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Location } from '@angular/common';
 import { Tax } from 'src/app/core/model/tax.model';
 import { TaxService } from 'src/app/core/service/tax.service';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 
-const confirmMsg = "Do you want to delete this tax?";
-
+const confirmMsg = 'Do you want to delete this tax?';
 
 @Component({
-  selector: 'app-tax-details',
-  templateUrl: './tax-details.component.html',
-  styleUrls: ['./tax-details.component.scss']
+	selector: 'app-tax-details',
+	templateUrl: './tax-details.component.html',
+	styleUrls: [ './tax-details.component.scss' ],
+	providers: [ ConfirmationService, MessageService ]
 })
 export class TaxDetailsComponent implements OnInit {
-  taxId: string = "";
-  taxes: Tax[] = [];
-  tax: Tax;
+	taxId: string = '';
+	taxes: Tax[] = [];
+	tableHeaders: any[];
+	msgs: Message[] = [];
+	tax: Tax;
 
-  taxInputForm = this.fb.group({
-    name: ['', Validators.required],
-    rate: ['', [Validators.required,Validators.max(100)]]
-  });
+	taxInputForm = this.fb.group({
+		name: [ '', Validators.required ],
+		rate: [ '', [ Validators.required, Validators.max(100) ] ]
+	});
 
+	constructor(private location: Location, private _taxService: TaxService, private fb: FormBuilder) {}
 
-  constructor(private location: Location, private _taxService: TaxService,private fb: FormBuilder) { }
+	ngOnInit() {
+		this.getTaxDetails();
 
-  taxDetailsTableHeaders = ['Name','Rate','Actions']
+		this.tableHeaders = [ { field: 'name', header: ' Tax Name' }, { field: 'rate', header: 'Rate' } ];
+	}
 
-  ngOnInit() {
-    this.getTaxDetails();
-  }
+	get name() {
+		return this.taxInputForm.get('name');
+	}
 
-  get name() {
-    return this.taxInputForm.get('name');
-  }
+	get rate() {
+		return this.taxInputForm.get('rate');
+	}
 
-  get rate() {
-    return this.taxInputForm.get('rate');
-  }
+	closeClicked() {
+		this.location.back();
+	}
 
-  closeClicked() {
-    this.location.back();
-  }
+	getTaxDetails() {
+		this._taxService.getTaxes().subscribe((response) => {
+			this.taxes = response;
+			console.log(response);
+		});
+	}
 
+	deleteTax(tax: Tax) {
+		if (confirm(confirmMsg)) {
+			this._taxService.deleteTax(tax);
+		}
+	}
 
-  getTaxDetails() {
-    this._taxService.getTaxes()
-      .subscribe((response) => {
-        console.log("response:");
-        if (response) {
-          this.taxes = response;
-        }
-      });
-  }
-
-  deleteTax(tax: Tax){
-    if(confirm(confirmMsg)){
-      this._taxService.deleteTax(tax);
-    }
-  }
-
-  setTax(){
-    this.tax = Object.assign({}, this.taxInputForm.value);
-    this._taxService.setTax(this.tax);
-  }
-
-
+	setTax() {
+		this.tax = Object.assign({}, this.taxInputForm.value);
+		this._taxService.setTax(this.tax);
+	}
 }

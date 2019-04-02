@@ -1,24 +1,30 @@
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
-
-.sale-widget {
-}
+@import "../../../../assets/styles/common.scss";
 
 .dash-widget {
 	display: block;
 	width: 20vw;
-	background-color: $positive-color;
-	padding: 1vw;
-	margin: 1vw;
 	color: $text-color-light;
-	font-family: 'Montserrat', sans-serif;
 	font-weight: 800;
-	box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.2);
+	background-color: $background-color-light;
+	// box-shadow: 6px 6px 20px 8px rgba(0, 0, 0, 0.2);
 	.widget-data {
 		text-align: center;
+		width: 100%;
+		padding: 20px;
+		background-color: $background-color-light;
 		vertical-align: middle;
+		color: $text-color-dark;
+		label {
+			text-align: left;
+		}
 	}
 	.widget-title {
 		text-align: center;
+		padding: 20px;
+		width: 100%;
+		background-color: $positive-color;
+		vertical-align: middle;
 	}
 }

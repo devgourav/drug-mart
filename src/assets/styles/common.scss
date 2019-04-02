@@ -1,5 +1,10 @@
 @import "_colors.scss";
 
+html,
+body {
+	font-family: 'Montserrat', sans-serif;
+}
+
 .wrapper-content {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 300;
@@ -17,42 +22,66 @@
 		color: $text-color-light;
 	}
 }
+
+//Title Header CSS
 .title-header {
 	font-weight: bold;
 	text-align: left;
-	padding: 17px 5px;
-	border-bottom: 1px solid $border-color-dark;
-	font-size: 20px;
-}
-
-.search-header {
-	margin: 10px auto;
-
-	.input-form {
-		padding-left: 40px;
-		font-weight: bold;
-
-		.search-area {
-			text-align: left;
-
-			.search-box {
-				height: 44px;
-				text-align: left;
-				padding: 5px;
-				border-radius: 4px;
-			}
-		}
+	padding: 16px 0;
+	background-color: $background-color-dark;
+	font-size: 1.4em;
+	text-align: left;
+	.header-text {
+		margin-left: 40px;
+		color: $text-color-light;
+		text-transform: uppercase;
 	}
-	.new-item-area {
-		text-align: right;
+	.action-area {
+		float: right;
+		padding-right: 40px;
 	}
 }
 
-.wrapper-content {
-	padding: 10px;
+.content-wrapper {
+	display: flex;
+	justify-content: left;
+	margin-left: 15px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+
+.action-buttons {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	button {
+		margin-top: 40px;
+		width: 10%;
+	}
+}
+
+// .search-header {
+// 	margin: 10px auto;
+
+// 	.input-form {
+// 		padding-left: 40px;
+// 		font-weight: bold;
+
+// 		.search-area {
+// 			text-align: left;
+
+// 			.search-box {
+// 				height: 44px;
+// 				text-align: left;
+// 				padding: 5px;
+// 				border-radius: 4px;
+// 			}
+// 		}
+// 	}
+// 	.new-item-area {
+// 		text-align: right;
+// 	}
+// }
 
 .has-error {
 	input,
