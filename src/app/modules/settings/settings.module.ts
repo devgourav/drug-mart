@@ -9,6 +9,12 @@ import { DiscountDetailsComponent } from './discount-details/discount-details.co
 import { SharedModule } from 'src/app/core/shared/shared.module';
 import { OfferDetailsComponent } from './offer-details/offer-details.component';
 import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
 	declarations: [
@@ -18,6 +24,19 @@ import { ButtonModule } from 'primeng/button';
 		DiscountDetailsComponent,
 		OfferDetailsComponent
 	],
-	imports: [ CommonModule, SettingsRoutingModule, FormsModule, ReactiveFormsModule, ButtonModule, SharedModule ]
+	imports: [
+		CommonModule,
+		SettingsRoutingModule,
+		FormsModule,
+		ReactiveFormsModule,
+		ButtonModule,
+		SharedModule,
+		ConfirmDialogModule,
+		BrowserAnimationsModule,
+		ToastModule,
+		MessagesModule,
+		MessageModule,
+		TableModule
+	]
 })
 export class SettingsModule {}

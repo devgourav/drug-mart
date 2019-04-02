@@ -1,82 +1,110 @@
-<div id="client-details-wrapper">
+<div id="new-client-wrapper">
 	<div class="title-header">
-		<span id="header-text">Add New Client</span>
+		<span class="header-text">New Client</span>
 	</div>
 
-	<div class="input-form wrapper-content">
-		<form [formGroup]="clientInputForm">
-			<div class="row">
-				<div class="col-sm-8">
-					<div class="form-group row" [ngClass]="{'has-error':name.errors && (name.touched || name.dirty)}"> <label class="col-sm-4 col-form-label" for="clientName">Client Name</label>
-						<div class="col-sm-8">
-							<input maxlength="100" type="text" id="clientName" class="form-control" formControlName="name" appAlphabet>
+	<div class="wrapper-content">
+		<div class="input-form">
+			<form [formGroup]="clientInputForm">
+				<div class="row">
+					<div class="col">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientName">Client Name</label>
+							<div class="col-sm-5">
+								<input maxlength="100" type="text" id="clientName" class="form-control"
+									formControlName="name" appAlphabet>
+							</div>
+							<div class="col-sm-5 error-message">
+								<p-message severity="error" text="Client name Should not be empty"
+									*ngIf="name.errors && (name.touched || name.dirty)"></p-message>
+							</div>
 						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientPhoneNumber">Phone Number</label>
-						<div class="col-sm-1">
-							<input class="form-control" id="countryCode" placeholder="+91" disabled>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="phoneNumber">Phone Number</label>
+							<div class="col-sm-1">
+								<input class="form-control" id="countryCode" placeholder="+91" disabled>
+							</div>
+							<div class="col-sm-4">
+								<input maxlength="10" type="tel" id="phoneNumber" class="form-control"
+									formControlName="phoneNumber" appQuantity>
+							</div>
+							<div class="col-sm-5 error-message">
+								<p-message severity="error" text="Phone Number Should not be empty."
+									*ngIf="phoneNumber.errors && (phoneNumber.touched || phoneNumber.dirty)">
+								</p-message>
+							</div>
 						</div>
-						<div class="col-sm-7">
-							<input maxlength="10" type="tel" id="clientPhoneNumber" class="form-control" formControlName="phoneNumber" appQuantity>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientEmailId">Email Id</label>
+							<div class="col-sm-5">
+								<input maxlength="100" type="email" id="clientEmailId" class="form-control"
+									formControlName="emailId">
+							</div>
+							<div class="col-sm-5 error-message">
+								<p-message severity="error" text="Please Enter a valid Email Id."
+									*ngIf="emailId.errors && (emailId.touched || emailId.dirty)"></p-message>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientWebsite">Website</label>
+							<div class="col-sm-5">
+								<input maxlength="100" type="email" id="clientWebsite" class="form-control"
+									formControlName="website">
+							</div>
+
 						</div>
 
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientEmailId">Email Id</label>
-						<div class="col-sm-8">
-							<input maxlength="100" type="email" id="clientEmailId" class="form-control" formControlName="emailId">
-							<span class="has-error" *ngIf="emailId.errors && (emailId.touched || emailId.dirty)">
-								Please Enter a valid Email Id.
-							</span>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientWebsite">Website</label>
-						
-						<div class="col-sm-8">
-							<input maxlength="100" type="email" id="clientWebsite" class="form-control" formControlName="website">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientGstin">GSTIN</label>
+							<div class="col-sm-5">
+								<input maxlength="15" type="text" id="clientGstin" class="form-control"
+									formControlName="GSTIN">
+							</div>
 						</div>
 
-					</div>
-
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientGstin">GSTIN</label>
-						<div class="col-sm-8">
-							<input maxlength="15" type="text" id="clientGstin" class="form-control" formControlName="GSTIN">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientContactPerson">Contact Person</label>
+							<div class="col-sm-5">
+								<input maxlength="100" type="text" id="clientContactPerson" class="form-control"
+									formControlName="contactPersonName">
+							</div>
+							<div class="col-sm-5 error-message">
+								<p-message severity="error" text="Contact Person Should not be empty"
+									*ngIf="contactPersonName.errors && (contactPersonName.touched || contactPersonName.dirty)">
+								</p-message>
+							</div>
 						</div>
-					</div>
 
-					<div class="form-group row" [ngClass]="{'has-error':contactPersonName.errors &&
-					(contactPersonName.touched || contactPersonName.dirty)}">
-						<label class="col-sm-4 col-form-label" for="clientContactPerson">Contact Person</label>
-						<div class="col-sm-8">
-							<input maxlength="100" type="text" id="clientContactPerson" class="form-control" formControlName="contactPersonName">
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="contactPersonPhoneNumber">Contact Phone</label>
+							<div class="col-sm-1">
+								<input class="form-control" id="contactPersonPhoneNumber" placeholder="+91" disabled>
+							</div>
+							<div class="col-sm-4">
+								<input maxlength="5" type="text" id="clientContactPhone" class="form-control"
+									formControlName="contactPersonPhoneNumber" appQuantity>
+							</div>
+							<div class="col-sm-5 error-message">
+								<p-message severity="error" text="Contact Phone Number Should not be empty"
+									*ngIf="contactPersonPhoneNumber.errors && (contactPersonPhoneNumber.touched || contactPersonPhoneNumber.dirty)">
+								</p-message>
+							</div>
 						</div>
-					</div>
 
-					<div class="form-group row" [ngClass]="{'has-error':contactPersonPhoneNumber.errors &&
-					(contactPersonPhoneNumber.touched || contactPersonPhoneNumber.dirty)}">
-						<label class="col-sm-4 col-form-label" for="clientContactPhone">Contact Phone</label>
-						<div class="col-sm-1">
-							<input class="form-control" id="countryCode" placeholder="+91" disabled>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientContactEmail">Contact Email</label>
+							<div class="col-sm-5">
+								<input type="text" id="clientContactEmail" class="form-control"
+									formControlName="contactPersonEmailId">
+								<div class="col-sm-5 error-message">
+									<p-message severity="error" text="Enter a valid email Id"
+										*ngIf="contactPersonEmailId.errors && (contactPersonEmailId.touched || contactPersonEmailId.dirty)">
+									</p-message>
+								</div>
+							</div>
 						</div>
-						<div class="col-sm-7">
-							<input maxlength="10" type="text" id="clientContactPhone" class="form-control" formControlName="contactPersonPhoneNumber" appQuantity>
-						</div>
-					</div>
 
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientContactEmail">Contact Email</label>
-						<div class="col-sm-8">
-							<input type="text" id="clientContactEmail" class="form-control" formControlName="contactPersonEmailId">
-							<span class="has-error" *ngIf="contactPersonEmailId.errors && (contactPersonEmailId.touched || contactPersonEmailId.dirty)">
-								Please Enter a valid Email Id.
-							</span>
-						</div>
-					</div>
-
-					<!--<div class="address-details">
+						<!--<div class="address-details">
 						 <div class="form-group row">
 							<label class="col-sm-4 col-form-label" for="companyShippingAddress">Address</label>
 							<div class="col-sm-8">
@@ -108,42 +136,56 @@
 					</div> -->
 
 
-					<div class="form-group row" [ngClass]="{'has-error':address.errors &&
-					(address.touched || address.dirty)}">
-						<label class="col-sm-4 col-form-label" for="clientAddress">Address</label>
-						<div class="col-sm-8">
-							<textarea class="form-control" id="clientAddress" rows="3" formControlName="address"></textarea>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientAddress">Address</label>
+							<div class="col-sm-5">
+								<textarea class="form-control" id="clientAddress" rows="3"
+									formControlName="address"></textarea>
+							</div>
+							<div class="col-sm-5 error-message">
+								<p-message severity="error" text="Address should not be empty"
+									*ngIf="address.errors && (address.touched || address.dirty)">
+								</p-message>
+							</div>
 						</div>
-					</div>
 
 
 
-					<div class="form-group row" [ngClass]="{'has-error':pincode.errors &&
-						(pincode.touched || pincode.dirty)}">
-						<label class="col-sm-4 col-form-label" for="clientAddressPinCode">Pin Code</label>
-						<div class="col-sm-8">
-							<input maxlength="6" type="text" id="clientAddressPinCode" class="form-control" formControlName="pincode" appQuantity>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientAddressPinCode">Pin Code</label>
+							<div class="col-sm-5">
+								<input maxlength="6" type="text" id="clientAddressPinCode" class="form-control"
+									formControlName="pincode" appQuantity>
+							</div>
+							<div class="col-sm-5 error-message">
+								<p-message severity="error" text="Pincode should not be empty"
+									*ngIf="pincode.errors && (pincode.touched || pincode.dirty)">
+								</p-message>
+							</div>
 						</div>
-					</div>
 
 
-					<div class="form-group row">
-						<label class="col-sm-4 col-form-label" for="clientNotes">Notes</label>
-						<div class="col-sm-8">
-							<textarea maxlength="200" class="form-control" id="clientNotes" rows="3" formControlName="notes"></textarea>
+						<div class="form-group row">
+							<label class="col-sm-2 col-form-label" for="clientNotes">Notes</label>
+							<div class="col-sm-5">
+								<textarea maxlength="200" class="form-control" id="clientNotes" rows="3"
+									formControlName="notes"></textarea>
+							</div>
 						</div>
+
+
 					</div>
-
-
 				</div>
-			</div>
-			<div class="action-buttons">
-				<button type="button" [disabled]="!clientInputForm.valid" *ngIf="!clientId" (click)="setClient()" class="btn button-save">Save</button>
-				<button type="button" [disabled]="!clientInputForm.valid" *ngIf="clientId" (click)="updateClient()" class="btn button-save">Update</button>
-				<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
-			</div>
+				<div class="action-buttons">
+					<button type="button" [disabled]="!clientInputForm.valid" *ngIf="!clientId" (click)="setClient()"
+						class="btn button-save">Save</button>
+					<button type="button" [disabled]="!clientInputForm.valid" *ngIf="clientId" (click)="updateClient()"
+						class="btn button-save">Update</button>
+					<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
+				</div>
 
-		</form>
+			</form>
 
+		</div>
 	</div>
 </div>

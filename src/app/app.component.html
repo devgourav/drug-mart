@@ -1,8 +1,10 @@
 <div *ngIf="_authService.user | async as user; else login">
 	<div *ngIf="_authService.user | async as user">
-		<div id="container">
-			<app-sidebar></app-sidebar>
-			<div id="content">
+		<div class="app-container">
+			<div class="app-sidebar">
+				<app-sidebar></app-sidebar>
+			</div>
+			<div class="app-content">
 				<router-outlet></router-outlet>
 			</div>
 		</div>
@@ -11,34 +13,35 @@
 
 
 <ng-template #login>
-
-	<div id="login-wrapper">
+	<div class="login-wrapper">
 		<div class="row login-content">
 			<div class="col">
 				<div class="text-header">
-					<h2>Login/SignUp</h2>
+					<h1 class="title-text">Welcome to DrugMart</h1>
+					<h2 class="subtitle-text">Sign In to continue</h2>
 				</div>
 
 				<div class="form-group row">
-					<label class="col-sm-4 col-form-label" for="Enter Email">Email ID</label>
-					<div class="col-sm-8">
-						<input type="text" name="emailID" class="input form-control" [(ngModel)]="emailID"
-							placeholder="Enter email" required>
-					</div>
+					<label for="Enter Email">Email ID</label>
+					<input type="text" name="emailID" class="input form-control" [(ngModel)]="emailID" placeholder=""
+						required>
 				</div>
 
 				<div class="form-group row">
-					<label class="col-sm-4 col-form-label" for="Enter password">Password</label>
-					<div class="col-sm-8">
-						<input type="password" name="password" class="input form-control" [(ngModel)]="password"
-							placeholder="Enter password" required>
-					</div>
+					<label for="Enter password">Password</label>
+					<input type="password" name="password" class="input form-control" [(ngModel)]="password"
+						placeholder="" required>
+
 				</div>
 
-
-				<button type="button" class="btn button-primary" (click)="onEmailandPasswordSignIn()">
-					Sign In
-				</button>
+				<div class="form-group row">
+					<button type="button" class="btn button-primary" (click)="onEmailandPasswordSignIn()">
+						Sign In
+					</button>
+				</div>
+				<div class="notice-header">
+					<h3 class="notice-text">Incase you are not able to Sign In please contact our customer care.</h3>
+				</div>
 			</div>
 
 		</div>

@@ -9,6 +9,8 @@ import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
 	declarations: [ VendorDetailsComponent, NewVendorComponent ],
@@ -21,7 +23,9 @@ import { ToastModule } from 'primeng/toast';
 		SharedModule,
 		ConfirmDialogModule,
 		BrowserAnimationsModule,
-		ToastModule
+		ToastModule,
+		MessagesModule,
+		MessageModule
 	]
 })
 export class VendorModule {}

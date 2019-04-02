@@ -1,18 +1,25 @@
-<div class="purchase-widget dash-widget">
-  <div class="form-group row widget-title">
-      <label for="Monthly Purchases" class="col-sm-12 col-form-label">Monthly Purchases</label>
-  </div>
-    <div class="form-group row">
-      <label for="Monthly Purchases" class="col-sm-8 col-form-label">Amount:</label>
-      <div class="col-sm-4 widget-data">
-        <span name="totalPurchase">{{ totalPurchase }}</span>
+  <div class="sale-widget dash-widget">
+
+
+      <div class="widget-title">
+        <label for="Monthly Purchases">Monthly Purchases</label>
+      </div>
+    
+    
+      <div class="widget-data">
+    
+        <div class="form-group row">
+          <label for="Monthly Sales" class="col-sm-8">Amount</label>
+          <div class="col-sm-4">
+            <span name="totalPurchase">{{ totalPurchase }}</span>
+          </div>
+        </div>
+    
+        <div class="form-group row">
+          <label for="Monthly Purchase" class="col-sm-8">Number of Purchases:</label>
+          <div class="col-sm-4">
+            <span name="noOfPurchases">{{ noOfPurchases }}</span>
+          </div>
+        </div>
       </div>
     </div>
-  
-    <div class="form-group row">
-      <label for="Monthly Sales" class="col-sm-8 col-form-label">Number of Purchases:</label>
-      <div class="col-sm-4 widget-data">
-        <span name="noOfPurchases">{{ noOfPurchases }}</span>
-      </div>
-    </div>
-  </div>

@@ -9,7 +9,29 @@ import { AuthService } from '../../service/auth.service';
 export class SidebarComponent implements OnInit {
 	auth: AuthService;
 
-	sidebarItems = [ 'Dashboard', 'Clients', 'Vendors', 'Items', 'Invoice', 'Bills', 'Reports', 'Users', 'Settings' ];
+	sidebarItems = [
+		{ name: 'Dashboard', svgName: 'home.svg' },
+		{ name: 'Clients', svgName: 'user-1.svg' },
+		{ name: 'Vendors', svgName: 'user.svg' },
+		{ name: 'Items', svgName: 'drug.svg' },
+		{ name: 'Invoice', svgName: 'list.svg' },
+		{ name: 'Bills', svgName: 'list.svg' },
+		{ name: 'Reports', svgName: 'list-1.svg' },
+		{ name: 'Users', svgName: 'user-1.svg' },
+		{ name: 'Settings', svgName: 'gear.svg' }
+	];
+
+	svgFileNames = [
+		'home.svg',
+		'user-1.svg',
+		'user.svg',
+		'user-1.svg',
+		'list-1.svg',
+		'bill.svg',
+		'list.svg',
+		'user-1.svg',
+		'gear.svg'
+	];
 
 	constructor(public _authService: AuthService) {
 		this.auth = _authService;

@@ -6,7 +6,21 @@
 		<span class="company-name">KANCHAN MEDICO</span>
 	</div>
 	<ul class="sidebar-nav">
-		<li *ngFor="let sidebarItem of sidebarItems"><a routerLink="{{sidebarItem}}">{{sidebarItem}}</a></li>
-		<li><a (click)="auth.logout()">Logout</a></li>
+		<li *ngFor="let sidebarItem of sidebarItems">
+
+			<a routerLink="{{sidebarItem.name}}" routerLinkActive="router-link-active">
+				<img width="20px" height="20px" class="dashboard-icons"
+					src="../../../../assets/graphics/{{ sidebarItem.svgName }}" alt="">
+					{{sidebarItem.name}}
+			</a>
+		</li>
+		<li>
+
+			<a (click)="auth.logout()">
+				<img width="20px" height="20px" class="dashboard-icons" src="../../../../assets/graphics/logout.svg"
+					alt="">
+					Logout
+			</a>
+		</li>
 	</ul>
 </div>

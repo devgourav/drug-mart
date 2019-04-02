@@ -1,32 +1,40 @@
 <div id="tax-details-wrapper">
 	<div class="title-header">
-		<span id="header-text">Tax Details</span>
+		<span class="header-text">Tax Details</span>
 	</div>
 
 	<div class="input-form">
 		<form [formGroup]="taxInputForm">
 
 			<div class="row">
-				<div class="col col-md-6">
+				<div class="col">
 					<div class=" form-group row" [ngClass]="{'has-error':name.errors && (name.touched || name.dirty)}">
-						<label class="col-md-4 col-form-label" for="taxName">Tax Name</label>
-						<div class="col-md-8">
+						<label class="col-md-3 col-form-label" for="taxName">Tax Name</label>
+						<div class="col-md-9">
 							<input type="text" id="taxName" class="form-control" formControlName="name">
 						</div>
 					</div>
 
 					<div class=" form-group row">
-						<label class="col-md-4 col-form-label" for="taxRate">Tax Rate</label>
+						<label class="col-md-3 col-form-label" for="taxRate">Tax Rate</label>
 						<div class="col-md-4" [ngClass]="{'has-error':rate.errors && (rate.touched || rate.dirty)}">
 							<input type="number" id="taxRate" class="form-control" formControlName="rate" appCurrency>
 							<span class="has-error" *ngIf="rate.errors?.max && (rate.touched || rate.dirty)">
 								Tax cannot be more than 100%
 							</span>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-5">
 							<select name="taxUnit" id="taxUnit" class="form-control">
 								<option value="percentage" selected>% - Percentage</option>
 							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col action-button">
+							<button type="submit" [disabled]="!taxInputForm.valid" class="btn button-save"
+								(click)="setTax()">Add
+								Tax</button>
 						</div>
 					</div>
 				</div>
@@ -34,33 +42,56 @@
 
 
 
-			<div id="action-buttons">
-				<button type="submit" [disabled]="!taxInputForm.valid" class="btn button-save" (click)="setTax()">Add Tax</button>
-			</div>
+
 
 		</form>
 	</div>
 
-	<div class="table-wrapper row">
-		<table class="col-sm-6 table table-striped">
-			<thead>
-				<tr>
-					<th *ngFor="let taxDetailsTableHeader of taxDetailsTableHeaders" scope="col">{{taxDetailsTableHeader}}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="let tax of taxes">
-					<td>{{ tax?.name }}</td>
-					<td>{{ tax?.rate }}</td>
-					<td>
-						<button type="button" class="btn button-cancel" (click)="deleteTax(tax)">Delete</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+
+	<div class="content-wrapper">
+		<div class="table-wrapper">
+			<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+			<p-table #dt [columns]="tableHeaders" [value]="taxes">
+
+				<ng-template pTemplate="caption">
+					<div style="text-align: right">
+						<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+						<input type="text" pInputText size="50" placeholder="Search Taxes"
+							(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+					</div>
+				</ng-template>
+
+				<ng-template pTemplate="header">
+					<tr>
+						<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+							{{tableHeader.header}}
+							<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+						</th>
+						<th>Actions</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-tax>
+					<tr>
+						<td>{{ tax?.name }}</td>
+						<td>{{ tax?.rate }}</td>
+						<td data-html2canvas-ignore>
+							<button type="button" class="btn button-cancel" (click)="deleteTax(tax)">Delete</button>
+						</td>
+					</tr>
+				</ng-template>
+
+			</p-table>
+
+
+		</div>
+
 	</div>
 
 	<div class="action-buttons">
-		<button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+			<button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
 	</div>
+
+
+
 </div>

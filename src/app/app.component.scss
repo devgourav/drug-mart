@@ -3,41 +3,93 @@
 @import "../assets/styles/_title-header.scss";
 @import "../assets/styles/common.scss";
 
-#login-wrapper {
-	// background-color: $primary-color;
-	width: 60vw;
-	margin: auto;
-	padding: 50px;
-	text-align: center;
+// #login-wrapper {
+// 	display: flex;
+// 	justify-content: center;
+// 	align-items: center;
+// 	background-color: $primary-color;
+// 	width: 20vw;
+
+// 	.login-content {
+// 		padding: 10px;
+// 		text-align: center;
+
+// 		label {
+// 			text-align: right;
+// 		}
+// 	}
+// 	.text-header {
+// 		padding: 10px;
+// 	}
+// }
+
+html,
+body {
+	min-height: 100vh;
+	height: auto;
+	margin: 0;
+}
+
+.login-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	// background-color: $background-color;
+	background-image: url("../assets/graphics/prism.png");
+	background-repeat: repeat;
 
 	.login-content {
-		display: inline-block;
-		padding: 10px;
+		padding: 20px;
+		width: 20vw;
+		text-align: center;
+
+		.text-header {
+			padding-bottom: 20px;
+			.title-text {
+				font-size: 2em;
+				color: $primary-color-dark;
+			}
+			.subtitle-text {
+				font-size: 1.2em;
+				color: $text-color-light;
+			}
+		}
 
 		label {
 			text-align: right;
+			color: $text-color-light;
 		}
-	}
-	.text-header {
-		padding: 10px;
+
+		button {
+			padding-top: 5px;
+			width: 100%;
+		}
+
+		.notice-text {
+			font-size: 1em;
+			color: $text-color-light;
+		}
 	}
 }
 
-#content {
-	position: absolute;
-	width: 100%;
-	padding-left: 250px;
-}
+.app-container {
+	height: 100vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
 
-.login-list {
-	list-style: none;
-	padding: 0;
+	.app-content {
+		height: 100vh;
+		width: 88vw;
+		float: right;
+		margin-left: 10px;
+		background: $background-color;
+	}
 
-	li {
-		margin-bottom: 20px;
-		a {
-			display: block;
-			text-decoration: none;
-		}
+	.app-sidebar {
+		position: fixed;
+		width: 12vw;
+		min-height: 100vh;
+		background: $background-color-dark;
 	}
 }

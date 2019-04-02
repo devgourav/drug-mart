@@ -1,70 +1,60 @@
 <div id="bill-details-wrapper">
-	<div class="search-header">
-		<div class="row">
-			<!-- <div class="search-area col">
-				<div class="input-form">
-					<div class="input-group">
-						<input type="text"placeholder="Search Bills" class="search-box form-control">
-						<button type="submit" class="btn button-filter">Filter Options</button>
-					</div>
-				</div>
-			</div> -->
-			<div class="new-item-area col">
-				<a routerLink="New Bill"><button class="btn button-save">New Bill</button></a>
-				<button class="btn button-filter">Export</button>
-			</div>
+
+	<div class="title-header">
+		<span class="header-text">Recent Bills</span>
+		<div class="action-area">
+			<a routerLink="New Bill"><button class="btn button-save">New Bill</button></a>
+			<button class="btn button-filter">Export</button>
 		</div>
 		<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
 	</div>
 
-	<div class="title-header">
-		<span id="header-text">Recent Bills</span>
-	</div>
+	<div class="content-wrapper">
+		<div class="table-wrapper">
 
-	<div class="table-wrapper">
-
-		<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+			<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 
-		<p-table #dt [columns]="tableHeaders" [value]="bills">
-			<ng-template pTemplate="caption">
-				<div style="text-align: right">
-					<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-					<input type="text" pInputText size="50" placeholder="Search Bills"
-						(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-				</div>
-			</ng-template>
-			<ng-template pTemplate="header">
-				<tr>
-					<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
-						{{tableHeader.header}}
-						<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
-					</th>
-					<th>Actions</th>
-				</tr>
-			</ng-template>
-			<ng-template pTemplate="body" let-bill>
-				<tr>
-					<td>{{ bill?.billId }}</td>
-					<td>{{ bill?.billedDate }}</td>
-					<td>{{ bill?.vendorName }}</td>
-					<!-- <td class="currencyDisplay"> {{ getSubAmount(bill.billItems)}}</td> -->
-					<td class="currencyDisplay"> {{ getTaxAmount(bill.billItems) }}</td>
-					<!-- <td class="currencyDisplay"> {{ getDiscountAmount(bill.billItems) }}</td> -->
-					<td class="currencyDisplay"> {{ getTotalAmount((bill.billItems)) }}</td>
-					<!-- <td>{{ bill?.orderNote }}</td> -->
-					<td class="currencyDisplay"> {{ getPendingAmount(bill?.amountPaid)}}</td>
-					<td>
-						<button type="button" class="btn button-primary" (click)="editBill(bill.id)"><i
-								class="pi pi-pencil"></i>
-						</button>
-						<button type="button" class="btn button-cancel" (click)="deleteBill(bill)">
-							<i class="pi pi-trash"></i>
-						</button>
-					</td>
-				</tr>
+			<p-table #dt [columns]="tableHeaders" [value]="bills">
+				<ng-template pTemplate="caption">
+					<div style="text-align: right">
+						<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+						<input type="text" pInputText size="50" placeholder="Search Bills"
+							(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+							{{tableHeader.header}}
+							<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+						</th>
+						<th>Actions</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-bill>
+					<tr>
+						<td>{{ bill?.billId }}</td>
+						<td>{{ bill?.billedDate }}</td>
+						<td>{{ bill?.vendorName }}</td>
+						<!-- <td class="currencyDisplay"> {{ getSubAmount(bill.billItems)}}</td> -->
+						<td class="currencyDisplay"> {{ getTaxAmount(bill.billItems) }}</td>
+						<!-- <td class="currencyDisplay"> {{ getDiscountAmount(bill.billItems) }}</td> -->
+						<td class="currencyDisplay"> {{ getTotalAmount((bill.billItems)) }}</td>
+						<!-- <td>{{ bill?.orderNote }}</td> -->
+						<td class="currencyDisplay"> {{ getPendingAmount(bill?.amountPaid)}}</td>
+						<td>
+							<button type="button" class="btn button-primary" (click)="editBill(bill.id)"><i
+									class="pi pi-pencil" pTooltip="View/Edit" tooltipPosition="top"></i>
+							</button>
+							<button type="button" class="btn button-cancel" (click)="deleteBill(bill)">
+								<i class="pi pi-trash" pTooltip="Delete" tooltipPosition="top"></i>
+							</button>
+						</td>
+					</tr>
 
-			</ng-template>
-		</p-table>
+				</ng-template>
+			</p-table>
+		</div>
 	</div>
 </div>
