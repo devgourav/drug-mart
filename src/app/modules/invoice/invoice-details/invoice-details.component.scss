@@ -4,12 +4,6 @@
 
 #invoice-details-wrapper {
 	.table-wrapper {
-		tbody {
-			.form-control {
-				font-size: 12px;
-			}
-		}
-
 		.currencyDisplay::before {
 			content: '\20B9'; //Ruppee symbol for CSS
 		}

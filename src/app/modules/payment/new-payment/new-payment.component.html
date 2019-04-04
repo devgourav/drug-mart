@@ -1,3 +1,126 @@
-<p>
-  new-payment works!
-</p>
+<div id="new-payment-wrapper">
+  <div class="title-header">
+    <span class="header-text">Payment Details</span>
+  </div>
+
+    <div class="input-form">
+      <form [formGroup]="paymentInputForm">
+
+        <div class="row">
+          <div class="col">
+
+            <div class="form-group row"
+              [ngClass]="{'has-error':clientId.errors && (clientId.touched || clientId.dirty)}">
+              <label class="col-sm-3 col-form-label" for="clientName">Client Name</label>
+              <div class="col-sm-5">
+                <select name="clientId" id="clientId" class="form-control" 
+                formControlName="clientId" (change)="fetchClientBalance($event)">
+                  <option value="" [selected]="true">Select a Client</option>
+                  <option *ngFor="let client of clients" value="{{ client.id }}">{{ client.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="amountPending">Amount Pending</label>
+                <div class="col-sm-5">
+                  <input type="text" id="amountPending" class="form-control"
+                    formControlName="amountPending" disabled appCurrency>
+                </div>
+              </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="amountPaid">Amount Paid</label>
+                <div class="col-sm-5">
+                  <input type="text" id="amountPaid" class="form-control"
+                    formControlName="amountPaid" appCurrency>
+                </div>
+              </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="paymentDate">Payment Date</label>
+                <div class="col-sm-5">
+                  <input type="date" id="paymentDate" class="form-control"
+                    formControlName="paymentDate">
+                </div>
+              </div>
+
+
+              <div class="form-group row">
+                  <label class="col-sm-3 col-form-label" for="paymentMethod">Payment Method</label>
+                  <div class="col-sm-5">
+                    <select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod"
+                      class="form-control">
+                      <option value="" [selected]="isSelected">Payment Method</option>
+                      <option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">
+                        {{paymentSystem}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="paymentRefNo">Payment Ref No.</label>
+                    <div class="col-sm-5">
+                      <input type="text" id="paymentRefNo" class="form-control"
+                        formControlName="paymentRefNo" appCurrency>
+                    </div>
+                  </div>
+
+          </div>
+        </div>
+
+
+
+      </form>
+    </div>
+
+<!-- 
+    <div class="content-wrapper">
+      <div class="table-wrapper">
+        <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+        <p-table #dt [columns]="tableHeaders" [value]="paymentes">
+
+          <ng-template pTemplate="caption">
+            <div style="text-align: right">
+              <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText size="50" placeholder="Search Paymentes"
+                (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+                {{tableHeader.header}}
+                <p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-payment>
+            <tr>
+              <td>{{ payment?.name }}</td>
+              <td>{{ payment?.rate }}</td>
+              <td>{{ getPaymentType(payment) }}</td>
+              <td data-html2canvas-ignore>
+                <button type="button" class="btn button-cancel" (click)="deletePayment(payment)">Delete</button>
+              </td>
+            </tr>
+          </ng-template>
+
+        </p-table>
+
+
+      </div>
+    </div> -->
+
+    <div class="action-buttons">
+        <button type="button" class="btn button-save" (click)="savePayment()">Save</button>
+        <button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+    </div>
+
+
+  </div>

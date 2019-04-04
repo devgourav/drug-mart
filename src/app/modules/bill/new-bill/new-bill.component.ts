@@ -74,6 +74,13 @@ export class NewBillComponent implements OnInit {
 			}
 		});
 
+		const date = new Date();
+		let currentDate = date.toISOString().substring(0, 10);
+		console.log(currentDate);
+		this.billInputForm.patchValue({
+			billedDate: currentDate
+		});
+
 		this.tableHeaders = [
 			{ field: '', header: 'Particular' },
 			{ field: '', header: 'Manufacturer' },

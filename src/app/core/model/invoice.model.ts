@@ -2,7 +2,7 @@ import { BillItem } from './billItem.model';
 
 export class Invoice {
 	id: string;
-	invoiceId: string;
+	invoiceNumber: string;
 	clientName: string;
 	totalTax: number;
 	totalDiscount: number;
