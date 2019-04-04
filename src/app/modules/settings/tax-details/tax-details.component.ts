@@ -19,10 +19,13 @@ export class TaxDetailsComponent implements OnInit {
 	tableHeaders: any[];
 	msgs: Message[] = [];
 	tax: Tax;
+	ifStateTax: boolean = true;
 
 	taxInputForm = this.fb.group({
 		name: [ '', Validators.required ],
-		rate: [ '', [ Validators.required, Validators.max(100) ] ]
+		rate: [ '', [ Validators.required, Validators.max(100) ] ],
+		isStateTax: [ '', Validators.required ],
+		isCountryTax: [ '', Validators.required ]
 	});
 
 	constructor(private location: Location, private _taxService: TaxService, private fb: FormBuilder) {}
@@ -30,7 +33,11 @@ export class TaxDetailsComponent implements OnInit {
 	ngOnInit() {
 		this.getTaxDetails();
 
-		this.tableHeaders = [ { field: 'name', header: ' Tax Name' }, { field: 'rate', header: 'Rate' } ];
+		this.tableHeaders = [
+			{ field: 'name', header: ' Tax Name' },
+			{ field: 'rate', header: 'Rate' },
+			{ field: 'taxType', header: 'Tax Type' }
+		];
 	}
 
 	get name() {
@@ -39,6 +46,14 @@ export class TaxDetailsComponent implements OnInit {
 
 	get rate() {
 		return this.taxInputForm.get('rate');
+	}
+
+	get isStateTax() {
+		return this.taxInputForm.get('isStateTax').value;
+	}
+
+	get isCountryTax() {
+		return this.taxInputForm.get('isCountryTax').value;
 	}
 
 	closeClicked() {
@@ -52,6 +67,14 @@ export class TaxDetailsComponent implements OnInit {
 		});
 	}
 
+	getTaxType(tax: Tax): string {
+		if (tax.isStateTax) {
+			return 'StateTax';
+		} else {
+			return 'CountryTax';
+		}
+	}
+
 	deleteTax(tax: Tax) {
 		if (confirm(confirmMsg)) {
 			this._taxService.deleteTax(tax);
@@ -59,7 +82,32 @@ export class TaxDetailsComponent implements OnInit {
 	}
 
 	setTax() {
-		this.tax = Object.assign({}, this.taxInputForm.value);
-		this._taxService.setTax(this.tax);
+		this._taxService.setTax(this.getTaxObj());
+	}
+
+	getTaxObj(): Tax {
+		if (this.isStateTax == 'true') {
+			this.ifStateTax == true;
+		} else {
+			this.isStateTax == false;
+		}
+		this.tax = new Tax(this.taxInputForm.get('name').value, this.taxInputForm.get('rate').value, this.isStateTax);
+
+		const tax = Object.assign({}, this.tax);
+		return tax;
+	}
+
+	stateTaxChecked(isChecked) {
+		console.log(isChecked);
+		if (isChecked) {
+			this.taxInputForm.get('isCountryTax').setValue(false);
+		}
+	}
+
+	countryTaxChanged(isChecked) {
+		console.log(isChecked);
+		if (isChecked) {
+			this.taxInputForm.get('isStateTax').setValue(false);
+		}
 	}
 }

@@ -1,4 +1,29 @@
-@import "../../../../assets/styles/_title-header.scss";
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
+
+.modal-header {
+	background-color: $background-color-dark;
+	.modal-title {
+		font-weight: bold;
+		font-size: 1.4em;
+		text-align: center;
+		margin-left: 40px;
+		color: $text-color-light;
+		text-transform: uppercase;
+	}
+}
+
+.modal-body {
+	padding: 10px;
+	font-weight: bold;
+	label {
+		text-align: right;
+	}
+}
+
+.action-buttons {
+	button {
+		width: 20%;
+	}
+}

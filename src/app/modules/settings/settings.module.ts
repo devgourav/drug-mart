@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
 	declarations: [
@@ -36,7 +37,8 @@ import { MessageModule } from 'primeng/message';
 		ToastModule,
 		MessagesModule,
 		MessageModule,
-		TableModule
+		TableModule,
+		CheckboxModule
 	]
 })
 export class SettingsModule {}

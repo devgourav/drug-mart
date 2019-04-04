@@ -1,7 +1,6 @@
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
-@import "../../../../assets/styles/_title-header.scss";
 
 #company-details-wrapper {
 	font-family: 'Montserrat', sans-serif;
@@ -10,18 +9,13 @@
 .input-form {
 	padding: 5px;
 	padding-left: 40px;
-	text-align: left;
+	padding-top: 40px;
 	margin: 0 auto;
 	font-weight: bold;
-}
-.address-label {
-	background-color: $primary-color;
-	color: $text-color-light;
 
-	text-align: center;
-	padding: 10px;
-	border-radius: 4px;
-	border: none;
-	z-index: 1;
-	margin: 0 5px;
+	width: 80vw;
+
+	label {
+		text-align: right;
+	}
 }

@@ -8,6 +8,8 @@ import { OfferService } from 'src/app/core/service/offer.service';
 import { Offer } from 'src/app/core/model/offer.model';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
+import { Tax } from 'src/app/core/model/tax.model';
+import { TaxService } from 'src/app/core/service/tax.service';
 
 // TODO: Add A save/Update prompt
 
@@ -22,6 +24,8 @@ export class NewItemComponent implements OnInit {
 	itemMap: Map<string, string> = new Map();
 	submitted = false;
 	offers: Offer[] = [];
+	stateTaxes: Tax[] = [];
+	countryTaxes: Tax[] = [];
 
 	itemInputForm = this.fb.group({
 		name: [ '', Validators.required ],
@@ -36,7 +40,10 @@ export class NewItemComponent implements OnInit {
 		itemMRP: [ '', Validators.required ],
 		saleCost: [ '', Validators.required ],
 		saleDiscount: [ '', Validators.max(100) ],
-		saleOffers: new FormControl('')
+		saleOffers: new FormControl(''),
+		stateTaxId: new FormControl(''),
+		countryTaxId: new FormControl(''),
+		cess: [ '', Validators.max(100) ]
 	});
 
 	constructor(
@@ -44,11 +51,13 @@ export class NewItemComponent implements OnInit {
 		private _itemService: ItemService,
 		private route: ActivatedRoute,
 		private fb: FormBuilder,
-		private _offerService: OfferService
+		private _offerService: OfferService,
+		private _taxService: TaxService
 	) {}
 
 	ngOnInit() {
 		this.fetchOffers();
+		this.fetchTaxes();
 		this.route.paramMap.subscribe((params) => {
 			this.itemId = params.get('id');
 			if (this.itemId) {
@@ -96,6 +105,9 @@ export class NewItemComponent implements OnInit {
 	get saleDiscount() {
 		return this.itemInputForm.get('saleDiscount');
 	}
+	get cess() {
+		return this.itemInputForm.get('cess');
+	}
 
 	getItem(itemId: string) {
 		this._itemService.getItemById(itemId).subscribe((response) => {
@@ -112,7 +124,10 @@ export class NewItemComponent implements OnInit {
 				response.itemMRP,
 				response.saleCost,
 				response.saleDiscount,
-				response.saleOffers
+				response.saleOffers,
+				response.stateTaxId,
+				response.countryTaxId,
+				response.cess
 			);
 			console.log(new Date());
 			console.log(response.expiryDate);
@@ -134,7 +149,10 @@ export class NewItemComponent implements OnInit {
 			saleCost: this.item.saleCost,
 			itemMRP: this.item.itemMRP,
 			saleDiscount: this.item.saleDiscount,
-			saleOffers: this.item.saleOffers
+			saleOffers: this.item.saleOffers,
+			stateTaxId: this.item.stateTaxId,
+			countryTaxId: this.item.countryTaxId,
+			cess: this.item.cess
 		});
 	}
 
@@ -168,8 +186,12 @@ export class NewItemComponent implements OnInit {
 			this.itemInputForm.get('itemMRP').value,
 			this.itemInputForm.get('saleCost').value,
 			this.itemInputForm.get('saleDiscount').value,
-			this.itemInputForm.get('saleOffers').value
+			this.itemInputForm.get('saleOffers').value,
+			this.itemInputForm.get('stateTaxId').value,
+			this.itemInputForm.get('countryTaxId').value,
+			this.itemInputForm.get('cess').value
 		);
+
 		this.item.id = this.itemId;
 		if (this.itemId) {
 			this.item.modificationDate = new Date();
@@ -185,6 +207,18 @@ export class NewItemComponent implements OnInit {
 	fetchOffers() {
 		this._offerService.getOffers().subscribe((response) => {
 			this.offers = response;
+		});
+	}
+
+	fetchTaxes() {
+		this._taxService.getTaxes().subscribe((response) => {
+			for (let tax of response) {
+				if (tax.isStateTax) {
+					this.stateTaxes.push(tax);
+				} else {
+					this.countryTaxes.push(tax);
+				}
+			}
 		});
 	}
 

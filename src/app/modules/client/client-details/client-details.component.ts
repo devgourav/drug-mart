@@ -42,10 +42,10 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
 		this.tableHeaders = [
 			{ field: 'name', header: 'Client Name' },
 			{ field: 'contactPersonName', header: 'Contact Name' },
-			{ field: 'address.streetAddress', header: 'Address' },
-			{ field: 'emailId', header: 'Email' },
-			{ field: 'phoneNumber', header: 'Client Phone' },
-			{ field: 'contactPersonPhoneNumber', header: 'Contact Phone' }
+			{ field: '', header: 'Address' },
+			{ field: '', header: 'Email' },
+			{ field: '', header: 'Client Phone' },
+			{ field: '', header: 'Contact Phone' }
 		];
 	}
 

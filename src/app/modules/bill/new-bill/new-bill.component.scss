@@ -1,67 +1,64 @@
-@import "../../../../assets/styles/_title-header.scss";
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
-
-textarea {
-	resize: none;
-}
-
-.customCalendar {
-	width: 10vw;
-}
+@import "../../../../assets/styles/common.scss";
 
 .wrapper-content {
-	padding: 10px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-}
-
-.row {
-	margin-bottom: 20px;
-}
-
-.table-wrapper {
-	tbody {
-		.form-control {
-			font-size: 12px;
-		}
-	}
-}
-
-.itemEntry {
-	thead {
-		display: none;
-	}
-}
-
-.cost-details {
-	.amount {
+	label {
 		text-align: right;
 	}
-	.span {
-		label {
-			text-align: right;
+	.input-form {
+		margin-left: 15px;
+		padding-top: 40px;
+		text-align: left;
+		font-weight: bold;
+		width: 100vw;
+
+		.table-wrapper {
+			width: 100%;
+			margin-left: 15px;
+		}
+
+		.new-item-btn {
+			margin-top: 20px;
+			text-align: center;
+		}
+
+		.beforeTable {
+			padding-left: 20px;
+		}
+
+		.afterTable {
+			.afterTableRow {
+				margin-bottom: 20px;
+			}
+			.cost-details {
+				border: 1px solid black;
+				padding: 10px;
+				.cost-row {
+					.amount {
+						text-align: right;
+						span::after {
+							content: " \20B9";
+						}
+					}
+				}
+			}
+		}
+
+		.order-notes {
+			.row {
+				display: flex;
+				align-items: center;
+			}
+			textarea {
+				resize: none;
+			}
 		}
 	}
 }
 
-.order-notes {
-	.row {
-		display: flex;
-		align-items: center;
-	}
-}
-
-.reverse-charge {
-	text-align: center;
-}
-
-.payment-details {
-	label {
-		text-align: left;
-	}
-}
-
-.totalAmount {
-	font-weight: bold;
-}
+// .rupeeSymbol {
+// 	text-align: left;
+// 	display: inline-flex;
+// 	align-items: center;
+// }
