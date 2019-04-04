@@ -28,6 +28,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { PaymentModule } from './modules/payment/payment.module';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './core/service/user.service';
+import { PaymentService } from './core/service/payment.service';
 
 @NgModule({
 	declarations: [ AppComponent, SidebarComponent ],
@@ -53,7 +54,16 @@ import { UserService } from './core/service/user.service';
 		AngularFireAuthModule,
 		SharedModule
 	],
-	providers: [ VendorService, BillService, ItemService, InvoiceService, AuthService, ClientService, UserService ],
+	providers: [
+		VendorService,
+		BillService,
+		ItemService,
+		InvoiceService,
+		AuthService,
+		ClientService,
+		UserService,
+		PaymentService
+	],
 	bootstrap: [ AppComponent ],
 	exports: [ SidebarComponent ]
 })

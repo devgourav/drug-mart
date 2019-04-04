@@ -54,14 +54,14 @@ export class InvoiceDetailsComponent implements OnInit {
 		this.getInvoices();
 
 		this.tableHeaders = [
-			{ field: 'invoiceId', header: 'Invoice Id' },
+			{ field: 'invoiceNumber', header: 'Invoice Id' },
 			{ field: 'invoicedDate', header: 'Invoice Date' },
 			{ field: 'clientName', header: 'Client' },
 			{ field: '', header: 'Sub Amount' },
 			{ field: '', header: 'Tax' },
 			{ field: '', header: 'Discount' },
-			{ field: '', header: 'Total Amount' },
-			{ field: '', header: 'Amount Pending' }
+			{ field: '', header: 'Total Amount' }
+			// { field: '', header: 'Amount Pending' }
 		];
 	}
 

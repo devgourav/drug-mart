@@ -1,7 +1,10 @@
+import { Payment } from './payment.model';
+
 export class Client {
 	id: string;
 	creationDate: Date;
 	modificationDate: Date;
+	payments: Payment[];
 
 	constructor(
 		public name: string,

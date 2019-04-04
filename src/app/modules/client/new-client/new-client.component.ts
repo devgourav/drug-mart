@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Client } from 'src/app/core/model/client.model';
 import { ClientService } from 'src/app/core/service/client.service';
 import { Subscription } from 'rxjs';
+import { Payment } from 'src/app/core/model/payment.model';
 
 // TODO: Add A save/Update prompt
 
@@ -117,7 +118,7 @@ export class NewClientComponent implements OnInit {
 		);
 	}
 
-	setClient() {
+	getClientObj(): Client {
 		this.addressMap = new Map();
 		this.addressMap.set('streetAddress', this.clientInputForm.get('address').value);
 		this.addressMap.set('pincode', this.clientInputForm.get('pincode').value);
@@ -136,9 +137,19 @@ export class NewClientComponent implements OnInit {
 			addressMap,
 			this.clientInputForm.get('notes').value
 		);
+		this.client.id = this.clientId;
 		const client = Object.assign({}, this.client);
 		console.log(client);
-		this._clientService.setClient(client);
+		return client;
+	}
+
+	setClient() {
+		this._clientService.setClient(this.getClientObj());
+		this.closeClicked();
+	}
+
+	updateClient() {
+		this._clientService.updateClient(this.getClientObj());
 		this.closeClicked();
 	}
 
@@ -165,31 +176,6 @@ export class NewClientComponent implements OnInit {
 			pincode: this.client.address.get('pincode'),
 			notes: this.client.notes
 		});
-	}
-
-	updateClient() {
-		this.addressMap = new Map();
-		this.addressMap.set('streetAddress', this.clientInputForm.get('address').value);
-		this.addressMap.set('pincode', this.clientInputForm.get('pincode').value);
-
-		const addressMap = this.convertMapToObject(this.addressMap);
-
-		this.client = new Client(
-			this.clientInputForm.get('name').value,
-			this.clientInputForm.get('phoneNumber').value,
-			this.clientInputForm.get('emailId').value,
-			this.clientInputForm.get('website').value,
-			this.clientInputForm.get('GSTIN').value,
-			this.clientInputForm.get('contactPersonName').value,
-			this.clientInputForm.get('contactPersonPhoneNumber').value,
-			this.clientInputForm.get('contactPersonEmailId').value,
-			addressMap,
-			this.clientInputForm.get('notes').value
-		);
-		this.client.id = this.clientId;
-		const client = Object.assign({}, this.client);
-		this._clientService.updateClient(client);
-		this.closeClicked();
 	}
 
 	ngOnDestroy() {

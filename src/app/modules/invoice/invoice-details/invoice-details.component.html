@@ -35,7 +35,7 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-invoice>
 					<tr>
-						<td>{{ invoice?.invoiceId}}</td>
+						<td>{{ invoice?.invoiceNumber}}</td>
 						<td>{{ invoice?.invoicedDate }}</td>
 						<td>{{ invoice?.clientName }}</td>
 						<td class="currencyDisplay"> {{ getSubAmount(invoice.invoiceItems)}}</td>
@@ -43,7 +43,7 @@
 						<td class="currencyDisplay"> {{ getDiscountAmount(invoice.invoiceItems) }}</td>
 						<td class="currencyDisplay"> {{ getTotalAmount((invoice.id)) }}</td>
 						<!-- <td>{{ invoice?.orderNote }}</td> -->
-						<td class="currencyDisplay"> {{ getPendingAmount(invoice?.amountPaid)}}</td>
+						<!-- <td class="currencyDisplay"> {{ getPendingAmount(invoice?.amountPaid)}}</td> -->
 						<td>
 							<button type="button" class="btn button-primary" (click)="editInvoice(invoice.id)"><i
 									class="pi pi-pencil"></i>
