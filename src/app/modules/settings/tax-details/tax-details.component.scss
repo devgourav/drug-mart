@@ -13,7 +13,7 @@
 		text-align: center;
 		margin-left: 40px;
 		padding: 10px;
-		width: 30vw;
+		width: 50vw;
 
 		label {
 			text-align: right;
@@ -25,10 +25,16 @@
 
 		.action-button {
 			display: flex;
-			justify-content: center;
+			justify-content: left;
 			button {
 				width: 30%;
 			}
 		}
+	}
+
+	.taxType {
+		display: flex;
+		justify-content: left;
+		font-weight: normal;
 	}
 }

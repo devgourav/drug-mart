@@ -10,6 +10,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
 	declarations: [ NewItemComponent, ItemDetailsComponent ],
@@ -23,7 +25,9 @@ import { ToastModule } from 'primeng/toast';
 		CalendarModule,
 		ConfirmDialogModule,
 		BrowserAnimationsModule,
-		ToastModule
+		ToastModule,
+		MessagesModule,
+		MessageModule
 	],
 	exports: []
 })

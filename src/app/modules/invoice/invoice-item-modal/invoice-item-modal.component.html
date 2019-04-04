@@ -5,6 +5,7 @@
     </button>
   </div>
   
+  
   <form [formGroup]="invoiceItemForm">
     <div class="modal-body">
       <div class="row">
@@ -28,11 +29,15 @@
             </div>
           </div>
   
-          <div class="form-group row" [ngClass]="{'has-error':manufacturer.errors && (manufacturer.touched || manufacturer.dirty)}">
+          <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="itemMfg">Manufacturer</label>
-            <div class="col-sm-8">
+            <div class="col-sm-4">
               <input maxlength="100" type="text" class="form-control" id="itemMfg" formControlName="manufacturer">
             </div>
+            <div class="col-sm-5 error-message">
+								<p-message severity="error" text="Manufacturer should not be empty"
+									*ngIf="manufacturer.errors && (manufacturer.touched || manufacturer.dirty)"></p-message>
+							</div>
           </div>
   
           <div class="form-group row">
@@ -42,50 +47,74 @@
             </div>
           </div>
   
-          <div class="form-group row" [ngClass]="{'has-error':itemHSN.errors && (itemHSN.touched || itemHSN.dirty)}">
+          <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="itemHSN">HSN</label>
             <div class="col-sm-4">
               <input maxlength="20" type="text" class="form-control" id="itemHSN" formControlName="itemHSN">
             </div>
+            <div class="col-sm-5 error-message">
+								<p-message severity="error" text="Item HSN should not be empty"
+									*ngIf="itemHSN.errors && (itemHSN.touched || itemHSN.dirty)"></p-message>
+							</div>
           </div>
   
   
-          <div class="form-group row" [ngClass]="{'has-error':batchNumber.errors && (batchNumber.touched || batchNumber.dirty)}">
+          <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="itemBatchNumber">Batch Number</label>
             <div class="col-sm-4">
               <input maxlength="20" type="text" class="form-control" id="itemBatchNumber" formControlName="batchNumber">
             </div>
+            <div class="col-sm-5 error-message">
+								<p-message severity="error" text="Batch Number should not be empty"
+									*ngIf="batchNumber.errors && (batchNumber.touched || batchNumber.dirty)"></p-message>
+							</div>
           </div>
   
-          <div class="form-group row" [ngClass]="{'has-error':expiryDate.errors && (expiryDate.touched || expiryDate.dirty)}">
+          <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="itemExpiryDate">Expiry Date</label>
             <div class="col-sm-4">
               <input type="date" class="form-control" id="itemExpiryDate" formControlName="expiryDate">
             </div>
+            <div class="col-sm-5 error-message">
+								<p-message severity="error" text="Expiry Date should not be empty"
+									*ngIf="expiryDate.errors && (expiryDate.touched || expiryDate.dirty)"></p-message>
+							</div>
           </div>
   
   
-          <div class="form-group row" [ngClass]="{'has-error':quantity.errors && (quantity.touched || quantity.dirty)}">
+          <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="itemQuantity">Quantity</label>
             <div class="col-sm-4">
               <input maxlength="10" type="number" class="form-control" id="itemQuantity" formControlName="quantity" appQuantity>
             </div>
+            <div class="col-sm-5 error-message">
+								<p-message severity="error" text="Quantity should not be empty"
+									*ngIf="quantity.errors && (quantity.touched || quantity.dirty)"></p-message>
+							</div>
           </div>
   
-          <div class="form-group row" [ngClass]="{'has-error':rate.errors && (rate.touched || rate.dirty)}">
+          <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="itemRate">Rate</label>
             <div class="col-sm-4">
               <input type="number" class="form-control" id="itemRate" formControlName="rate" appCurrency>
             </div>
-            <span class="rupeeSymbol label col-sm-1">₹</span>
+            <div class="col-sm-5 error-message">
+								<p-message severity="error" text="Rate should not be empty"
+									*ngIf="rate.errors && (rate.touched || rate.dirty)"></p-message>
+							</div>
+           
           </div>
   
-          <div class="form-group row" [ngClass]="{'has-error':itemMRP.errors && (itemMRP.touched || itemMRP.dirty)}">
+          <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="itemMRP">MRP</label>
             <div class="col-sm-4">
               <input type="number" class="form-control" id="itemMRP" formControlName="itemMRP" appCurrency>
             </div>
-            <span class="rupeeSymbol label col-sm-1">₹</span>
+            <div class="col-sm-5 error-message">
+								<p-message severity="error" text="ItemMRP should not be empty"
+									*ngIf="itemMRP.errors && (itemMRP.touched || itemMRP.dirty)"></p-message>
+							</div>
+            
           </div>
   
           <div class="form-group row">
@@ -112,11 +141,12 @@
             <label class="col-sm-3 col-form-label" for="itemDiscount">Discount</label>
             <div class="col-sm-4">
               <input type="number" class="form-control" id="itemDiscount" formControlName="discount" appCurrency>
-              <span class="has-error" *ngIf="discount.errors?.max && (discount.touched || discount.dirty)">
-                Discount cannot be more than 100%
-              </span>
             </div>
-            <span class="rupeeSymbol label col-sm-1">%</span>
+            <div class="col-sm-5 error-message">
+              <p-message severity="error" text="Discount more than 100%"
+                *ngIf="discount.errors?.max && (discount.touched || discount.dirty)"></p-message>
+            </div>
+            
           </div>
   
           <div class="form-group row">
@@ -138,7 +168,7 @@
         </div>
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer action-buttons">
       <button type="button" [disabled]="!invoiceItemForm.valid" *ngIf="invoiceItem" class="btn button-primary" (click)="editInvoiceItem();activeModal.close('Close')">Save Item</button>
       <button type="button" [disabled]="!invoiceItemForm.valid" *ngIf="!invoiceItem" class="btn button-primary" (click)="addInvoiceItem();activeModal.close('Close')">Add Item</button>
       <button type="button" class="btn button-cancel" (click)="activeModal.close('Close')">Cancel</button>

@@ -1,170 +1,193 @@
 <div id="new-bill-wrapper make-scrollable">
 	<div class="title-header">
-		<span id="header-text">Add New Bill</span>
+		<span class="header-text">Add New Bill</span>
 	</div>
-	<div class="wrapper-content input-form">
-		<form [formGroup]="billInputForm">
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="form-group row"
-						[ngClass]="{'has-error':vendorId.errors && (vendorId.touched || vendorId.dirty)}">
-						<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
-						<div class="col-sm-5">
-							<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId"
-								(change)="fetchVendorName($event)">
-								<option value="" [selected]="true">Select a Vendor</option>
-								<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}
-								</option>
-							</select>
+
+	<div class="wrapper-content">
+		<div class="input-form">
+			<form [formGroup]="billInputForm">
+				<div class="row beforeTable">
+					<div class="col-sm-6">
+						<div class="form-group row"
+							[ngClass]="{'has-error':vendorId.errors && (vendorId.touched || vendorId.dirty)}">
+							<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
+							<div class="col-sm-5">
+								<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId"
+									(change)="fetchVendorName($event)">
+									<option value="" [selected]="true">Select a Vendor</option>
+									<option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}
+									</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<button type="button" (click)="navigateNewVendor()" class="btn button-primary">New
+									Vendor</button>
+							</div>
 						</div>
-						<div class="col-sm-4">
-							<button type="button" (click)="navigateNewVendor()" class="btn button-primary">New
-								Vendor</button>
-						</div>
-					</div>
-					<div class="form-group row"
-						[ngClass]="{'has-error':billedDate.errors && (billedDate.touched || billedDate.dirty)}">
-						<label class="col-sm-3 col-form-label" for="billDate">Bill Date</label>
-						<div class="col-sm-5">
-							<input type="date" class="form-control" id="billedDate" formControlName="billedDate">
-							<!-- <p-calendar styleclass="customCalendar" formControlName="billedDate" dateFormat="dd.mm.yy" [showIcon]="true"
+						<div class="form-group row"
+							[ngClass]="{'has-error':billedDate.errors && (billedDate.touched || billedDate.dirty)}">
+							<label class="col-sm-3 col-form-label" for="billDate">Bill Date</label>
+							<div class="col-sm-5">
+								<input type="date" class="form-control" id="billedDate" formControlName="billedDate">
+								<!-- <p-calendar styleclass="customCalendar" formControlName="billedDate" dateFormat="dd.mm.yy" [showIcon]="true"
 								[monthNavigator]="true" [yearNavigator]="true" yearRange="2018:2035"></p-calendar> -->
 
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="form-group row"
-						[ngClass]="{'has-error':billId.errors && (billId.touched || billId.dirty)}">
-						<label class="col-sm-3 col-form-label" for="billId">Bill Number</label>
-						<div class="col-sm-5">
-							<input type="text" class="form-control" id="billId" formControlName="billId">
+					<div class="col-sm-6">
+						<div class="form-group row"
+							[ngClass]="{'has-error':billId.errors && (billId.touched || billId.dirty)}">
+							<label class="col-sm-3 col-form-label" for="billId">Bill Number</label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" id="billId" formControlName="billId">
+							</div>
 						</div>
+
 					</div>
-
 				</div>
-			</div>
 
-			<div class="table-wrapper">
-				<table class="itemDetails table table-striped">
-					<thead>
-						<tr>
-							<th *ngFor="let billTableHeader of billTableHeaders" scope="col">{{billTableHeader}}</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let billItem of billItems">
-							<td scope="col">{{ billItem.itemName }}</td>
-							<td scope="col">{{ billItem.manufacturer }}</td>
-							<td scope="col">{{ billItem.quantity }}</td>
-							<td scope="col">{{ billItem.rate }}₹</td>
-							<td scope="col">{{ getSubAmount(billItem.rate,billItem.quantity) }}₹</td>
-							<td scope="col">{{ billItem.discount}}%</td>
-							<td scope="col">{{ billItem.tax["stateTax"] + billItem.tax["countryTax"] }}%</td>
-							<td scope="col">{{ getTotalAmount(billItem.rate,billItem.quantity,billItem.discount+billItem.offer,
+				<div class="table-wrapper">
+					<p-table #dt [columns]="tableHeaders" [value]="billItems" [responsive]="true">
+						<ng-template pTemplate="header">
+							<tr>
+								<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+									{{tableHeader.header}}
+								</th>
+								<th>Actions</th>
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-billItem>
+							<tr>
+								<td scope="col">{{ billItem.itemName }}</td>
+								<td scope="col">{{ billItem.manufacturer }}</td>
+								<td scope="col">{{ billItem.quantity }}</td>
+								<td scope="col">{{ billItem.rate }}₹</td>
+								<td scope="col">{{ getSubAmount(billItem.rate,billItem.quantity) }}₹</td>
+								<td scope="col">{{ billItem.discount}}%</td>
+								<td scope="col">{{ billItem.tax["stateTax"] + billItem.tax["countryTax"] }}%</td>
+								<td scope="col">{{ getTotalAmount(billItem.rate,billItem.quantity,billItem.discount+billItem.offer,
 								billItem.tax["stateTax"] + billItem.tax["countryTax"]) }}₹</td>
-							<td scope="col">{{ getOfferDiscount(billItem.offer) }}%</td>
-							<td scope="col">{{ billItem.itemMRP }}₹</td>
-							<td>
-								<button type="button" class="btn button-primary"
-									(click)="editItem(billItem)">View/Edit</button>
-								<button type="button" class="btn button-cancel"
-									(click)="deleteItem(billItem)">Delete</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+								<td scope="col">{{ getOfferDiscount(billItem.offer) }}%</td>
+								<td scope="col">{{ billItem.itemMRP }}₹</td>
+								<td>
+									<button type="button" class="btn button-primary" (click)="editItem(billItem)"><i
+											class="pi pi-pencil"></i></button>
+									<button type="button" class="btn button-cancel" (click)="deleteItem(billItem)"><i
+											class="pi pi-trash"></i></button>
+								</td>
+							</tr>
+						</ng-template>
+					</p-table>
+				</div>
 
-			<button type="button" class="btn button-primary" (click)="openItemModal()">Add New Item</button>
 
-			<div class="afterTable">
-				<div class="row">
-					<div class="col col-md-8">
-					</div>
-					<div class="col cost-details col-md-4">
-						<span class="row cost-row">
-							<label class="col-sm-3" for="subTotalAmount">SubTotal:</label>
-							<span class="amount col-sm-3" id="subTotalAmount">{{ billAmount.subAmount }}</span>
-							<span class="col-sm-1 rupeeSymbol">₹</span>
-						</span>
-						<span class="row cost-row">
-							<label class="col-sm-3" for="totalTax">Tax:</label>
-							<span class="amount col-sm-3" id="totalTax">(+) {{ billAmount.taxAmount }}</span>
-							<span class="col-sm-1 rupeeSymbol">₹</span>
-						</span>
-						<!-- <span class="cost-row">
+				<div class="row action-buttons">
+					<button type="button" class="btn button-primary" (click)="openItemModal()">Add New Item</button>
+				</div>
+				<div class="afterTable">
+					<div class="row afterTableRow">
+						<div class="col col-sm-8">
+						</div>
+						<div class="col cost-details col-sm-3">
+							<span class="row cost-row">
+								<label class="col-sm-4" for="subTotalAmount">SubTotal:(+)</label>
+								<div class="amount col-sm-8" id="subTotalAmount">
+									<span>{{ billAmount.subAmount }}</span>
+								</div>
+
+
+							</span>
+							<span class="row cost-row">
+								<label class="col-sm-4" for="totalTax">Tax:(+)</label>
+
+								<div class="amount col-sm-8" id="subTotalAmount">
+									<span>{{ billAmount.taxAmount }}</span>
+								</div>
+
+							</span>
+							<!-- <span class="cost-row">
 							<label class="col-sm-6" for="shippingCharge">Shipping Charge:</label>-
 							<span class="col-sm-6" id="shippingCharge"></span>
 						</span> -->
-						<span class="row cost-row">
-							<label class="col-sm-3" for="discount">Discount:</label>
-							<span class="amount col-sm-3" id="discount">(-) {{ billAmount.discountAmount }}</span>
-							<span class="col-sm-1 rupeeSymbol">₹</span>
-						</span>
-						<!-- <span class="cost-row">
+							<span class="row cost-row">
+								<label class="col-sm-4" for="discount">Discount:(-) </label>
+								<div class="amount col-sm-8" id="subTotalAmount">
+									<span>{{ billAmount.discountAmount }}</span>
+								</div>
+
+
+							</span>
+							<!-- <span class="cost-row">
 							<label class="col-sm-6" for="priceRoundedOff">Rounded Off:</label>
 							<span class="col-sm-6" id="priceRoundedOff"></span>
 						</span> -->
-						<hr>
-						<span class="row cost-row">
-							<label class="col-sm-3" for="netAmount">Net Amount:</label>
-							<span class="amount totalAmount col-sm-3" id="netAmount">{{ billAmount.totalAmount }}</span>
-							<span class="col-sm-1 rupeeSymbol">₹</span>
-						</span>
+							<hr>
+							<span class="row cost-row">
+								<label class="col-sm-4" for="netAmount">Net Amount:</label>
+
+								<div class="amount col-sm-8" id="subTotalAmount">
+									<span>{{ billAmount.totalAmount }}</span>
+								</div>
+
+							</span>
+						</div>
+					</div>
+					<div class="row afterTableRow">
+						<div class="col order-notes">
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="orderNote">Order Notes</label>
+								<div class="col-sm-5">
+									<textarea class="form-control" formControlName="orderNote" id="orderNote"
+										rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="col payment-details">
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="amountPaid">Amount Paid</label>
+								<div class="col-sm-5">
+									<input type="number" class="form-control" formControlName="amountPaid"
+										id="billAmountPaid" appCurrency>
+								</div>
+								<div class="col-sm-3 error-message">
+									<p-message severity="error" text="Amount Paid should not be empty"
+										*ngIf="amountPaid.errors && (amountPaid.touched || amountPaid.dirty)">
+									</p-message>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="paymentMethod">Payment Method</label>
+								<div class="col-sm-5">
+									<select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod"
+										class="form-control">
+										<option value="" [selected]="isSelected">Payment Method</option>
+										<option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">
+											{{paymentSystem}}</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="amountPaid">Payment Ref. Number</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" formControlName="paymentRef" id="paymentRef"
+										appCurrency>
+								</div>
+							</div>
+
+						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col order-notes">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="orderNote">Order Notes</label>
-							<div class="col-sm-8">
-								<textarea class="form-control" formControlName="orderNote" id="orderNote"
-									rows="3"></textarea>
-							</div>
-						</div>
-					</div>
-					<div class="col payment-details">
-						<div class="form-group row"
-							[ngClass]="{'has-error':amountPaid.errors && (amountPaid.touched || amountPaid.dirty)}">
-							<label class="col-sm-3 col-form-label" for="amountPaid">Amount Paid</label>
-							<div class="col-sm-3">
-								<input type="number" class="form-control" formControlName="amountPaid"
-									id="billAmountPaid" appCurrency>
-							</div>
-							<span class="rupeeSymbol label col-sm-5">₹</span>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="paymentMethod">Payment Method</label>
-							<div class="col-sm-3">
-								<select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod"
-									class="form-control">
-									<option value="" [selected]="isSelected">Payment Method</option>
-									<option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">
-										{{paymentSystem}}</option>
-								</select>
-							</div>
-						</div>
-
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="amountPaid">Payment Ref. Number</label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" formControlName="paymentRef" id="paymentRef"
-									appCurrency>
-							</div>
-						</div>
-
-					</div>
+				<div class="action-buttons">
+					<button type="submit" [disabled]="!billInputForm.valid" *ngIf="billId" id="billUpdateButton"
+						class="btn button-save" (click)="updateBill()">Update</button>
+					<button type="submit" [disabled]="!billInputForm.valid" *ngIf="!billId" id="billSaveButton"
+						class="btn button-save" (click)="setBill()">Save</button>
+					<button type="button" id="billCancelButton" class="btn button-cancel"
+						(click)="closeClicked()">Cancel</button>
 				</div>
-			</div>
-			<div class="action-buttons">
-				<button type="submit" [disabled]="!billInputForm.valid" *ngIf="billId" id="billUpdateButton"
-					class="btn button-save" (click)="updateBill()">Update</button>
-				<button type="submit" [disabled]="!billInputForm.valid" *ngIf="!billId" id="billSaveButton"
-					class="btn button-save" (click)="setBill()">Save</button>
-				<button type="button" id="billCancelButton" class="btn button-cancel"
-					(click)="closeClicked()">Cancel</button>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </div>

@@ -12,6 +12,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
 	declarations: [ NewInvoiceComponent, InvoiceDetailsComponent, InvoiceItemModalComponent ],
@@ -25,7 +27,9 @@ import { CalendarModule } from 'primeng/calendar';
 		ConfirmDialogModule,
 		BrowserAnimationsModule,
 		ToastModule,
-		CalendarModule
+		CalendarModule,
+		MessagesModule,
+		MessageModule
 	],
 	entryComponents: [ InvoiceItemModalComponent ]
 })

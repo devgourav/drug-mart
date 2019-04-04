@@ -16,6 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
 	declarations: [ BillDetailsComponent, NewBillComponent, BillItemModalComponent ],
@@ -31,7 +33,9 @@ import { TooltipModule } from 'primeng/tooltip';
 		BrowserAnimationsModule,
 		ToastModule,
 		CalendarModule,
-		TooltipModule
+		TooltipModule,
+		MessagesModule,
+		MessageModule
 	],
 	entryComponents: [ BillItemModalComponent ]
 })

@@ -21,6 +21,7 @@ import { Offer } from 'src/app/core/model/offer.model';
 	styleUrls: [ './new-bill.component.scss' ]
 })
 export class NewBillComponent implements OnInit {
+	tableHeaders: any[];
 	bill: Bill;
 	billItems: BillItem[] = [];
 	billItem: BillItem;
@@ -72,6 +73,19 @@ export class NewBillComponent implements OnInit {
 				this.getBill(params.get('id'));
 			}
 		});
+
+		this.tableHeaders = [
+			{ field: '', header: 'Particular' },
+			{ field: '', header: 'Manufacturer' },
+			{ field: '', header: 'Quantity' },
+			{ field: '', header: 'Rate' },
+			{ field: '', header: 'Amount' },
+			{ field: '', header: 'Discount' },
+			{ field: '', header: 'Tax' },
+			{ field: '', header: 'Total' },
+			{ field: '', header: 'Offers' },
+			{ field: '', header: 'M.R.P' }
+		];
 	}
 
 	get billedDate() {
@@ -86,19 +100,19 @@ export class NewBillComponent implements OnInit {
 		return this.billInputForm.get('billId');
 	}
 
-	billTableHeaders = [
-		'Particular',
-		'Manufacturer',
-		'Quantity',
-		'Rate',
-		'Amount',
-		'Discount',
-		'Tax',
-		'Total',
-		'Offers',
-		'M.R.P',
-		'Actions'
-	];
+	// billTableHeaders = [
+	// 	'Particular',
+	// 	'Manufacturer',
+	// 	'Quantity',
+	// 	'Rate',
+	// 	'Amount',
+	// 	'Discount',
+	// 	'Tax',
+	// 	'Total',
+	// 	'Offers',
+	// 	'M.R.P',
+	// 	'Actions'
+	// ];
 
 	openItemModal() {
 		const modalRef = this.modalService.open(BillItemModalComponent, { size: 'lg', keyboard: true });

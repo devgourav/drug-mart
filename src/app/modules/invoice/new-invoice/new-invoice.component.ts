@@ -23,6 +23,7 @@ import { Observable, of } from 'rxjs';
 	styleUrls: [ './new-invoice.component.scss' ]
 })
 export class NewInvoiceComponent implements OnInit {
+	tableHeaders: any[];
 	invoice: Invoice;
 	invoices: Invoice[] = [];
 	invoiceItems: BillItem[] = [];
@@ -82,6 +83,19 @@ export class NewInvoiceComponent implements OnInit {
 				this.getInvoice(params.get('id'));
 			}
 		});
+
+		this.tableHeaders = [
+			{ field: '', header: 'Particular' },
+			{ field: '', header: 'Manufacturer' },
+			{ field: '', header: 'Quantity' },
+			{ field: '', header: 'Rate' },
+			{ field: '', header: 'Amount' },
+			{ field: '', header: 'Discount' },
+			{ field: '', header: 'Tax' },
+			{ field: '', header: 'Total' },
+			{ field: '', header: 'Offers' },
+			{ field: '', header: 'M.R.P' }
+		];
 	}
 
 	get invoicedDate() {
@@ -91,20 +105,6 @@ export class NewInvoiceComponent implements OnInit {
 	get amountPaid() {
 		return this.invoiceInputForm.get('amountPaid');
 	}
-
-	invoiceTableHeaders = [
-		'Particular',
-		'Manufacturer',
-		'Quantity',
-		'Rate',
-		'Amount',
-		'Discount',
-		'Tax',
-		'Total',
-		'Offers',
-		'M.R.P',
-		'Actions'
-	];
 
 	openItemModal() {
 		const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });

@@ -18,19 +18,8 @@ export class SidebarComponent implements OnInit {
 		{ name: 'Bills', svgName: 'list.svg' },
 		{ name: 'Reports', svgName: 'list-1.svg' },
 		{ name: 'Users', svgName: 'user-1.svg' },
+		{ name: 'Payments', svgName: 'money.svg' },
 		{ name: 'Settings', svgName: 'gear.svg' }
-	];
-
-	svgFileNames = [
-		'home.svg',
-		'user-1.svg',
-		'user.svg',
-		'user-1.svg',
-		'list-1.svg',
-		'bill.svg',
-		'list.svg',
-		'user-1.svg',
-		'gear.svg'
 	];
 
 	constructor(public _authService: AuthService) {

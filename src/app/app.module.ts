@@ -25,6 +25,7 @@ import { AuthService } from './core/service/auth.service';
 import { ClientService } from './core/service/client.service';
 import { SharedModule } from './core/shared/shared.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { PaymentModule } from './modules/payment/payment.module';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './core/service/user.service';
 
@@ -40,6 +41,7 @@ import { UserService } from './core/service/user.service';
 		ItemModule,
 		SettingsModule,
 		DashboardModule,
+		PaymentModule,
 		UserModule,
 		NgbModule,
 		FormsModule,
