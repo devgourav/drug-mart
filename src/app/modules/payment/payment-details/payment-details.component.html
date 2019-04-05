@@ -37,11 +37,12 @@
         </ng-template>
         <ng-template pTemplate="body" let-payment>
           <tr>
-            <td>{{ payment?.clientName }}</td>
-            <td>{{ payment?.clientContactName }}</td>
-            <td>{{ payment?.clientPhoneNumber }}</td>
+            <td>{{ payment?.vendorName }}</td>
+            <td>{{ payment?.vendorContactName }}</td>
+            <td>{{ payment?.vendorPhoneNumber }}</td>
             <td class="currencyDisplay">{{ payment?.amountPaid }}</td>
             <td>{{ payment?.paymentDate }}</td>
+            <td>{{ getPaymentType(payment) }}</td>
             <td data-html2canvas-ignore>
               <button type="button" class="btn button-primary" (click)="editPayment(payment.id)"><i
                   class="pi pi-pencil"></i></button>

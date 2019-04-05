@@ -37,10 +37,11 @@
 					<tr>
 						<td>{{ vendor?.name }}</td>
 						<td>{{ vendor?.contactPersonName }}</td>
-						<td>{{ vendor?.address['streetAddress'] }}</td>
-						<td>{{ vendor?.emailId }}</td>
-						<td>{{ vendor?.phoneNumber }}</td>
 						<td>{{ vendor?.contactPersonPhoneNumber }}</td>
+						<td>{{ vendor?.phoneNumber }}</td>
+						<td class="currencyDisplay">{{ vendor?.amountBalance.toFixed(2) }}</td>
+						
+					
 						<td data-html2canvas-ignore>
 								<button type="button" class="btn button-primary"
 									(click)="editVendor(vendor.id)">View/Edit</button>

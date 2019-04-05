@@ -262,37 +262,37 @@ export class NewInvoiceComponent implements OnInit {
 
 	setInvoice() {
 		this._invoiceService.setInvoice(this.getInvoiceObj());
-		console.log(this.getPaymentObj());
-		this._paymentService.setPayment(this.getPaymentObj());
+		// console.log(this.getPaymentObj());
+		// this._paymentService.setPayment(this.getPaymentObj());
 		this.closeClicked();
 	}
 
 	updateInvoice() {
 		this._invoiceService.updateInvoice(this.getInvoiceObj());
-		this._paymentService.updatePayment(this.getPaymentObj());
+		// this._paymentService.updatePayment(this.getPaymentObj());
 		this.closeClicked();
 	}
-	getPaymentObj(): Payment {
-		this.payment = new Payment(
-			this.invoiceInputForm.get('clientId').value,
-			this.invoiceInputForm.get('amountPaid').value,
-			this.invoiceInputForm.get('invoicedDate').value
-		);
-		this.payment.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
-		this.payment.paymentRefNo = this.invoiceInputForm.get('paymentRef').value;
-		this.payment.amountPending = +this.invoiceAmount.totalAmount;
-		for (let client of this.clients) {
-			if (this.clientId == client.id) {
-				this.payment.clientName = client.name;
-				this.payment.clientContactName = client.contactPersonName;
-				this.payment.clientPhoneNumber = client.contactPersonPhoneNumber;
-				this.payment.amountPending -= this.payment.amountPaid;
-				break;
-			}
-		}
-		const payment = Object.assign({}, this.payment);
-		return payment;
-	}
+	// getPaymentObj(): Payment {
+	// 	this.payment = new Payment(
+	// 		this.invoiceInputForm.get('clientId').value,
+	// 		this.invoiceInputForm.get('amountPaid').value,
+	// 		this.invoiceInputForm.get('invoicedDate').value
+	// 	);
+	// 	this.payment.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
+	// 	this.payment.paymentRefNo = this.invoiceInputForm.get('paymentRef').value;
+	// 	this.payment.amountPending = +this.invoiceAmount.totalAmount;
+	// 	for (let client of this.clients) {
+	// 		if (this.clientId == client.id) {
+	// 			this.payment.clientName = client.name;
+	// 			this.payment.clientContactName = client.contactPersonName;
+	// 			this.payment.clientPhoneNumber = client.contactPersonPhoneNumber;
+	// 			this.payment.amountPending -= this.payment.amountPaid;
+	// 			break;
+	// 		}
+	// 	}
+	// 	const payment = Object.assign({}, this.payment);
+	// 	return payment;
+	// }
 
 	getInvoiceObj(): Invoice {
 		this.invoice = new Invoice(

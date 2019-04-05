@@ -18,15 +18,18 @@ export class PaymentService {
 	}
 
 	getPayments(): Observable<Payment[]> {
-		return (this.payments = this.paymentCollection.snapshotChanges().pipe(
-			map((actions) =>
-				actions.map((a) => {
-					const data = a.payload.doc.data() as Payment;
-					data.id = a.payload.doc.id;
-					return data;
-				})
-			)
-		));
+		// return (this.payments = this.paymentCollection.snapshotChanges().pipe(
+		// 	map((actions) =>
+		// 		actions.map((a) => {
+		// 			const data = a.payload.doc.data() as Payment;
+		// 			data.id = a.payload.doc.id;
+		// 			return data;
+		// 		})
+		// 	)
+		// ));
+
+		this.paymentCollection = this.afs.collection('payments', (ref) => ref.orderBy('creationDate'));
+		return (this.payments = this.paymentCollection.valueChanges());
 	}
 
 	getPaymentById(id: string): Observable<Payment> {
@@ -34,12 +37,13 @@ export class PaymentService {
 		return this.paymentDocument.valueChanges();
 	}
 
-	setPayment(payment: Payment) {
+	setPayment(payment: Payment): string {
 		const id = this.afs.createId();
 		payment.id = id;
 		payment.creationDate = new Date();
 		payment.modificationDate = new Date();
 		this.paymentCollection.doc(id).set(payment);
+		return id;
 	}
 
 	deletePayment(payment: Payment) {

@@ -4,12 +4,11 @@ import { Location } from '@angular/common';
 import { Payment } from 'src/app/core/model/payment.model';
 import { PaymentService } from 'src/app/core/service/payment.service';
 import { ConfirmationService, Message, MessageService } from 'primeng/api';
-import { ClientService } from 'src/app/core/service/client.service';
-import { Client } from 'src/app/core/model/client.model';
+import { VendorService } from 'src/app/core/service/vendor.service';
+import { Vendor } from 'src/app/core/model/vendor.model';
 import { InvoiceService } from 'src/app/core/service/invoice.service';
 import { Invoice } from 'src/app/core/model/invoice.model';
-
-const confirmMsg = 'Do you want to delete this payment?';
+import { Bill } from 'src/app/core/model/bill.model';
 
 @Component({
 	selector: 'app-new-payment',
@@ -23,14 +22,16 @@ export class NewPaymentComponent implements OnInit {
 	tableHeaders: any[];
 	msgs: Message[] = [];
 	payment: Payment;
-	clients: Client[];
-	client: Client;
-	invoices: Invoice[];
+	vendors: Vendor[];
+	vendor: Vendor;
+	bills: Bill[];
 	amountBalance: number = 0;
 	paymentSystems: string[] = [ 'Cash', 'Credit', 'Cheque', 'Bank Transfer' ];
 
+	isManualPayment: boolean = true;
+
 	paymentInputForm = this.fb.group({
-		clientId: [ '', Validators.required ],
+		vendorId: [ '', Validators.required ],
 		amountPaid: [ '', Validators.required ],
 		amountPending: [ '' ],
 		paymentDate: [ '', Validators.required ],
@@ -40,14 +41,13 @@ export class NewPaymentComponent implements OnInit {
 
 	constructor(
 		private location: Location,
-		private _clientService: ClientService,
+		private _vendorService: VendorService,
 		private _paymentService: PaymentService,
-		private _invoiceService: InvoiceService,
 		private fb: FormBuilder
 	) {}
 
 	ngOnInit() {
-		this.populateClientDropDown();
+		this.populateVendorDropDown();
 
 		const date = new Date();
 		let currentDate = date.toISOString().substring(0, 10);
@@ -55,10 +55,19 @@ export class NewPaymentComponent implements OnInit {
 		this.paymentInputForm.patchValue({
 			paymentDate: currentDate
 		});
+
+		this.tableHeaders = [
+			{ field: 'vendorName', header: 'Vendor Name' },
+			{ field: 'contactPerson', header: 'Contact Person' },
+			{ field: 'phoneNumber', header: 'Phone Number' },
+			{ field: 'amountPaid', header: 'Amount Paid' },
+			{ field: 'PaymentDate', header: 'Payment Date' },
+			{ field: 'PaymentType', header: 'Payment Type' }
+		];
 	}
 
-	get clientId() {
-		return this.paymentInputForm.get('clientId').value;
+	get vendorId() {
+		return this.paymentInputForm.get('vendorId').value;
 	}
 
 	get amountPaid() {
@@ -81,27 +90,23 @@ export class NewPaymentComponent implements OnInit {
 		this.location.back();
 	}
 
-	deletePayment(payment: Payment) {
-		if (confirm(confirmMsg)) {
-			this._paymentService.deletePayment(payment);
-		}
-	}
-
 	getPaymentObj(): Payment {
 		this.payment = new Payment(
-			this.paymentInputForm.get('clientId').value,
+			this.paymentInputForm.get('vendorId').value,
 			this.paymentInputForm.get('amountPaid').value,
-			this.paymentInputForm.get('paymentDate').value
+			this.paymentInputForm.get('paymentDate').value,
+			!this.isManualPayment,
+			this.isManualPayment
 		);
 		this.payment.paymentMethod = this.paymentInputForm.get('paymentMethod').value;
 		this.payment.paymentRefNo = this.paymentInputForm.get('paymentRefNo').value;
-		this.payment.amountPending = this.paymentInputForm.get('amountPending').value - this.payment.amountPaid;
+		this.payment.manualPaymentType = true;
 
-		for (let client of this.clients) {
-			if (this.clientId == client.id) {
-				this.payment.clientName = client.name;
-				this.payment.clientContactName = client.contactPersonName;
-				this.payment.clientPhoneNumber = client.contactPersonPhoneNumber;
+		for (let vendor of this.vendors) {
+			if (this.vendorId == vendor.id) {
+				this.payment.vendorName = vendor.name;
+				this.payment.vendorContactName = vendor.contactPersonName;
+				this.payment.vendorPhoneNumber = vendor.contactPersonPhoneNumber;
 				break;
 			}
 		}
@@ -109,20 +114,30 @@ export class NewPaymentComponent implements OnInit {
 		return payment;
 	}
 
-	populateClientDropDown() {
-		this._clientService.getClients().subscribe((response) => {
-			this.clients = response;
+	populateVendorDropDown() {
+		this._vendorService.getVendors().subscribe((response) => {
+			this.vendors = response;
 		});
 	}
 
-	fetchClientBalance(event: any) {
-		let clientId = event.target.value;
+	fetchVendor(event: any) {
+		let vendorId = event.target.value;
 		this.amountBalance = 0;
+
+		for (let vendor of this.vendors) {
+			if (vendorId == vendor.id) {
+				this.vendor = vendor;
+				console.log(vendor);
+				this.paymentInputForm.patchValue({
+					amountPending: vendor.amountBalance.toFixed(2)
+				});
+			}
+		}
 
 		this._paymentService.getPayments().subscribe((response) => {
 			for (let payment of response) {
-				if (clientId == payment.clientId) {
-					this.paymentInputForm.get('amountPending').setValue(payment.amountPending.toFixed(2));
+				if (this.vendor.id == payment.vendorId) {
+					this.payments.push(payment);
 				}
 			}
 		});
@@ -130,6 +145,18 @@ export class NewPaymentComponent implements OnInit {
 
 	savePayment() {
 		this._paymentService.setPayment(this.getPaymentObj());
+		this.vendor.amountBalance = this.vendor.amountBalance - this.payment.amountPaid;
+		this._vendorService.updateVendor(this.vendor);
 		this.closeClicked();
+	}
+
+	getPaymentType(payment): string {
+		if (payment.billPaymentType == true) {
+			return 'Bill Payment';
+		} else if (payment.manualPaymentType == true) {
+			return 'Manual Payment';
+		} else {
+			return 'Invalid Payment';
+		}
 	}
 }

@@ -1,7 +1,10 @@
+import { Payment } from './payment.model';
+
 export class Vendor {
 	id: string;
 	creationDate: Date;
 	modificationDate: Date;
+	amountBalance: number = 0;
 
 	constructor(
 		public name: string,

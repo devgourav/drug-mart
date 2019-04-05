@@ -26,6 +26,9 @@ export class BillItemModalComponent implements OnInit {
 	taxMap: Map<string, number>;
 	offers: Offer[] = [];
 
+	stateTaxes: Tax[] = [];
+	countryTaxes: Tax[] = [];
+
 	billItemForm = this.fb.group({
 		itemName: new FormControl(''),
 		itemId: [ '', Validators.required ],
@@ -77,7 +80,7 @@ export class BillItemModalComponent implements OnInit {
 
 	constructor(
 		private modalService: NgbModal,
-		private activeModal: NgbActiveModal,
+		public activeModal: NgbActiveModal,
 		private _itemService: ItemService,
 		private _taxService: TaxService,
 		private fb: FormBuilder,
@@ -103,9 +106,23 @@ export class BillItemModalComponent implements OnInit {
 	}
 
 	getBillItemObj(): BillItem {
+		let stateTaxRate = 0;
+		let countryTaxRate = 0;
+		for (let tax of this.stateTaxes) {
+			if (this.billItemForm.get('stateTax').value == tax.id) {
+				stateTaxRate = tax.rate;
+			}
+		}
+
+		for (let tax of this.countryTaxes) {
+			if (this.billItemForm.get('countryTax').value == tax.id) {
+				countryTaxRate = tax.rate;
+			}
+		}
+
 		this.taxMap = new Map();
-		this.taxMap.set('stateTax', +this.billItemForm.get('stateTax').value);
-		this.taxMap.set('countryTax', +this.billItemForm.get('countryTax').value);
+		this.taxMap.set('stateTax', +stateTaxRate);
+		this.taxMap.set('countryTax', +countryTaxRate);
 
 		const taxMap = this.convertMapToObject(this.taxMap);
 
@@ -162,6 +179,8 @@ export class BillItemModalComponent implements OnInit {
 				this.item = item;
 			}
 		}
+
+		console.log('stateTax', this.item.stateTaxId);
 		this.billItemForm.patchValue({
 			itemName: this.item.name,
 			itemId: this.item.id,
@@ -173,13 +192,22 @@ export class BillItemModalComponent implements OnInit {
 			expiryDate: this.item.expiryDate,
 			rate: this.item.saleCost,
 			discount: this.item.saleDiscount,
-			offer: this.item.saleOffers
+			offer: this.item.saleOffers,
+			stateTax: this.item.stateTaxId,
+			countryTax: this.item.countryTaxId
 		});
 	}
 
 	fetchTaxDetails() {
 		this._taxService.getTaxes().subscribe((response) => {
 			this.taxes = response;
+			for (let tax of response) {
+				if (tax.isStateTax) {
+					this.stateTaxes.push(tax);
+				} else {
+					this.countryTaxes.push(tax);
+				}
+			}
 		});
 	}
 

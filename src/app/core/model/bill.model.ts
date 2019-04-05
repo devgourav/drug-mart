@@ -2,7 +2,7 @@ import { BillItem } from './billItem.model';
 
 export class Bill {
 	id: string;
-	billId: string;
+	billNumber: string;
 	vendorName: string;
 	totalTax: number;
 	totalDiscount: number;
@@ -12,6 +12,7 @@ export class Bill {
 	paymentMethod: string;
 	orderNote: string;
 	paymentRef: string;
+	paymentId: string;
 
 	constructor(
 		public vendorId: string,

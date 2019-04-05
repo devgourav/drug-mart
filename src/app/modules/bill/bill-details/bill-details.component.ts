@@ -6,6 +6,10 @@ import { Amount } from 'src/app/core/model/amount.model';
 import { BillItem } from 'src/app/core/model/billItem.model';
 import { Subscription } from 'rxjs';
 import { ConfirmationService, Message, MessageService } from 'primeng/api';
+import { PaymentService } from 'src/app/core/service/payment.service';
+import { VendorService } from 'src/app/core/service/vendor.service';
+import { Payment } from 'src/app/core/model/payment.model';
+import { Vendor } from 'src/app/core/model/vendor.model';
 
 const confirmMsg = 'Do you want to delete this Bill?';
 
@@ -20,6 +24,8 @@ export class BillDetailsComponent implements OnInit {
 	private subscriptions: Array<Subscription> = [];
 	tableHeaders: any[];
 	msgs: Message[] = [];
+	payment: Payment;
+	vendor: Vendor;
 
 	taxRate: number;
 	discountRate: number;
@@ -32,7 +38,9 @@ export class BillDetailsComponent implements OnInit {
 		private _billService: BillService,
 		private router: Router,
 		private confirmationService: ConfirmationService,
-		private messageService: MessageService
+		private messageService: MessageService,
+		private _paymentService: PaymentService,
+		private _vendorService: VendorService
 	) {}
 
 	// billDetailsTableHeaders = [
@@ -51,7 +59,7 @@ export class BillDetailsComponent implements OnInit {
 		this.getBills();
 
 		this.tableHeaders = [
-			{ field: 'billId', header: 'Bill Id' },
+			{ field: 'billNumber', header: 'Bill No.' },
 			{ field: 'billedDate', header: 'Billed Date' },
 			{ field: 'vendorName', header: 'Vendor' },
 			// { field: '', header: 'Sub Amount' },
@@ -68,6 +76,16 @@ export class BillDetailsComponent implements OnInit {
 	}
 
 	deleteBill(bill: Bill) {
+		this._paymentService.getPaymentById(bill.paymentId).subscribe((paymentResponse) => {
+			this.payment = paymentResponse;
+			this._vendorService.getVendorById(this.payment.vendorId).subscribe((vendorResponse) => {
+				vendorResponse.amountBalance =
+					vendorResponse.amountBalance - bill.totalAmount + this.payment.amountPaid;
+				this.vendor = vendorResponse;
+				console.log('response.amountBalance', vendorResponse.amountBalance);
+			});
+		});
+
 		this.confirmationService.confirm({
 			message: 'Do you want to delete this item?',
 			header: 'Delete Confirmation',
@@ -78,7 +96,9 @@ export class BillDetailsComponent implements OnInit {
 			accept: () => {
 				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Bill Deleted' } ];
 				this._billService.deleteBill(bill);
-				this.messageService.add({ severity: 'success', summary: 'Bill Deleted', detail: 'Bill Deleted' });
+				this._paymentService.deletePayment(this.payment);
+				this._vendorService.updateVendor(this.vendor);
+				this.messageService.add({ severity: 'success', summary: '', detail: 'Bill Deleted' });
 			}
 		});
 	}

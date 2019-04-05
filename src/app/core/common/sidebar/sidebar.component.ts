@@ -19,6 +19,7 @@ export class SidebarComponent implements OnInit {
 		{ name: 'Reports', svgName: 'list-1.svg' },
 		{ name: 'Users', svgName: 'user-1.svg' },
 		{ name: 'Payments', svgName: 'money.svg' },
+		{ name: 'Receipts', svgName: 'money.svg' },
 		{ name: 'Settings', svgName: 'gear.svg' }
 	];
 

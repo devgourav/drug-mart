@@ -10,13 +10,13 @@
           <div class="col">
 
             <div class="form-group row"
-              [ngClass]="{'has-error':clientId.errors && (clientId.touched || clientId.dirty)}">
-              <label class="col-sm-3 col-form-label" for="clientName">Client Name</label>
+              [ngClass]="{'has-error':vendorId.errors && (vendorId.touched || vendorId.dirty)}">
+              <label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
               <div class="col-sm-5">
-                <select name="clientId" id="clientId" class="form-control" 
-                formControlName="clientId" (change)="fetchClientBalance($event)">
-                  <option value="" [selected]="true">Select a Client</option>
-                  <option *ngFor="let client of clients" value="{{ client.id }}">{{ client.name }}
+                <select name="vendorId" id="vendorId" class="form-control" 
+                formControlName="vendorId" (change)="fetchVendor($event)">
+                  <option value="" [selected]="true">Select a Vendor</option>
+                  <option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}
                   </option>
                 </select>
               </div>
@@ -76,12 +76,12 @@
       </form>
     </div>
 
-<!-- 
+
     <div class="content-wrapper">
       <div class="table-wrapper">
         <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
-        <p-table #dt [columns]="tableHeaders" [value]="paymentes">
+        <p-table #dt [columns]="tableHeaders" [value]="payments">
 
           <ng-template pTemplate="caption">
             <div style="text-align: right">
@@ -102,11 +102,14 @@
           </ng-template>
           <ng-template pTemplate="body" let-payment>
             <tr>
-              <td>{{ payment?.name }}</td>
-              <td>{{ payment?.rate }}</td>
+              <td>{{ payment?.vendorName }}</td>
+              <td>{{ payment?.vendorContactName }}</td>
+              <td>{{ payment?.vendorPhoneNumber}}</td>
+              <td>{{ payment?.amountPaid}}</td>
+              <td>{{ payment?.paymentDate}}</td>
               <td>{{ getPaymentType(payment) }}</td>
               <td data-html2canvas-ignore>
-                <button type="button" class="btn button-cancel" (click)="deletePayment(payment)">Delete</button>
+                <button type="button" class="btn button-primary">View</button>
               </td>
             </tr>
           </ng-template>
@@ -115,7 +118,7 @@
 
 
       </div>
-    </div> -->
+    </div>
 
     <div class="action-buttons">
         <button type="button" class="btn button-save" (click)="savePayment()">Save</button>

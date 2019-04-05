@@ -2,12 +2,17 @@ export class Payment {
 	id: string;
 	creationDate: Date;
 	modificationDate: Date;
-	clientName: string;
-	clientContactName: string;
-	clientPhoneNumber: string;
+	vendorName: string;
+	vendorContactName: string;
+	vendorPhoneNumber: string;
 	paymentRefNo: string;
-	amountPending: number;
 	paymentMethod: string;
 
-	constructor(public clientId: string, public amountPaid: number, public paymentDate: Date) {}
+	constructor(
+		public vendorId: string,
+		public amountPaid: number,
+		public paymentDate: Date,
+		public billPaymentType: boolean,
+		public manualPaymentType: boolean
+	) {}
 }

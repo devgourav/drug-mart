@@ -36,10 +36,9 @@ export class VendorDetailsComponent implements OnInit {
 		this.tableHeaders = [
 			{ field: 'name', header: 'Vendor Name' },
 			{ field: 'contactPersonName', header: 'Contact Name' },
-			{ field: 'address.streetAddress', header: 'Address' },
-			{ field: 'emailId', header: 'Email' },
+			{ field: 'contactPersonPhoneNumber', header: 'Contact Phone' },
 			{ field: 'phoneNumber', header: 'Vendor Phone' },
-			{ field: 'contactPersonPhoneNumber', header: 'Contact Phone' }
+			{ field: 'amountBalance', header: 'Amount Balance' }
 		];
 	}
 
