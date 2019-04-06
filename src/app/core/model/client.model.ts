@@ -2,6 +2,7 @@ export class Client {
 	id: string;
 	creationDate: Date;
 	modificationDate: Date;
+	amountBalance: number = 0;
 
 	constructor(
 		public name: string,

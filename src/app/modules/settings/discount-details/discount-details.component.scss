@@ -1,11 +1,10 @@
 @import "../../../../assets/styles/_colors.scss";
 @import "../../../../assets/styles/_button.scss";
-@import "../../../../assets/styles/_title-header.scss";
 @import "../../../../assets/styles/common.scss";
 
-#tax-details-wrapper{
+#tax-details-wrapper {
 }
-.input-form{
+.input-form {
 	padding: 5px;
 	padding-left: 40px;
 	text-align: left;
@@ -13,10 +12,10 @@
 	font-weight: bold;
 }
 
-.table{
+.table {
 	margin: 0 auto !important;
-	th,td{
+	th,
+	td {
 		text-align: center;
 	}
-
 }

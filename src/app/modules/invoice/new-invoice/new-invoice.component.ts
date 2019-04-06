@@ -12,10 +12,13 @@ import { Client } from 'src/app/core/model/client.model';
 import { OfferService } from 'src/app/core/service/offer.service';
 import { Offer } from 'src/app/core/model/offer.model';
 import { BillItem } from 'src/app/core/model/billItem.model';
-import { InvoiceItemModalComponent } from '../invoice-item-modal/invoice-item-modal.component';
 import { Observable, of } from 'rxjs';
 import { PaymentService } from 'src/app/core/service/payment.service';
 import { Payment } from 'src/app/core/model/payment.model';
+import { InvoiceItemModalComponent } from '../invoiceItem-modal/invoiceItem-modal.component';
+import { Receipt } from 'src/app/core/model/receipt.model';
+import { ReceiptService } from 'src/app/core/service/receipt.service';
+import { ItemService } from 'src/app/core/service/item.service';
 
 // TODO: Add A save/Update prompt
 
@@ -28,12 +31,17 @@ export class NewInvoiceComponent implements OnInit {
 	invoice: Invoice;
 	invoiceItems: InvoiceItem[] = [];
 	invoiceItem: InvoiceItem;
-	payment: Payment;
 	clients: Client[];
+	client: Client;
+	billMap: Map<string, number> = new Map();
+	currDate: Date = new Date();
+	receipt: Receipt;
+	itemMap: Map<string, number> = new Map();
 
 	invoiceId: string = '';
-	clientName: string = '';
 	clientId: string = '';
+	receiptId: string = '';
+
 	paymentSystems: string[] = [ 'Cash', 'Credit', 'Cheque', 'Bank Transfer' ];
 
 	tableHeaders: any[];
@@ -46,6 +54,7 @@ export class NewInvoiceComponent implements OnInit {
 	taxRate: number;
 	discountRate: number;
 	offerRate: number;
+	isInvoicePayment: boolean = true;
 
 	invoiceAmount: Amount = new Amount();
 	constructor(
@@ -53,10 +62,11 @@ export class NewInvoiceComponent implements OnInit {
 		private modalService: NgbModal,
 		private _invoiceService: InvoiceService,
 		private _clientService: ClientService,
+		private _itemService: ItemService,
 		private route: ActivatedRoute,
 		private router: Router,
 		private fb: FormBuilder,
-		private _paymentService: PaymentService
+		private _receiptService: ReceiptService
 	) {}
 
 	invoiceInputForm = this.fb.group({
@@ -248,51 +258,60 @@ export class NewInvoiceComponent implements OnInit {
 
 	fetchClientName(event: any) {
 		this.clientId = event.target.value;
-		this.setClientName(this.clientId);
+		this.setClientDetails(this.clientId);
 	}
 
-	setClientName(clientId: string): string {
+	setClientDetails(clientId: string): Client {
 		for (let client of this.clients) {
 			if (clientId == client.id) {
-				this.clientName = client.name;
+				this.client = client;
 			}
 		}
-		return this.clientName;
+		return this.client;
 	}
 
 	setInvoice() {
+		this.receiptId = this._receiptService.setReceipt(this.getReceiptObj());
 		this._invoiceService.setInvoice(this.getInvoiceObj());
-		// console.log(this.getPaymentObj());
-		// this._paymentService.setPayment(this.getPaymentObj());
+		this._itemService.batchItemQuantityUpdate(this.itemMap);
+		this.updateAccountBalance();
 		this.closeClicked();
 	}
 
 	updateInvoice() {
 		this._invoiceService.updateInvoice(this.getInvoiceObj());
-		// this._paymentService.updatePayment(this.getPaymentObj());
+		this._receiptService.updateReceipt(this.getReceiptObj());
 		this.closeClicked();
 	}
-	// getPaymentObj(): Payment {
-	// 	this.payment = new Payment(
-	// 		this.invoiceInputForm.get('clientId').value,
-	// 		this.invoiceInputForm.get('amountPaid').value,
-	// 		this.invoiceInputForm.get('invoicedDate').value
-	// 	);
-	// 	this.payment.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
-	// 	this.payment.paymentRefNo = this.invoiceInputForm.get('paymentRef').value;
-	// 	this.payment.amountPending = +this.invoiceAmount.totalAmount;
-	// 	for (let client of this.clients) {
-	// 		if (this.clientId == client.id) {
-	// 			this.payment.clientName = client.name;
-	// 			this.payment.clientContactName = client.contactPersonName;
-	// 			this.payment.clientPhoneNumber = client.contactPersonPhoneNumber;
-	// 			this.payment.amountPending -= this.payment.amountPaid;
-	// 			break;
-	// 		}
-	// 	}
-	// 	const payment = Object.assign({}, this.payment);
-	// 	return payment;
-	// }
+
+	updateAccountBalance() {
+		console.log();
+		this.client.amountBalance += this.invoice.totalAmount - this.invoice.amountPaid;
+		this._clientService.updateClient(this.client);
+	}
+
+	getReceiptObj(): Receipt {
+		this.receipt = new Receipt(
+			this.invoiceInputForm.get('clientId').value,
+			this.invoiceInputForm.get('amountPaid').value,
+			this.invoiceInputForm.get('invoicedDate').value,
+			this.isInvoicePayment,
+			!this.isInvoicePayment
+		);
+		this.receipt.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
+		this.receipt.paymentRefNo = this.invoiceInputForm.get('paymentRef').value;
+		this.receipt.invoiceReceiptType = true;
+		for (let client of this.clients) {
+			if (this.clientId == client.id) {
+				this.receipt.clientName = client.name;
+				this.receipt.clientContactName = client.contactPersonName;
+				this.receipt.clientPhoneNumber = client.contactPersonPhoneNumber;
+				break;
+			}
+		}
+		const receipt = Object.assign({}, this.receipt);
+		return receipt;
+	}
 
 	getInvoiceObj(): Invoice {
 		this.invoice = new Invoice(
@@ -306,6 +325,7 @@ export class NewInvoiceComponent implements OnInit {
 		this.invoice.paymentRef = this.invoiceInputForm.get('paymentRef').value;
 		this.invoice.orderNote = this.invoiceInputForm.get('orderNote').value;
 		this.invoice.invoiceNumber = this.invoiceInputForm.get('invoiceNumber').value;
+		this.invoice.receiptId = this.receiptId;
 
 		if (this.invoiceAmount != null) {
 			this.invoice.totalAmount = +this.invoiceAmount.totalAmount;
@@ -313,7 +333,7 @@ export class NewInvoiceComponent implements OnInit {
 			this.invoice.totalDiscount = +this.invoiceAmount.discountAmount;
 		}
 
-		this.invoice.clientName = this.setClientName(this.invoiceInputForm.get('clientId').value);
+		this.invoice.clientName = this.setClientDetails(this.invoiceInputForm.get('clientId').value).name;
 		this.invoice.id = this.invoiceId;
 		const invoice = Object.assign({}, this.invoice);
 		return invoice;

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PaymentRoutingModule } from './payment-routing.module';
-import { PaymentDetailsComponent } from './payment-details/payment-details.component';
-import { NewPaymentComponent } from './new-payment/new-payment.component';
+import { ReceiptRoutingModule } from './receipt-routing.module';
+import { ReceiptDetailsComponent } from './receipt-details/receipt-details.component';
+import { NewReceiptComponent } from './new-receipt/new-receipt.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/core/shared/shared.module';
@@ -14,13 +14,13 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
-import { PaymentPrintComponent } from './payment-print/payment-print.component';
+import { ReceiptPrintComponent } from './receipt-print/receipt-print.component';
 
 @NgModule({
-	declarations: [ PaymentDetailsComponent, NewPaymentComponent, PaymentPrintComponent ],
+	declarations: [ ReceiptDetailsComponent, NewReceiptComponent, ReceiptPrintComponent ],
 	imports: [
 		CommonModule,
-		PaymentRoutingModule,
+		ReceiptRoutingModule,
 		FormsModule,
 		ReactiveFormsModule,
 		TableModule,
@@ -33,4 +33,4 @@ import { PaymentPrintComponent } from './payment-print/payment-print.component';
 		MessageModule
 	]
 })
-export class PaymentModule {}
+export class ReceiptModule {}

@@ -18,16 +18,6 @@ export class PaymentService {
 	}
 
 	getPayments(): Observable<Payment[]> {
-		// return (this.payments = this.paymentCollection.snapshotChanges().pipe(
-		// 	map((actions) =>
-		// 		actions.map((a) => {
-		// 			const data = a.payload.doc.data() as Payment;
-		// 			data.id = a.payload.doc.id;
-		// 			return data;
-		// 		})
-		// 	)
-		// ));
-
 		this.paymentCollection = this.afs.collection('payments', (ref) => ref.orderBy('creationDate'));
 		return (this.payments = this.paymentCollection.valueChanges());
 	}
@@ -56,16 +46,4 @@ export class PaymentService {
 		this.paymentDocument = this.afs.doc(`payments/${payment.id}`);
 		this.paymentDocument.update(payment);
 	}
-
-	// private handleError(error: HttpErrorResponse) {
-	//   if (error.error instanceof ErrorEvent) {
-	//     console.error('An error occurred:', error.error.message);
-	//   } else {
-	//     console.error(
-	//       `Backend returned code ${error.status}, ` +
-	//       `body was: ${error.error}`);
-	//   }
-	//   return throwError(
-	//     'Something bad happened; please try again later.');
-	// };
 }

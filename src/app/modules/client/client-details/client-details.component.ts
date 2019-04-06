@@ -26,26 +26,15 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
 		private messageService: MessageService
 	) {}
 
-	clientDetailsTableHeaders = [
-		'Client Name',
-		'Contact Name',
-		'Address',
-		'Email',
-		'Client Phone',
-		'Contact Phone',
-		'Actions'
-	];
-
 	ngOnInit() {
 		this.getClients();
 
 		this.tableHeaders = [
 			{ field: 'name', header: 'Client Name' },
-			{ field: 'contactPersonName', header: 'Contact Name' },
-			{ field: '', header: 'Address' },
-			{ field: '', header: 'Email' },
+			{ field: 'contactPersonName', header: 'Client Name' },
+			{ field: '', header: 'Contact Phone' },
 			{ field: '', header: 'Client Phone' },
-			{ field: '', header: 'Contact Phone' }
+			{ field: 'amountBalance', header: 'Amount Balance' }
 		];
 	}
 
@@ -55,7 +44,6 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
 				this.clients = response;
 			})
 		);
-		console.log('ClientList:' + this.clients);
 	}
 
 	deleteClient(client: Client) {

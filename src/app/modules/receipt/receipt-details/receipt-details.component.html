@@ -1,9 +1,9 @@
-<div id="payment-details-wrapper">
+<div id="receipt-details-wrapper">
 
   <div class="title-header">
-    <span class="header-text">Payment Details</span>
+    <span class="header-text">Receipt Details</span>
     <div class="action-area">
-      <a routerLink="New Payment"><button class="btn button-save">New Payment</button></a>
+      <a routerLink="New Receipt"><button class="btn button-save">New Receipt</button></a>
       <button class="btn button-filter">Export</button>
     </div>
     <p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
@@ -17,11 +17,11 @@
       <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 
-      <p-table #dt [columns]="tableHeaders" [value]="payments">
+      <p-table #dt [columns]="tableHeaders" [value]="receipts">
         <ng-template pTemplate="caption">
           <div style="text-align: right">
             <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-            <input type="text" pInputText size="50" placeholder="Search Payments"
+            <input type="text" pInputText size="50" placeholder="Search Receipts"
               (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
           </div>
         </ng-template>
@@ -35,22 +35,19 @@
             <th>Actions</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-payment>
+        <ng-template pTemplate="body" let-receipt>
           <tr>
-            <td>{{ payment?.vendorName }}</td>
-            <td>{{ payment?.vendorContactName }}</td>
-            <td>{{ payment?.vendorPhoneNumber }}</td>
-            <td class="currencyDisplay">{{ payment?.amountPaid }}</td>
-            <td>{{ payment?.paymentDate }}</td>
-            <td>{{ getPaymentType(payment) }}</td>
+            <td>{{ receipt?.clientName }}</td>
+            <td>{{ receipt?.clientContactName }}</td>
+            <td>{{ receipt?.clientPhoneNumber }}</td>
+            <td class="currencyDisplay">{{ receipt?.amountPaid }}</td>
+            <td>{{ receipt?.receiptDate }}</td>
+            <td>{{ getReceiptType(receipt) }}</td>
             <td data-html2canvas-ignore>
-              <!-- <button type="button" class="btn button-primary" (click)="editPayment(payment.id)"><i
-                  class="pi pi-eye"></i></button> -->
-              <button type="button" class="btn button-cancel" (click)="printPayment(payment.id)"><i
-                    class="pi pi-print"></i></button>
-              <button type="button" class="btn button-cancel" (click)="deletePayment(payment)"><i
+              <button type="button" class="btn button-primary" (click)="editReceipt(receipt.id)"><i
+                  class="pi pi-eye"></i></button>
+              <button type="button" class="btn button-cancel" (click)="deleteReceipt(receipt)"><i
                   class="pi pi-trash"></i></button>
-
             </td>
           </tr>
 

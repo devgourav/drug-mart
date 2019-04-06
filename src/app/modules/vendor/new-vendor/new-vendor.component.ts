@@ -25,6 +25,7 @@ export class NewVendorComponent implements OnInit {
 		emailId: [ '', Validators.email ],
 		website: new FormControl(''),
 		GSTIN: new FormControl(''),
+		amountBalance: new FormControl(''),
 		contactPersonName: [ '', Validators.required ],
 		contactPersonPhoneNumber: [ '', Validators.required ],
 		contactPersonEmailId: [ '', Validators.email ],
@@ -105,6 +106,7 @@ export class NewVendorComponent implements OnInit {
 					this.addressMap,
 					response.notes
 				);
+				this.vendor.amountBalance = +response.amountBalance.toFixed(2);
 				this.populateVendorData();
 			})
 		);
@@ -132,6 +134,7 @@ export class NewVendorComponent implements OnInit {
 			emailId: this.vendor.emailId,
 			website: this.vendor.website,
 			GSTIN: this.vendor.GSTIN,
+			amountBalance: this.vendor.amountBalance,
 			contactPersonName: this.vendor.contactPersonName,
 			contactPersonPhoneNumber: this.vendor.contactPersonPhoneNumber,
 			contactPersonEmailId: this.vendor.contactPersonEmailId,

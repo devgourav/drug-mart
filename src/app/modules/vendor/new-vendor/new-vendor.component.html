@@ -65,6 +65,15 @@
 							</div>
 						</div>
 
+
+						<div class="form-group row" *ngIf="vendorId">
+							<label class="col-sm-2 col-form-label" for="amountBalance">Amount Balance</label>
+							<div class="col-sm-5">
+								<input type="text" id="amountBalance" class="form-control"
+									formControlName="amountBalance" disabled>
+							</div>
+						</div>
+
 						<div class="form-group row">
 							<label class="col-sm-2 col-form-label" for="vendorContactPerson">Contact Person</label>
 							<div class="col-sm-5">

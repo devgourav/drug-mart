@@ -29,6 +29,9 @@ import { PaymentModule } from './modules/payment/payment.module';
 import { UserModule } from './modules/user/user.module';
 import { UserService } from './core/service/user.service';
 import { PaymentService } from './core/service/payment.service';
+import { ReceiptService } from './core/service/receipt.service';
+import { ReceiptModule } from './modules/receipt/receipt.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
 	declarations: [ AppComponent, SidebarComponent ],
@@ -43,6 +46,7 @@ import { PaymentService } from './core/service/payment.service';
 		SettingsModule,
 		DashboardModule,
 		PaymentModule,
+		ReceiptModule,
 		UserModule,
 		NgbModule,
 		FormsModule,
@@ -52,6 +56,7 @@ import { PaymentService } from './core/service/payment.service';
 		AngularFireModule.initializeApp(environment.firebase),
 		AngularFirestoreModule.enablePersistence(),
 		AngularFireAuthModule,
+		BrowserAnimationsModule,
 		SharedModule
 	],
 	providers: [
@@ -62,7 +67,8 @@ import { PaymentService } from './core/service/payment.service';
 		AuthService,
 		ClientService,
 		UserService,
-		PaymentService
+		PaymentService,
+		ReceiptService
 	],
 	bootstrap: [ AppComponent ],
 	exports: [ SidebarComponent ]

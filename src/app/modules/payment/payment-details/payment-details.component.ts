@@ -85,8 +85,12 @@ export class PaymentDetailsComponent implements OnInit {
 		}
 	}
 
-	editPayment(paymentId: string) {
-		this.router.navigate([ 'Payments/New Payment', paymentId ]);
+	// editPayment(paymentId: string) {
+	// 	this.router.navigate([ 'Payments/New Payment', paymentId ]);
+	// }
+
+	printPayment(paymentId: string) {
+		this.router.navigate([ 'Payments/Print Payment', paymentId ]);
 	}
 
 	getPaymentType(payment): string {

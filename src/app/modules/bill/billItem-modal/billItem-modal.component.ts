@@ -42,7 +42,7 @@ export class BillItemModalComponent implements OnInit {
 		itemMRP: [ '', Validators.required ],
 		stateTax: new FormControl(''),
 		countryTax: new FormControl(''),
-		discount: [ '', [ Validators.required, Validators.max(100) ] ],
+		discount: [ '', [ Validators.max(100) ] ],
 		offer: new FormControl('')
 	});
 

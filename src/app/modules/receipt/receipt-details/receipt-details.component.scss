@@ -1,0 +1,19 @@
+@import "../../../../assets/styles/_colors.scss";
+@import "../../../../assets/styles/_button.scss";
+@import "../../../../assets/styles/common.scss";
+
+#item-details-wrapper {
+	.table-wrapper {
+		.currencyDisplay::before {
+			content: '\20B9'; //Ruppee symbol for CSS
+		}
+		.currencyDisplay::after {
+			content: '/-';
+		}
+	}
+
+	#action-buttons {
+		text-align: center;
+		margin: auto;
+	}
+}

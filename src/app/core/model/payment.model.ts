@@ -7,6 +7,7 @@ export class Payment {
 	vendorPhoneNumber: string;
 	paymentRefNo: string;
 	paymentMethod: string;
+	paymentNote: string;
 
 	constructor(
 		public vendorId: string,

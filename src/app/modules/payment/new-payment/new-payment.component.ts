@@ -36,7 +36,8 @@ export class NewPaymentComponent implements OnInit {
 		amountPending: [ '' ],
 		paymentDate: [ '', Validators.required ],
 		paymentMethod: [ '', Validators.required ],
-		paymentRefNo: [ '', Validators.required ]
+		paymentRefNo: [ '', Validators.required ],
+		paymentNote: [ '', Validators.required ]
 	});
 
 	constructor(
@@ -48,7 +49,6 @@ export class NewPaymentComponent implements OnInit {
 
 	ngOnInit() {
 		this.populateVendorDropDown();
-
 		const date = new Date();
 		let currentDate = date.toISOString().substring(0, 10);
 		console.log(currentDate);
@@ -61,8 +61,8 @@ export class NewPaymentComponent implements OnInit {
 			{ field: 'contactPerson', header: 'Contact Person' },
 			{ field: 'phoneNumber', header: 'Phone Number' },
 			{ field: 'amountPaid', header: 'Amount Paid' },
-			{ field: 'PaymentDate', header: 'Payment Date' },
-			{ field: 'PaymentType', header: 'Payment Type' }
+			{ field: 'paymentDate', header: 'Payment Date' },
+			{ field: 'paymentType', header: 'Payment Type' }
 		];
 	}
 
@@ -86,6 +86,10 @@ export class NewPaymentComponent implements OnInit {
 		return this.paymentInputForm.get('paymentRefNo').value;
 	}
 
+	get paymentNote() {
+		return this.paymentInputForm.get('paymentNote').value;
+	}
+
 	closeClicked() {
 		this.location.back();
 	}
@@ -101,6 +105,7 @@ export class NewPaymentComponent implements OnInit {
 		this.payment.paymentMethod = this.paymentInputForm.get('paymentMethod').value;
 		this.payment.paymentRefNo = this.paymentInputForm.get('paymentRefNo').value;
 		this.payment.manualPaymentType = true;
+		this.payment.paymentNote = this.paymentInputForm.get('paymentNote').value;
 
 		for (let vendor of this.vendors) {
 			if (this.vendorId == vendor.id) {
@@ -135,6 +140,7 @@ export class NewPaymentComponent implements OnInit {
 		}
 
 		this._paymentService.getPayments().subscribe((response) => {
+			this.payments = [];
 			for (let payment of response) {
 				if (this.vendor.id == payment.vendorId) {
 					this.payments.push(payment);
@@ -147,7 +153,6 @@ export class NewPaymentComponent implements OnInit {
 		this._paymentService.setPayment(this.getPaymentObj());
 		this.vendor.amountBalance = this.vendor.amountBalance - this.payment.amountPaid;
 		this._vendorService.updateVendor(this.vendor);
-		this.closeClicked();
 	}
 
 	getPaymentType(payment): string {

@@ -12,6 +12,24 @@
 </div>
 
 
+<!-- <div *ngIf="_authService.user | async as user; else login">
+		<div *ngIf="_authService.user | async as user">
+			<mat-sidenav-container>
+					<mat-sidenav opened mode="side" disableClose>
+							<app-sidebar></app-sidebar>
+					</mat-sidenav>
+
+					<mat-sidenav-content>
+						<router-outlet></router-outlet>
+					</mat-sidenav-content>
+
+				</mat-sidenav-container>
+		</div>
+	</div> -->
+
+
+
+
 <ng-template #login>
 	<div class="login-wrapper">
 		<div class="row login-content">

@@ -1,26 +1,34 @@
-<div id="new-payment-wrapper">
+<div id="new-receipt-wrapper">
   <div class="title-header">
-    <span class="header-text">Payment Details</span>
+    <span class="header-text">Receipt Details</span>
   </div>
 
     <div class="input-form">
-      <form [formGroup]="paymentInputForm">
+      <form [formGroup]="receiptInputForm">
 
         <div class="row">
           <div class="col">
 
             <div class="form-group row"
-              [ngClass]="{'has-error':vendorId.errors && (vendorId.touched || vendorId.dirty)}">
-              <label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
+              [ngClass]="{'has-error':clientId.errors && (clientId.touched || clientId.dirty)}">
+              <label class="col-sm-3 col-form-label" for="clientName">Client Name</label>
               <div class="col-sm-5">
-                <select name="vendorId" id="vendorId" class="form-control" 
-                formControlName="vendorId" (change)="fetchVendor($event)">
-                  <option value="" [selected]="true">Select a Vendor</option>
-                  <option *ngFor="let vendor of vendors" value="{{ vendor.id }}">{{ vendor.name }}
+                <select name="clientId" id="clientId" class="form-control" 
+                formControlName="clientId" (change)="fetchClient($event)">
+                  <option value="" [selected]="true">Select a Client</option>
+                  <option *ngFor="let client of clients" value="{{ client.id }}">{{ client.name }}
                   </option>
                 </select>
               </div>
             </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="paymentRefNo">Payment Ref No.</label>
+                <div class="col-sm-5">
+                  <input type="text" id="paymentRefNo" class="form-control"
+                    formControlName="paymentRefNo" disabled>
+                </div>
+              </div>
 
             <div class="form-group row">
                 <label class="col-sm-3 col-form-label" for="amountPending">Amount Pending</label>
@@ -38,12 +46,12 @@
                 </div>
               </div>
 
-
+`
             <div class="form-group row">
-                <label class="col-sm-3 col-form-label" for="paymentDate">Payment Date</label>
+                <label class="col-sm-3 col-form-label" for="receiptDate">Receipt Date</label>
                 <div class="col-sm-5">
-                  <input type="date" id="paymentDate" class="form-control"
-                    formControlName="paymentDate">
+                  <input type="date" id="receiptDate" class="form-control"
+                    formControlName="receiptDate">
                 </div>
               </div>
 
@@ -53,25 +61,16 @@
                   <div class="col-sm-5">
                     <select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod"
                       class="form-control">
-                      <option value="" [selected]="isSelected">Payment Method</option>
-                      <option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">
-                        {{paymentSystem}}</option>
+                      <option *ngFor="let receiptSystem of receiptSystems" value="{{receiptSystem}}">
+                        {{receiptSystem}}</option>
                     </select>
                   </div>
                 </div>
 
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="paymentRefNo">Payment Ref No.</label>
-                    <div class="col-sm-5">
-                      <input type="text" id="paymentRefNo" class="form-control"
-                        formControlName="paymentRefNo" appCurrency>
-                    </div>
-                  </div>
-
                   <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="paymentNote">Payment Note</label>
+                    <label class="col-sm-3 col-form-label" for="receiptNote">Receipt Note</label>
                     <div class="col-sm-5">
-                      <textarea class="form-control" formControlName="paymentNote" id="paymentNote"
+                      <textarea class="form-control" formControlName="receiptNote" id="receiptNote"
                         rows="3"></textarea>
                     </div>
                   </div>
@@ -80,7 +79,7 @@
         </div>
       </form>
       <div class="action-buttons">
-        <button type="button" class="btn button-save" (click)="savePayment()">Save</button>
+        <button type="button" class="btn button-save" (click)="saveReceipt()">Save</button>
         <button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
     </div>
     </div>
@@ -90,12 +89,12 @@
       <div class="table-wrapper">
         <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
-        <p-table #dt [columns]="tableHeaders" [value]="payments">
+        <p-table #dt [columns]="tableHeaders" [value]="receipts">
 
           <ng-template pTemplate="caption">
             <div style="text-align: right">
               <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-              <input type="text" pInputText size="50" placeholder="Search Paymentes"
+              <input type="text" pInputText size="50" placeholder="Search Receiptes"
                 (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
             </div>
           </ng-template>
@@ -109,14 +108,14 @@
               <th>Actions</th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-payment>
+          <ng-template pTemplate="body" let-receipt>
             <tr>
-              <td>{{ payment?.vendorName }}</td>
-              <td>{{ payment?.vendorContactName }}</td>
-              <td>{{ payment?.vendorPhoneNumber}}</td>
-              <td>{{ payment?.amountPaid}}</td>
-              <td>{{ payment?.paymentDate}}</td>
-              <td>{{ getPaymentType(payment) }}</td>
+              <td>{{ receipt?.clientName }}</td>
+              <td>{{ receipt?.clientContactName }}</td>
+              <td>{{ receipt?.clientPhoneNumber}}</td>
+              <td>{{ receipt?.amountPaid}}</td>
+              <td>{{ receipt?.receiptDate}}</td>
+              <td>{{ getReceiptType(receipt) }}</td>
               <td data-html2canvas-ignore>
                 <button type="button" class="btn button-primary"><i
                   class="pi pi-search"></i></button>

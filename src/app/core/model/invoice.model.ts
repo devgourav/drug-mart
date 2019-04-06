@@ -12,6 +12,7 @@ export class Invoice {
 	paymentMethod: string;
 	orderNote: string;
 	paymentRef: string;
+	receiptId: string;
 
 	constructor(
 		public clientId: string,

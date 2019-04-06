@@ -26,6 +26,7 @@ export class NewClientComponent implements OnInit {
 		emailId: [ '', Validators.email ],
 		website: new FormControl(''),
 		GSTIN: new FormControl(''),
+		amountBalance: new FormControl(''),
 		contactPersonName: [ '', Validators.required ],
 		contactPersonPhoneNumber: [ '', Validators.required ],
 		contactPersonEmailId: [ '', Validators.email ],
@@ -113,6 +114,7 @@ export class NewClientComponent implements OnInit {
 					this.addressMap,
 					response.notes
 				);
+				this.client.amountBalance = +response.amountBalance.toFixed(2);
 				this.populateClientData();
 			})
 		);
@@ -169,6 +171,7 @@ export class NewClientComponent implements OnInit {
 			emailId: this.client.emailId,
 			website: this.client.website,
 			GSTIN: this.client.GSTIN,
+			amountBalance: this.client.amountBalance,
 			contactPersonName: this.client.contactPersonName,
 			contactPersonPhoneNumber: this.client.contactPersonPhoneNumber,
 			contactPersonEmailId: this.client.contactPersonEmailId,

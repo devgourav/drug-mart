@@ -41,16 +41,6 @@ export class NewBillComponent implements OnInit {
 	vendorName: string = '';
 	currDate: Date = new Date();
 
-	billInputForm = this.fb.group({
-		vendorId: [ '', Validators.required ],
-		billedDate: [ this.currDate, Validators.required ],
-		billNumber: [ '' ],
-		orderNote: new FormControl(''),
-		amountPaid: [ '', Validators.required ],
-		paymentMethod: new FormControl(''),
-		paymentRef: new FormControl('')
-	});
-
 	subAmount: number;
 	taxAmount: number;
 	discountAmount: number;
@@ -60,6 +50,16 @@ export class NewBillComponent implements OnInit {
 	discountRate: number;
 	offerRate: number;
 	isBillPayment: boolean = true;
+
+	billInputForm = this.fb.group({
+		vendorId: [ '', Validators.required ],
+		billedDate: [ this.currDate, Validators.required ],
+		billNumber: [ '' ],
+		orderNote: new FormControl(''),
+		amountPaid: [ '', Validators.required ],
+		paymentMethod: new FormControl(''),
+		paymentRef: new FormControl('')
+	});
 
 	billAmount: Amount = new Amount();
 	constructor(

@@ -38,12 +38,13 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-client>
 					<tr>
-						<td>{{ client?.name }}</td>
+						<td>{{ client ?.name }}</td>
 						<td>{{ client?.contactPersonName }}</td>
-						<td>{{ client?.address.streetAddress }}</td>
-						<td>{{ client?.emailId }}</td>
-						<td>{{ client?.phoneNumber }}</td>
 						<td>{{ client?.contactPersonPhoneNumber }}</td>
+						<td>{{ client?.phoneNumber }}</td>
+						<td class="currencyDisplay">{{ client?.amountBalance.toFixed(2) }}</td>
+						 
+						 
 						<td data-html2canvas-ignore>
 							<button type="button" class="btn button-primary"
 								(click)="editClient(client.id)">View/Edit</button>

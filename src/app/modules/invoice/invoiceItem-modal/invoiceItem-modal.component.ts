@@ -12,8 +12,8 @@ import { BillItem } from 'src/app/core/model/billItem.model';
 
 @Component({
 	selector: 'item-modal',
-	templateUrl: './invoice-item-modal.component.html',
-	styleUrls: [ './invoice-item-modal.component.scss' ]
+	templateUrl: './invoiceItem-modal.component.html',
+	styleUrls: [ './invoiceItem-modal.component.scss' ]
 })
 export class InvoiceItemModalComponent implements OnInit {
 	@Input() invoiceItem: BillItem;
@@ -26,6 +26,9 @@ export class InvoiceItemModalComponent implements OnInit {
 	itemId: string = '';
 	taxMap: Map<string, number>;
 	offers: Offer[] = [];
+
+	stateTaxes: Tax[] = [];
+	countryTaxes: Tax[] = [];
 
 	invoiceItemForm = this.fb.group({
 		itemName: new FormControl(''),
@@ -40,7 +43,7 @@ export class InvoiceItemModalComponent implements OnInit {
 		itemMRP: [ '', Validators.required ],
 		stateTax: new FormControl(''),
 		countryTax: new FormControl(''),
-		discount: [ '', [ Validators.required, Validators.max(100) ] ],
+		discount: [ '', [ Validators.max(100) ] ],
 		offer: new FormControl('')
 	});
 
@@ -78,7 +81,7 @@ export class InvoiceItemModalComponent implements OnInit {
 
 	constructor(
 		private modalService: NgbModal,
-		private activeModal: NgbActiveModal,
+		public activeModal: NgbActiveModal,
 		private _itemService: ItemService,
 		private _taxService: TaxService,
 		private fb: FormBuilder,
@@ -104,9 +107,23 @@ export class InvoiceItemModalComponent implements OnInit {
 	}
 
 	getInvoiceItemObj(): BillItem {
+		let stateTaxRate = 0;
+		let countryTaxRate = 0;
+		for (let tax of this.stateTaxes) {
+			if (this.invoiceItemForm.get('stateTax').value == tax.id) {
+				stateTaxRate = tax.rate;
+			}
+		}
+
+		for (let tax of this.countryTaxes) {
+			if (this.invoiceItemForm.get('countryTax').value == tax.id) {
+				countryTaxRate = tax.rate;
+			}
+		}
+
 		this.taxMap = new Map();
-		this.taxMap.set('stateTax', +this.invoiceItemForm.get('stateTax').value);
-		this.taxMap.set('countryTax', +this.invoiceItemForm.get('countryTax').value);
+		this.taxMap.set('stateTax', +stateTaxRate);
+		this.taxMap.set('countryTax', +countryTaxRate);
 
 		const taxMap = this.convertMapToObject(this.taxMap);
 
@@ -174,13 +191,22 @@ export class InvoiceItemModalComponent implements OnInit {
 			expiryDate: this.item.expiryDate,
 			rate: this.item.saleCost,
 			discount: this.item.saleDiscount,
-			offer: this.item.saleOffers
+			offer: this.item.saleOffers,
+			stateTax: this.item.stateTaxId,
+			countryTax: this.item.countryTaxId
 		});
 	}
 
 	fetchTaxDetails() {
 		this._taxService.getTaxes().subscribe((response) => {
 			this.taxes = response;
+			for (let tax of response) {
+				if (tax.isStateTax) {
+					this.stateTaxes.push(tax);
+				} else {
+					this.countryTaxes.push(tax);
+				}
+			}
 		});
 	}
 

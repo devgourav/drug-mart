@@ -1,6 +1,5 @@
 @import "../assets/styles/_colors.scss";
 @import "../assets/styles/_button.scss";
-@import "../assets/styles/_title-header.scss";
 @import "../assets/styles/common.scss";
 
 // #login-wrapper {
@@ -91,5 +90,21 @@ body {
 		width: 15vw;
 		height: 100%;
 		background: $background-color-dark;
+		overflow-y: auto;
 	}
 }
+
+// mat-sidenav-container {
+// 	height: 100vh;
+// }
+// mat-sidenav {
+// 	width: 15vw;
+// 	height: 100vh;
+// 	background: $background-color-dark;
+// }
+
+// mat-sidenav-content {
+// 	height: 100vh;
+// 	margin-left: 10px;
+// 	background: $background-color;
+// }

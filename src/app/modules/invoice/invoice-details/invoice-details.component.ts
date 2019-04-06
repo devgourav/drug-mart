@@ -7,6 +7,10 @@ import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
 import { BillItem } from 'src/app/core/model/billItem.model';
 import { Subscription } from 'rxjs';
 import { ConfirmationService, Message, MessageService } from 'primeng/api';
+import { ReceiptService } from 'src/app/core/service/receipt.service';
+import { ClientService } from 'src/app/core/service/client.service';
+import { Receipt } from 'src/app/core/model/receipt.model';
+import { Client } from 'src/app/core/model/client.model';
 
 const confirmMsg = 'Do you want to delete this Invoice?';
 
@@ -22,6 +26,9 @@ export class InvoiceDetailsComponent implements OnInit {
 	tableHeaders: any[];
 	msgs: Message[] = [];
 
+	receipt: Receipt;
+	client: Client;
+
 	taxRate: number;
 	discountRate: number;
 	invoiceAmount: Amount;
@@ -33,7 +40,9 @@ export class InvoiceDetailsComponent implements OnInit {
 		private _invoiceService: InvoiceService,
 		private router: Router,
 		private confirmationService: ConfirmationService,
-		private messageService: MessageService
+		private messageService: MessageService,
+		private _receiptService: ReceiptService,
+		private _clientService: ClientService
 	) {
 		this.invoiceAmount = new Amount();
 	}
@@ -72,6 +81,15 @@ export class InvoiceDetailsComponent implements OnInit {
 	}
 
 	deleteInvoice(invoice: Invoice) {
+		this._receiptService.getReceiptById(invoice.receiptId).subscribe((receiptResponse) => {
+			this.receipt = receiptResponse;
+			this._clientService.getClientById(this.receipt.clientId).subscribe((clientResponse) => {
+				clientResponse.amountBalance =
+					clientResponse.amountBalance - invoice.totalAmount + this.receipt.amountPaid;
+				this.client = clientResponse;
+			});
+		});
+
 		this.confirmationService.confirm({
 			message: 'Do you want to delete this item?',
 			header: 'Delete Confirmation',
@@ -82,7 +100,10 @@ export class InvoiceDetailsComponent implements OnInit {
 			accept: () => {
 				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Invoice Deleted' } ];
 				this._invoiceService.deleteInvoice(invoice);
-				this.messageService.add({ severity: 'success', summary: 'Invoice Deleted', detail: 'Invoice Deleted' });
+				console.log('this.receipt', this.receipt);
+				this._receiptService.deleteReceipt(this.receipt);
+				this._clientService.updateClient(this.client);
+				this.messageService.add({ severity: 'success', summary: '', detail: 'Invoice Deleted' });
 			}
 		});
 	}

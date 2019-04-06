@@ -28,16 +28,14 @@ export class VendorDetailsComponent implements OnInit {
 		private messageService: MessageService
 	) {}
 
-	// tableHeaders = [ 'Vendor Name', 'Contact Name', 'Address', 'Email', 'Vendor Phone', 'Contact Phone', 'Actions' ];
-
 	ngOnInit() {
 		this.getVendors();
 
 		this.tableHeaders = [
 			{ field: 'name', header: 'Vendor Name' },
 			{ field: 'contactPersonName', header: 'Contact Name' },
-			{ field: 'contactPersonPhoneNumber', header: 'Contact Phone' },
-			{ field: 'phoneNumber', header: 'Vendor Phone' },
+			{ field: '', header: 'Contact Phone' },
+			{ field: '', header: 'Vendor Phone' },
 			{ field: 'amountBalance', header: 'Amount Balance' }
 		];
 	}

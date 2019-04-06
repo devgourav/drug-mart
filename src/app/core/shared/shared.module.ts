@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SharedComponent } from './shared/shared.component';
 import { CurrencyDirective } from '../directive/currency.directive';
 import { QuantityDirective } from '../directive/quantity.directive';
 import { AlphabetDirective } from '../directive/alphabet.directive';
 
+// const material = [ MatSidenavModule ];
+
 @NgModule({
-	declarations: [ SharedComponent, CurrencyDirective, QuantityDirective, AlphabetDirective ],
-	imports: [ CommonModule ],
+	declarations: [ CurrencyDirective, QuantityDirective, AlphabetDirective ],
 	exports: [ CurrencyDirective, QuantityDirective, AlphabetDirective ]
 })
 export class SharedModule {}
