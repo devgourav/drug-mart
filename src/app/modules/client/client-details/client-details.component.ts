@@ -56,7 +56,7 @@ export class ClientDetailsComponent implements OnInit, OnDestroy {
 			},
 			accept: () => {
 				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Record deleted' } ];
-				this.messageService.add({ severity: 'success', summary: 'Vendor Deleted', detail: 'Vendor Deleted' });
+				this.messageService.add({ severity: 'success', summary: '', detail: 'Vendor Deleted' });
 
 				this._clientService.deleteClient(client);
 			}

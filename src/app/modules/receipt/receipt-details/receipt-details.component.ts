@@ -85,8 +85,12 @@ export class ReceiptDetailsComponent implements OnInit {
 		}
 	}
 
-	editReceipt(receiptId: string) {
-		this.router.navigate([ 'Receipts/New Receipt', receiptId ]);
+	// editReceipt(receiptId: string) {
+	// 	this.router.navigate([ 'Receipts/New Receipt', receiptId ]);
+	// }
+
+	printReceipt(receiptId: string) {
+		this.router.navigate([ 'Receipts/Print Receipt', receiptId ]);
 	}
 
 	getReceiptType(receipt): string {

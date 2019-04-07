@@ -1,0 +1,151 @@
+<div class="print-details-wrapper">
+  <div class="title-header">
+    <span class="header-text">Print Invoices</span>
+  </div>
+
+  <div class="wrapper-content">
+    <div class="input-form" #screen>
+      <div class="print-header">
+        <span class="print-header-text">Invoice</span>
+      </div>
+
+
+      <form [formGroup]="companyDetailsForm">
+        <div class="row">
+          <div class="companyDetailsForm col-sm-6">
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="name" id="name">
+            </div>
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="phoneNumber" id="phoneNumber">
+            </div>
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="GSTNumber" id="GSTNumber">
+            </div>
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="address" id="address">
+            </div>
+          </div>
+
+          <div class="clientDetailsForm col-sm-6">
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="name" id="name">
+            </div>
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="phoneNumber" id="phoneNumber">
+            </div>
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="GSTNumber" id="GSTNumber">
+            </div>
+            <div class="row">
+              <input type="text" readonly class="form-control-plaintext" formControlName="address" id="address">
+            </div>
+          </div>
+        </div>
+      </form>
+
+
+      <div class="row">
+        <div class="table-wrapper">
+          <p-table #dt [columns]="tableHeaders" [value]="invoice.invoiceItems" [responsive]="true">
+            <ng-template pTemplate="header">
+              <tr>
+                <th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+                  {{tableHeader.header}}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-invoiceItem>
+              <tr>
+                <td scope="col">{{ invoiceItem.itemName }}</td>
+                <td scope="col">{{ invoiceItem.manufacturer }}</td>
+                <td scope="col">{{ invoiceItem.quantity }}</td>
+                <td scope="col">{{ invoiceItem.rate }}₹</td>
+                <td scope="col">{{ getSubAmount(invoiceItem.rate,invoiceItem.quantity) }}₹</td>
+                <td scope="col">{{ invoiceItem.discount}}%</td>
+                <td scope="col">{{ invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"] }}%
+                </td>
+                <td scope="col">{{ getTotalAmount(invoiceItem.rate,invoiceItem.quantity,invoiceItem.discount+invoiceItem.offer,
+                              invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"]) }}₹</td>
+                <td scope="col">{{ getOfferDiscount(invoiceItem.offer) }}%</td>
+                <td scope="col">{{ invoiceItem.itemMRP }}₹</td>
+              </tr>
+
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+
+
+      <form [formGroup]="afterTableDetailsForm">
+        <div class="row afterTableDetailsForm">
+          <div class="col-sm-6">
+            <div class="row cost-row">
+              <label class="col-sm-2" for="netAmount">Order Notes</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" formControlName="orderNote" id="orderNote" rows="3" readonly class="form-control-plaintext"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6 amount-details">
+            <div class="row cost-row">
+              <label class="col-sm-4" for="subTotalAmount">SubTotal:(+)</label>
+              <div class="amount col-sm-8" id="totalTax">
+                <input type="text" readonly class="form-control-plaintext" formControlName="subAmount" id="subAmount">
+              </div>
+            </div>
+
+            <div class="row cost-row">
+              <label class="col-sm-4" for="totalTax">Tax:(+)</label>
+
+              <div class="amount col-sm-8" id="totalTax">
+                <input type="text" readonly class="form-control-plaintext" formControlName="taxAmount" id="taxAmount">
+              </div>
+            </div>
+
+            <div class="row cost-row">
+              <label class="col-sm-4" for="discount">Discount:(-)</label>
+              <div class="amount col-sm-8" id="discountAmount">
+                <input class="amount col-sm-8" type="text" readonly class="form-control-plaintext"
+                  formControlName="discountAmount" id="discountAmount">
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="row cost-row">
+              <label class="col-sm-4" for="totalAmount">Amount Payable:</label>
+              <div class="amount col-sm-8" id="totalAmount">
+                <input class="amount col-sm-8" type="text" readonly class="form-control-plaintext"
+                  formControlName="totalAmount" id="totalAmount">
+              </div>
+            </div>
+
+            <div class="row cost-row">
+              <label class="col-sm-4" for="amountPaid">Amount Paid:</label>
+              <div class="amount col-sm-8" id="amountPaid">
+                <input class="amount col-sm-8" type="text" readonly class="form-control-plaintext"
+                  formControlName="amountPaid" id="amountPaid">
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </form>
+
+
+
+
+      <div class="action-buttons" data-html2canvas-ignore>
+        <button type="button" class="btn button-save" (click)="printInvoice()">Print</button>
+        <button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>

@@ -158,4 +158,8 @@ export class InvoiceDetailsComponent implements OnInit {
 	getPendingAmount(amountPaid: number): string {
 		return (this.totalAmount - amountPaid).toFixed(2);
 	}
+
+	printInvoice(invoiceId: string) {
+		this.router.navigate([ 'Invoice/Print Invoice', invoiceId ]);
+	}
 }

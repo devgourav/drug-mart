@@ -4,51 +4,70 @@
   </div>
 
   <div class="wrapper-content">
-    <div class="input-form">
-
+    <div class="input-form" #screen>
+        <div class="print-header">
+            <span class="print-header-text">Payments</span>
+          </div>
+      
       <form [formGroup]="companyDetailsForm" class="companyDetailsForm">
         <div class="row">
           <div class="col">
             <div class="row">
-              <input type="text" readonly class="form-control-plaintext" formControlName="name" id="name" >
+              <input type="text" readonly class="form-control-plaintext" formControlName="name" id="name">
             </div>
             <div class="row">
-                <input type="text" readonly class="form-control-plaintext" formControlName="phoneNumber" id="phoneNumber" >
-              </div>
+              <input type="text" readonly class="form-control-plaintext" formControlName="phoneNumber" id="phoneNumber">
+            </div>
             <div class="row">
-                <input type="text" readonly class="form-control-plaintext" formControlName="GSTNumber" id="GSTNumber" >
-              </div>
+              <input type="text" readonly class="form-control-plaintext" formControlName="GSTNumber" id="GSTNumber">
+            </div>
             <div class="row">
-                <input type="text" readonly class="form-control-plaintext" formControlName="address" id="address" >
-              </div>
+              <input type="text" readonly class="form-control-plaintext" formControlName="address" id="address">
+            </div>
           </div>
         </div>
       </form>
 
       <form [formGroup]="paymentDetailsForm" class="paymentDetailsForm">
-          <div class="row">
-            <div class="col">
-              <div class="row">
-                <label class="col-sm-6 col-form-label" for="vendorName">Vendor Name</label>
-                <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="vendorName" id="vendorName" >
-              </div>
-              <div class="row">
-                  <label class="col-sm-6 col-form-label" for="amountPaid">Amount Paid</label>
-                  <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="amountPaid" id="phoneNumber" >
-                </div>
-              <div class="row">
-                  <label class="col-sm-6 col-form-label" for="paymentDate">Payment Date</label>
-                  <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="paymentDate" id="GSTNumber" >
-                </div>
-              <div class="row">
-                  <label class="col-sm-6 col-form-label" for="paymentMethod">Payment Method</label>
-                  <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="paymentMethod" id="address" >
-                </div>
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <label class="col-sm-6 col-form-label" for="paymentRefNumber">Payment Ref. Number</label>
+              <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="paymentRefNumber"
+                id="paymentRefNumber">
+            </div>
+            <div class="row">
+              <label class="col-sm-6 col-form-label" for="vendorName">Vendor Name</label>
+              <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="vendorName"
+                id="vendorName">
+            </div>
+            <div class="row">
+              <label class="col-sm-6 col-form-label" for="amountPaid">Amount Paid</label>
+              <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="amountPaid"
+                id="phoneNumber">
+            </div>
+            <div class="row">
+              <label class="col-sm-6 col-form-label" for="paymentDate">Payment Date</label>
+              <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="paymentDate"
+                id="GSTNumber">
+            </div>
+            <div class="row">
+              <label class="col-sm-6 col-form-label" for="paymentMethod">Payment Method</label>
+              <input type="text" readonly class="col-sm-6 form-control-plaintext" formControlName="paymentMethod"
+                id="address">
             </div>
           </div>
-        </form>
+        </div>
+      </form>
+
+      <div class="action-buttons" data-html2canvas-ignore>
+          <button type="button" class="btn button-save" (click)="printPayment()">Print</button>
+          <button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+      </div>
+  
 
     </div>
+
   </div>
 
 </div>

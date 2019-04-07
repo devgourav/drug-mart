@@ -15,18 +15,25 @@
 
 	.input-form {
 		margin-top: 40px;
+		margin-left: 15px;
 		border: 1px solid $border-color-dark;
+
+		.table-wrapper {
+			width: 100%;
+			margin-left: 15px;
+		}
 		.print-header {
 			text-align: center;
-			border-bottom: 1px solid black;
+			border-bottom: 1px solid $border-color-dark;
 			padding: 10px;
 		}
 		.companyDetailsForm {
+			padding-left: 20px;
 			input {
-				text-align: center;
+				text-align: left;
 			}
 		}
-		.receiptDetailsForm {
+		.invoiceDetailsForm {
 			margin-top: 50px;
 			label {
 				text-align: right;
@@ -35,10 +42,17 @@
 				font-weight: bold;
 			}
 		}
-		.action-buttons {
-			margin-top: 40px;
-			button {
-				width: 30%;
+
+		.afterTableDetailsForm {
+			.amount-details {
+				border: 1px solid $border-color-dark;
+				label {
+					text-align: right;
+					padding: 0px;
+				}
+				.amount {
+					text-align: right;
+				}
 			}
 		}
 	}

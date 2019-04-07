@@ -11,23 +11,34 @@
 	display: flex;
 	width: 100%;
 	height: 100vh;
-	align-content: center;
 	justify-content: center;
 
 	.input-form {
-		padding: 40px;
-		text-align: center;
-		height: 50vh;
+		margin-top: 40px;
 		border: 1px solid $border-color-dark;
+		.print-header {
+			text-align: center;
+			border-bottom: 1px solid black;
+			padding: 10px;
+		}
 		.companyDetailsForm {
-			font-weight: bold;
+			input {
+				text-align: center;
+			}
 		}
 		.paymentDetailsForm {
 			margin-top: 50px;
-			text-align: center;
 			label {
+				text-align: right;
+			}
+			input {
 				font-weight: bold;
-				text-align: left;
+			}
+		}
+		.action-buttons {
+			margin-top: 40px;
+			button {
+				width: 30%;
 			}
 		}
 	}

@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { InvoiceDetailsComponent } from './invoice-details/invoice-details.component';
 import { NewInvoiceComponent } from './new-invoice/new-invoice.component';
 import { NewClientComponent } from '../client/new-client/new-client.component';
+import { InvoicePrintComponent } from './invoice-print/invoice-print.component';
 
 const routes: Routes = [
 	{
@@ -25,6 +26,10 @@ const routes: Routes = [
 	{
 		path: 'Invoice/New Invoice/:id/New Client',
 		component: NewClientComponent
+	},
+	{
+		path: 'Invoice/Print Invoice/:id',
+		component: InvoicePrintComponent
 	}
 ];
 

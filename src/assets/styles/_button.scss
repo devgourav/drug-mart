@@ -1,62 +1,64 @@
 @import "_colors.scss";
 
-.button{
+.button {
 	text-align: center;
-	padding:10px;
+	padding: 10px;
 	border-radius: 4px;
 	width: 150px;
-	border:none;
+	border: none;
 	z-index: 1;
-	margin:0 5px;
+	margin: 0 5px;
 }
 
-.action-buttons{
-  	display: flex;
-  	justify-content: center;
+.action-buttons {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	button {
+		margin-top: 10px;
+		width: 10%;
+	}
 }
-
-.button-save{
+.button-save {
 	background-color: $positive-color;
-	color:$text-color-light;
-	margin:0 5px;
-	
+	color: $text-color-light;
+	margin: 0 5px;
 }
-.button-save:hover{
+.button-save:hover {
 	background-color: $positive-color-dark;
 }
 
-
-.button-cancel{
+.button-cancel {
 	background-color: $negative-color;
-	color:$text-color-light;
-	margin:0 5px;
+	color: $text-color-light;
+	margin: 0 5px;
 }
-.button-cancel:hover{
+.button-cancel:hover {
 	background-color: $negative-color-dark;
 }
 
-.button-search{
+.button-search {
 	background-color: $primary-color;
-	color:$text-color-light;
-	margin:0 5px;
+	color: $text-color-light;
+	margin: 0 5px;
 }
-.button-search:hover{
+.button-search:hover {
 	background-color: $primary-color-dark;
 }
 
-.button-filter{
+.button-filter {
 	background-color: $primary-color;
-	color:$text-color-light;
-	margin:0 5px;
+	color: $text-color-light;
+	margin: 0 5px;
 }
-.button-filter:hover{
+.button-filter:hover {
 	background-color: $primary-color-dark;
 }
-.button-primary{
+.button-primary {
 	background-color: $primary-color;
-	color:$text-color-light;
-	margin:0 5px;
+	color: $text-color-light;
+	margin: 0 5px;
 }
-.button-primary:hover{
+.button-primary:hover {
 	background-color: $primary-color-dark;
 }

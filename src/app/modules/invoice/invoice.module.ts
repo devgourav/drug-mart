@@ -14,9 +14,10 @@ import { CalendarModule } from 'primeng/calendar';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { InvoiceItemModalComponent } from './invoiceItem-modal/invoiceItem-modal.component';
+import { InvoicePrintComponent } from './invoice-print/invoice-print.component';
 
 @NgModule({
-	declarations: [ NewInvoiceComponent, InvoiceDetailsComponent, InvoiceItemModalComponent ],
+	declarations: [ NewInvoiceComponent, InvoiceDetailsComponent, InvoiceItemModalComponent, InvoicePrintComponent ],
 	imports: [
 		CommonModule,
 		InvoiceRoutingModule,

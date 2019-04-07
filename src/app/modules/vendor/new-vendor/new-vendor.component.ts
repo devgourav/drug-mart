@@ -164,6 +164,7 @@ export class NewVendorComponent implements OnInit {
 			this.vendorInputForm.get('notes').value
 		);
 		this.vendor.id = this.vendorId;
+		this.vendor.amountBalance = 0;
 		const vendor = Object.assign({}, this.vendor);
 		return vendor;
 	}

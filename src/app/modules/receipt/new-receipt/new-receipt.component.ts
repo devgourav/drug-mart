@@ -53,7 +53,6 @@ export class NewReceiptComponent implements OnInit {
 
 		const date = new Date();
 		let currentDate = date.toISOString().substring(0, 10);
-		console.log(currentDate);
 		this.receiptInputForm.patchValue({
 			receiptDate: currentDate
 		});
@@ -122,6 +121,7 @@ export class NewReceiptComponent implements OnInit {
 	}
 
 	populateClientDropDown() {
+		this.clients = [];
 		this._clientService.getClients().subscribe((response) => {
 			this.clients = response;
 		});

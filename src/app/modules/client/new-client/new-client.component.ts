@@ -140,6 +140,7 @@ export class NewClientComponent implements OnInit {
 			this.clientInputForm.get('notes').value
 		);
 		this.client.id = this.clientId;
+		this.client.amountBalance = 0;
 		const client = Object.assign({}, this.client);
 		console.log(client);
 		return client;

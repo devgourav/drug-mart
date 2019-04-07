@@ -44,8 +44,8 @@
             <td>{{ receipt?.receiptDate }}</td>
             <td>{{ getReceiptType(receipt) }}</td>
             <td data-html2canvas-ignore>
-              <button type="button" class="btn button-primary" (click)="editReceipt(receipt.id)"><i
-                  class="pi pi-eye"></i></button>
+              <button type="button" class="btn button-primary" (click)="printReceipt(receipt.id)"><i
+                  class="pi pi-print"></i></button>
               <button type="button" class="btn button-cancel" (click)="deleteReceipt(receipt)"><i
                   class="pi pi-trash"></i></button>
             </td>

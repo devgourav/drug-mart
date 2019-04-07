@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { PaymentService } from 'src/app/core/service/payment.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -6,6 +6,8 @@ import { Payment } from 'src/app/core/model/payment.model';
 import { CompanyDetailsService } from 'src/app/core/service/company-details.service';
 import { CompanyDetails } from 'src/app/core/model/companyDetails.model';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import * as jsPDF from 'jspdf';
+import * as html2canvas from 'html2canvas';
 
 @Component({
 	selector: 'app-payment-print',
@@ -66,8 +68,7 @@ export class PaymentPrintComponent implements OnInit {
 	}
 
 	getFullAddress(address) {
-		const fullAddress =
-			address['streetAddress'] + ' ,' + address['city'] + ' ,' + address['state'] + ' ,' + address['pincode'];
+		const fullAddress = address['streetAddress'] + '-' + address['pincode'];
 
 		return fullAddress;
 	}
@@ -83,11 +84,42 @@ export class PaymentPrintComponent implements OnInit {
 
 	populatePaymentDetails() {
 		this.paymentDetailsForm.setValue({
+			paymentRefNumber: this.payment.paymentRefNo,
 			vendorName: this.payment.vendorName,
 			amountPaid: this.payment.amountPaid,
 			paymentDate: this.payment.paymentDate,
-			paymentMethod: this.payment.paymentMethod,
-			paymentRefNumber: this.payment.paymentRefNo
+			paymentMethod: this.payment.paymentMethod
+		});
+	}
+
+	closeClicked() {
+		this.location.back();
+	}
+
+	@ViewChild('screen') screen: ElementRef;
+	printPayment() {
+		let pdf = new jsPDF('portrait', 'mm', 'a5');
+		pdf.setProperties({
+			title: 'Pdf Export',
+			author: 'Kanchan Medico',
+			keywords: 'generated,drug-mart,kanchan,payments',
+			creator: 'Drug Mart'
+		});
+
+		html2canvas(this.screen.nativeElement).then((canvas) => {
+			var imgData = canvas.toDataURL('image/png');
+			var imgWidth = 148;
+			var imgHeight = canvas.height * imgWidth / canvas.width;
+
+			pdf.addImage({
+				imageData: imgData,
+				x: 0,
+				y: 0,
+				w: imgWidth,
+				h: imgHeight
+			});
+			let pdfName = 'receipt' + this.payment.paymentDate + '.pdf';
+			pdf.save(pdfName);
 		});
 	}
 }

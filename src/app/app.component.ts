@@ -22,18 +22,18 @@ export class AppComponent implements OnInit {
 	constructor(public _authService: AuthService) {}
 	ngOnInit() {}
 
-	ngAfterViewInit() {
-		this.recaptchaVerifier = new auth.RecaptchaVerifier('recaptcha-container', {
-			size: 'invisible',
-			callback: function(response) {
-				this.onEmailandPasswordSignIn();
-			},
-			'expired-callback': () => {
-				console.error('Recaptcha expired...Solve again');
-			}
-		});
-		this.recaptchaVerifier.render();
-	}
+	// ngAfterViewInit() {
+	// 	this.recaptchaVerifier = new auth.RecaptchaVerifier('recaptcha-container', {
+	// 		size: 'invisible',
+	// 		callback: function(response) {
+	// 			this.onEmailandPasswordSignIn();
+	// 		},
+	// 		'expired-callback': () => {
+	// 			console.error('Recaptcha expired...Solve again');
+	// 		}
+	// 	});
+	// 	this.recaptchaVerifier.render();
+	// }
 
 	// onSignInSubmit() {
 	// 	const appVerifier = this.recaptchaVerifier;
