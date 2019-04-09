@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col">
 
-        <div class="form-group row" [ngClass]="{'has-error':itemId.errors && (itemId.touched || itemId.dirty)}">
+        <div class="form-group row">
           <label class="col-sm-3 col-form-label" for="itemName">Item List</label>
           <div class="col-sm-8">
             <select name="itemName" id="itemPackType" class="form-control" (change)="populateOnItemSelectEvent($event)"
@@ -119,7 +119,7 @@
           <label class="col-sm-3 col-form-label" for="stateTax">SGST</label>
           <div class="col-sm-4">
             <select name="stateTax" id="stateTax" class="form-control" formControlName="stateTax">
-              <option value="" [selected]="isSelected">Select state Tax</option>
+              <option value="" [selected]="true">Select state Tax</option>
               <option *ngFor="let tax of stateTaxes" value="{{ tax.id }}">{{ tax.name }}</option>
             </select>
           </div>
@@ -129,7 +129,7 @@
           <label class="col-sm-3 col-form-label" for="countryTax">CGST</label>
           <div class="col-sm-4">
             <select name="countryTax" id="countryTax" class="form-control" formControlName="countryTax">
-              <option value="" [selected]="isSelected">Select country Tax</option>
+              <option value="" selected="true">Select country Tax</option>
               <option *ngFor="let tax of countryTaxes" value="{{ tax.id }}">{{ tax.name }}</option>
             </select>
           </div>

@@ -32,6 +32,7 @@ import { PaymentService } from './core/service/payment.service';
 import { ReceiptService } from './core/service/receipt.service';
 import { ReceiptModule } from './modules/receipt/receipt.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
 	declarations: [ AppComponent, SidebarComponent ],
@@ -57,7 +58,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 		AngularFirestoreModule.enablePersistence(),
 		AngularFireAuthModule,
 		BrowserAnimationsModule,
-		SharedModule
+		SharedModule,
+		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
 	],
 	providers: [
 		VendorService,

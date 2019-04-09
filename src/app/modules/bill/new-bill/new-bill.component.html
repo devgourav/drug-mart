@@ -8,8 +8,7 @@
 			<form [formGroup]="billInputForm">
 				<div class="row beforeTable">
 					<div class="col-sm-6">
-						<div class="form-group row"
-							[ngClass]="{'has-error':vendorId.errors && (vendorId.touched || vendorId.dirty)}">
+						<div class="form-group row">
 							<label class="col-sm-3 col-form-label" for="vendorName">Vendor Name</label>
 							<div class="col-sm-5">
 								<select name="vendorId" id="vendorId" class="form-control" formControlName="vendorId"
@@ -161,7 +160,7 @@
 								<div class="col-sm-5">
 									<select name="paymentMethod" id="paymentMethod" formControlName="paymentMethod"
 										class="form-control">
-										<option value="" [selected]="isSelected">Payment Method</option>
+										<option value="" [selected]="true">Payment Method</option>
 										<option *ngFor="let paymentSystem of paymentSystems" value="{{paymentSystem}}">
 											{{paymentSystem}}</option>
 									</select>

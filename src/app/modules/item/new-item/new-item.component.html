@@ -146,7 +146,7 @@
 							<div class="col-sm-6">
 								<select name="saleOffers" id="saleOffers" formControlName="saleOffers"
 									class="form-control">
-									<option value="" [selected]="isSelected">Select Offers</option>
+									<option value="" [selected]="true">Select Offers</option>
 									<option *ngFor="let offer of offers"
 										value="{{calculatedDiscount(offer.minItems,offer.freeItems)}}">{{offer.name}}
 									</option>
@@ -180,7 +180,7 @@
 							<div class="col-sm-6">
 								<select name="taxId" id="taxId" formControlName="stateTaxId"
 									class="form-control">
-									<option value="" [selected]="isSelected">Select Tax</option>
+									<option value="" [selected]="true">Select Tax</option>
 									<option *ngFor="let tax of stateTaxes"
 										value="{{tax.id}}">{{tax.name}}
 									</option>
@@ -193,7 +193,7 @@
 							<div class="col-sm-6">
 								<select name="countryTaxId" id="countryTaxId" formControlName="countryTaxId"
 									class="form-control">
-									<option value="" [selected]="isSelected">Select Tax</option>
+									<option value="" [selected]="true">Select Tax</option>
 									<option *ngFor="let tax of countryTaxes"
 										value="{{tax.id}}">{{tax.name}}
 									</option>

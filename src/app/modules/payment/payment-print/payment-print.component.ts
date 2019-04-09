@@ -98,13 +98,15 @@ export class PaymentPrintComponent implements OnInit {
 
 	@ViewChild('screen') screen: ElementRef;
 	printPayment() {
-		let pdf = new jsPDF('portrait', 'mm', 'a5');
+		var pdf = new jsPDF('potrait', 'mm', 'a5');
 		pdf.setProperties({
 			title: 'Pdf Export',
 			author: 'Kanchan Medico',
 			keywords: 'generated,drug-mart,kanchan,payments',
 			creator: 'Drug Mart'
 		});
+
+		html2canvas(this.screen.nativeElement);
 
 		html2canvas(this.screen.nativeElement).then((canvas) => {
 			var imgData = canvas.toDataURL('image/png');
@@ -119,7 +121,20 @@ export class PaymentPrintComponent implements OnInit {
 				h: imgHeight
 			});
 			let pdfName = 'receipt' + this.payment.paymentDate + '.pdf';
-			pdf.save(pdfName);
+			// pdf.output('dataurlnewwindow', pdfName);
+
+			var dataSrc = pdf.output('datauristring');
+
+			// pdf.save(pdfName);
+
+			let w = window.open('', pdfName);
+			w.document.write(
+				'<html><head><title>' +
+					pdfName +
+					'</title></head><body><embed src=' +
+					dataSrc +
+					" width='100%' height='100%'></embed></body></html>"
+			);
 		});
 	}
 }

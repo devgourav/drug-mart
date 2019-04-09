@@ -94,7 +94,7 @@ export class AuthService {
 				modificationDate: response.modificationDate
 			};
 			// this._userService.setUser(data);
-			this.router.navigateByUrl('/Dashboard');
+			return this.router.navigateByUrl('/Dashboard');
 		});
 	}
 
