@@ -2,50 +2,50 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormControl, FormBuilder } from '@angular/forms';
-import { InvoiceService } from 'src/app/core/service/invoice.service';
+import { BillService } from 'src/app/core/service/bill.service';
 import { CompanyDetailsService } from 'src/app/core/service/company-details.service';
-import { Invoice } from 'src/app/core/model/invoice.model';
+import { Bill } from 'src/app/core/model/bill.model';
 import { CompanyDetails } from 'src/app/core/model/companyDetails.model';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
-import { ClientService } from 'src/app/core/service/client.service';
-import { Client } from 'src/app/core/model/client.model';
-import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
+import { VendorService } from 'src/app/core/service/vendor.service';
+import { Vendor } from 'src/app/core/model/vendor.model';
+import { BillItem } from 'src/app/core/model/billItem.model';
 
 @Component({
-	selector: 'app-invoice-print',
-	templateUrl: './invoice-print.component.html',
-	styleUrls: [ './invoice-print.component.scss' ]
+	selector: 'app-bill-print',
+	templateUrl: './bill-print.component.html',
+	styleUrls: [ './bill-print.component.scss' ]
 })
-export class InvoicePrintComponent implements OnInit {
-	invoiceId: string = '';
-	invoice: Invoice;
+export class BillPrintComponent implements OnInit {
+	billId: string = '';
+	bill: Bill;
 	companyDetails: CompanyDetails;
-	client: Client;
-	invoiceItems: InvoiceItem[] = [];
+	vendor: Vendor;
+	billItems: BillItem[] = [];
 
 	tableHeaders: any[];
 
 	constructor(
 		private route: ActivatedRoute,
 		private location: Location,
-		private _invoiceService: InvoiceService,
+		private _billService: BillService,
 		private _companyDetailsService: CompanyDetailsService,
-		private _clientService: ClientService,
+		private _vendorService: VendorService,
 		private fb: FormBuilder
 	) {}
 
-	invoiceDetailsForm = this.fb.group({
+	billDetailsForm = this.fb.group({
 		name: new FormControl(''),
 		phoneNumber: new FormControl(''),
 		GSTNumber: new FormControl(''),
 		address: new FormControl(''),
-		invoiceNumber: new FormControl(''),
-		invoicedDate: new FormControl(''),
-		clientName: new FormControl(''),
-		clientPhoneNumber: new FormControl(''),
-		clientGSTNumber: new FormControl(''),
-		clientAddress: new FormControl('')
+		billNumber: new FormControl(''),
+		billedDate: new FormControl(''),
+		vendorName: new FormControl(''),
+		vendorPhoneNumber: new FormControl(''),
+		vendorGSTNumber: new FormControl(''),
+		vendorAddress: new FormControl('')
 	});
 
 	afterTableDetailsForm = this.fb.group({
@@ -59,9 +59,9 @@ export class InvoicePrintComponent implements OnInit {
 
 	ngOnInit() {
 		this.route.paramMap.subscribe((params) => {
-			this.invoiceId = params.get('id');
-			if (this.invoiceId) {
-				this.getInvoice(params.get('id'));
+			this.billId = params.get('id');
+			if (this.billId) {
+				this.getBill(params.get('id'));
 			}
 		});
 
@@ -79,48 +79,48 @@ export class InvoicePrintComponent implements OnInit {
 		];
 	}
 
-	getInvoice(invoiceId: string) {
-		this._invoiceService.getInvoiceById(invoiceId).subscribe((response) => {
-			this.invoice = response;
-			this._clientService.getClientById(this.invoice.clientId).subscribe((response) => {
-				this.client = response;
-				console.log('client->getInvoice', this.client);
-				this.populateInvoiceDetails();
+	getBill(billId: string) {
+		this._billService.getBillById(billId).subscribe((response) => {
+			this.bill = response;
+			this._vendorService.getVendorById(this.bill.vendorId).subscribe((response) => {
+				this.vendor = response;
+				console.log('vendor->getBill', this.vendor);
+				this.populateBillDetails();
 				this.populateAfterTableDetails();
 			});
 		});
 	}
 
-	populateInvoiceDetails() {
+	populateBillDetails() {
 		this._companyDetailsService.getCompanyDetails().subscribe((response) => {
 			this.companyDetails = response[0];
 			console.log('companyDetails', this.companyDetails);
-			console.log('client', this.client);
-			console.log('invoice', this.invoice);
-			this.invoiceDetailsForm.setValue({
+			console.log('vendor', this.vendor);
+			console.log('bill', this.bill);
+			this.billDetailsForm.setValue({
 				name: this.companyDetails.name,
 				address: this.getFullAddress(this.companyDetails.billingAddress),
 				phoneNumber: this.companyDetails.phoneNumber,
 				GSTNumber: this.companyDetails.GSTNumber,
-				invoiceNumber: this.invoice.invoiceNumber,
-				invoicedDate: this.invoice.invoicedDate,
-				clientName: this.client.name,
-				clientPhoneNumber: this.client.phoneNumber,
-				clientGSTNumber: this.client.GSTIN,
-				clientAddress: this.client.address['streetAddress']
+				billNumber: this.bill.billNumber,
+				billedDate: this.bill.billedDate,
+				vendorName: this.vendor.name,
+				vendorPhoneNumber: this.vendor.phoneNumber,
+				vendorGSTNumber: this.vendor.GSTIN,
+				vendorAddress: this.vendor.address['streetAddress']
 			});
-			this.invoiceItems = this.invoice.invoiceItems;
+			this.billItems = this.bill.billItems;
 		});
 	}
 
 	populateAfterTableDetails() {
 		this.afterTableDetailsForm.setValue({
-			subAmount: (this.invoice.totalAmount - this.invoice.totalTax + this.invoice.totalDiscount).toFixed(2),
-			taxAmount: this.invoice.totalTax.toFixed(2),
-			discountAmount: this.invoice.totalDiscount.toFixed(2),
-			totalAmount: this.invoice.totalAmount.toFixed(2),
-			amountPaid: this.invoice.amountPaid.toFixed(2),
-			orderNote: this.invoice.orderNote
+			subAmount: (this.bill.totalAmount - this.bill.totalTax + this.bill.totalDiscount).toFixed(2),
+			taxAmount: this.bill.totalTax.toFixed(2),
+			discountAmount: this.bill.totalDiscount.toFixed(2),
+			totalAmount: this.bill.totalAmount.toFixed(2),
+			amountPaid: this.bill.amountPaid.toFixed(2),
+			orderNote: this.bill.orderNote
 		});
 	}
 
@@ -145,7 +145,7 @@ export class InvoicePrintComponent implements OnInit {
 	}
 
 	@ViewChild('screen') screen: ElementRef;
-	printInvoice() {
+	printBill() {
 		let pdf = new jsPDF('landscape', 'mm', 'a4');
 		pdf.setProperties({
 			title: 'Pdf Export',

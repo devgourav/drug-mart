@@ -70,13 +70,13 @@ export class AuthService {
 			.signInWithEmailAndPassword(emailID, password)
 			.then((firebaseUser) => {
 				if (firebaseUser) {
-					this.updateUserData(firebaseUser.user);
+					this.setUserData(firebaseUser.user);
 				}
 			})
 			.catch((error) => console.error('onEmailSignInSubmit', error));
 	}
 
-	public updateUserData(user: any) {
+	public setUserData(user: any) {
 		this._userService.getUserById(user.uid).subscribe((response) => {
 			console.log('Response:', response);
 			if (response.roles != '') {
@@ -93,7 +93,6 @@ export class AuthService {
 				creationDate: response.creationDate,
 				modificationDate: response.modificationDate
 			};
-			// this._userService.setUser(data);
 			return this.router.navigateByUrl('/Dashboard');
 		});
 	}

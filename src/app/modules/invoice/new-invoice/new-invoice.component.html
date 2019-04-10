@@ -173,7 +173,7 @@
 					<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="invoiceId"
 						id="invoiceUpdateButton" class="btn button-save" (click)="updateInvoice()">Update</button>
 					<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="!invoiceId" id="invoiceSaveButton"
-						class="btn button-save" (click)="setInvoice()">Save</button>
+						class="btn button-save" (click)="saveInvoice()">Save</button>
 					<button type="button" id="invoiceCancelButton" class="btn button-cancel"
 						(click)="closeClicked()">Cancel</button>
 				</div>

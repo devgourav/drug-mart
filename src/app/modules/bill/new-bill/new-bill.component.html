@@ -35,11 +35,15 @@
 						</div>
 					</div>
 					<div class="col-sm-6">
-						<div class="form-group row"
-							[ngClass]="{'has-error':billNumber.errors && (billNumber.touched || billNumber.dirty)}">
+						<div class="form-group row">
 							<label class="col-sm-3 col-form-label" for="billNumber">Bill Number</label>
 							<div class="col-sm-5">
 								<input type="text" class="form-control" id="billNumber" formControlName="billNumber">
+							</div>
+							<div class="col-sm-3 error-message">
+								<p-message severity="error" text="Bill Number should not be empty"
+									*ngIf="billNumber.errors && (billNumber.touched || billNumber.dirty)">
+								</p-message>
 							</div>
 						</div>
 
@@ -182,7 +186,7 @@
 					<button type="submit" [disabled]="!billInputForm.valid" *ngIf="billId" id="billUpdateButton"
 						class="btn button-save" (click)="updateBill()">Update</button>
 					<button type="submit" [disabled]="!billInputForm.valid" *ngIf="!billId" id="billSaveButton"
-						class="btn button-save" (click)="setBill()">Save</button>
+						class="btn button-save" (click)="saveBill()">Save</button>
 					<button type="button" id="billCancelButton" class="btn button-cancel"
 						(click)="closeClicked()">Cancel</button>
 				</div>

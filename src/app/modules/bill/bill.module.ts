@@ -18,9 +18,10 @@ import { CalendarModule } from 'primeng/calendar';
 import { TooltipModule } from 'primeng/tooltip';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { BillPrintComponent } from './bill-print/bill-print.component';
 
 @NgModule({
-	declarations: [ BillDetailsComponent, NewBillComponent, BillItemModalComponent ],
+	declarations: [ BillDetailsComponent, NewBillComponent, BillItemModalComponent, BillPrintComponent ],
 	imports: [
 		CommonModule,
 		BillRoutingModule,

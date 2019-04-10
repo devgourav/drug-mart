@@ -2,7 +2,7 @@
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
 
-#print-details-wrapper {
+#bill-details-wrapper {
 	font-family: 'Montserrat', sans-serif;
 	color: $text-color-dark;
 	font-weight: bold;
@@ -31,7 +31,7 @@
 			border: 1px solid $border-color-dark;
 			padding: 10px;
 		}
-		.invoiceDetails {
+		.billDetails {
 			margin: 0 0 20px;
 			border: 1px solid $border-color-dark;
 			border-top: 0px;
@@ -43,10 +43,10 @@
 					font-size: 1.5em;
 				}
 			}
-			.clientDetails {
+			.vendorDetails {
 				border-left: 1px solid $border-color-dark;
 
-				.invoiceData {
+				.billData {
 					border-bottom: 1px solid $border-color-dark;
 				}
 			}

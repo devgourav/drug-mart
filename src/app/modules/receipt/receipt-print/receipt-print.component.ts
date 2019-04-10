@@ -121,8 +121,8 @@ export class ReceiptPrintComponent implements OnInit {
 				w: imgWidth,
 				h: imgHeight
 			});
-			let pdfName = 'receipt' + this.receipt.receiptDate + '.pdf';
-			pdf.save(pdfName);
+			pdf.autoPrint();
+			window.open(pdf.output('bloburl'), '_blank');
 		});
 	}
 }

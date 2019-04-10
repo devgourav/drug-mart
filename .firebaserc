@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "drugmart-firestore"
+    "default": "drugmart-firestore",
+    "sonupackaging": "sonu-packaging"
   }
 }

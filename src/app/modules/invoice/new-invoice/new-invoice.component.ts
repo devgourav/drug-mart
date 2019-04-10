@@ -239,6 +239,7 @@ export class NewInvoiceComponent implements OnInit {
 			);
 			this.invoice.orderNote = response.orderNote;
 			this.invoice.paymentMethod = response.paymentMethod;
+			this.invoice.receiptId = response.receiptId;
 			this.invoice.invoiceNumber = response.invoiceNumber;
 			this.invoice.paymentRef = response.paymentRef;
 			this.invoiceItems = this.invoice.invoiceItems;
@@ -251,6 +252,8 @@ export class NewInvoiceComponent implements OnInit {
 				amountPaid: this.invoice.amountPaid,
 				paymentMethod: this.invoice.paymentMethod
 			});
+			this.receiptId = this.invoice.receiptId;
+			console.log('getInvoice', this.invoice);
 
 			this.calculateTotalCosts(this.invoiceItems);
 		});
@@ -270,7 +273,7 @@ export class NewInvoiceComponent implements OnInit {
 		return this.client;
 	}
 
-	setInvoice() {
+	saveInvoice() {
 		this.receiptId = this._receiptService.setReceipt(this.getReceiptObj());
 		this._invoiceService.setInvoice(this.getInvoiceObj());
 		this._itemService.batchItemQuantityUpdate(this.itemMap);
@@ -309,7 +312,13 @@ export class NewInvoiceComponent implements OnInit {
 				break;
 			}
 		}
+
+		if (this.invoiceId) {
+			this.receipt.id = this.invoice.receiptId;
+		}
+
 		const receipt = Object.assign({}, this.receipt);
+		console.log('receipt', receipt);
 		return receipt;
 	}
 
@@ -336,6 +345,7 @@ export class NewInvoiceComponent implements OnInit {
 		this.invoice.clientName = this.setClientDetails(this.invoiceInputForm.get('clientId').value).name;
 		this.invoice.id = this.invoiceId;
 		const invoice = Object.assign({}, this.invoice);
+		console.log('invoice', invoice);
 		return invoice;
 	}
 

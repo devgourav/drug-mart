@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { BillDetailsComponent } from './bill-details/bill-details.component';
 import { NewBillComponent } from './new-bill/new-bill.component';
 import { NewVendorComponent } from '../vendor/new-vendor/new-vendor.component';
+import { BillPrintComponent } from './bill-print/bill-print.component';
 
 const routes: Routes = [
 	{
@@ -25,6 +26,10 @@ const routes: Routes = [
 	{
 		path: 'Bills/New Bill/:id/New Vendor',
 		component: NewVendorComponent
+	},
+	{
+		path: 'Bills/Print Bill/:id',
+		component: BillPrintComponent
 	}
 ];
 

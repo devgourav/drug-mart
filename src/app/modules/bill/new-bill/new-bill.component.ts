@@ -15,6 +15,7 @@ import { Offer } from 'src/app/core/model/offer.model';
 import { Payment } from 'src/app/core/model/payment.model';
 import { PaymentService } from 'src/app/core/service/payment.service';
 import { ItemService } from 'src/app/core/service/item.service';
+import { isRegExp } from 'util';
 
 // TODO: Add A save/Update prompt
 
@@ -54,7 +55,7 @@ export class NewBillComponent implements OnInit {
 	billInputForm = this.fb.group({
 		vendorId: [ '', Validators.required ],
 		billedDate: [ this.currDate, Validators.required ],
-		billNumber: [ '' ],
+		billNumber: new FormControl(''),
 		orderNote: new FormControl(''),
 		amountPaid: [ '', Validators.required ],
 		paymentMethod: new FormControl(''),
@@ -177,6 +178,7 @@ export class NewBillComponent implements OnInit {
 
 		this.billAmount.subAmount = this.subAmount.toFixed(2);
 		this.billAmount.taxAmount = this.taxAmount.toFixed(2);
+		print;
 		this.billAmount.discountAmount = (this.discountAmount + this.offerAmount).toFixed(2);
 		this.billAmount.totalAmount = (+this.billAmount.subAmount +
 			+this.billAmount.taxAmount -
@@ -196,10 +198,12 @@ export class NewBillComponent implements OnInit {
 	getBill(billId: string) {
 		this._billService.getBillById(billId).subscribe((response) => {
 			this.bill = new Bill(response.vendorId, response.billItems, response.billedDate, response.amountPaid);
+
 			this.bill.orderNote = response.orderNote;
 			this.bill.paymentMethod = response.paymentMethod;
 			this.bill.paymentId = response.paymentId;
 			this.bill.paymentRef = response.paymentRef;
+			this.bill.billNumber = response.billNumber;
 			this.billItems = this.bill.billItems;
 
 			this.billInputForm.patchValue({
@@ -210,6 +214,8 @@ export class NewBillComponent implements OnInit {
 				amountPaid: this.bill.amountPaid,
 				paymentMethod: this.bill.paymentMethod
 			});
+
+			this.paymentId = this.bill.paymentId;
 
 			this.calculateTotalCosts(this.billItems);
 		});
@@ -229,7 +235,7 @@ export class NewBillComponent implements OnInit {
 		return this.vendor;
 	}
 
-	setBill() {
+	saveBill() {
 		this.paymentId = this._paymentService.setPayment(this.getPaymentObj());
 		this._billService.setBill(this.getBillObj());
 		this._itemService.batchItemQuantityUpdate(this.itemMap);
@@ -259,6 +265,9 @@ export class NewBillComponent implements OnInit {
 		this.payment.paymentMethod = this.billInputForm.get('paymentMethod').value;
 		this.payment.paymentRefNo = this.billInputForm.get('paymentRef').value;
 		this.payment.billPaymentType = true;
+
+		this.billItems = this.bill.billItems;
+
 		for (let vendor of this.vendors) {
 			if (this.vendorId == vendor.id) {
 				this.payment.vendorName = vendor.name;
@@ -267,7 +276,12 @@ export class NewBillComponent implements OnInit {
 				break;
 			}
 		}
+
+		if (this.billId) {
+			this.payment.id = this.bill.paymentId;
+		}
 		const payment = Object.assign({}, this.payment);
+
 		return payment;
 	}
 
@@ -283,7 +297,9 @@ export class NewBillComponent implements OnInit {
 		this.bill.paymentRef = this.billInputForm.get('paymentRef').value;
 		this.bill.orderNote = this.billInputForm.get('orderNote').value;
 		this.bill.billNumber = this.billInputForm.get('billNumber').value;
+
 		this.bill.paymentId = this.paymentId;
+
 		if (this.billAmount != null) {
 			this.bill.totalAmount = +this.billAmount.totalAmount;
 			this.bill.totalTax = +this.billAmount.taxAmount;
@@ -291,6 +307,7 @@ export class NewBillComponent implements OnInit {
 		}
 
 		this.bill.vendorName = this.setVendorDetails(this.billInputForm.get('vendorId').value).name;
+		this.bill.id = this.billId;
 		const bill = Object.assign({}, this.bill);
 		return bill;
 	}

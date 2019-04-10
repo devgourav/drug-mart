@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { Payment } from 'src/app/core/model/payment.model';
 import { CompanyDetailsService } from 'src/app/core/service/company-details.service';
 import { CompanyDetails } from 'src/app/core/model/companyDetails.model';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import * as jsPDF from 'jspdf';
 import * as html2canvas from 'html2canvas';
 
@@ -106,8 +106,6 @@ export class PaymentPrintComponent implements OnInit {
 			creator: 'Drug Mart'
 		});
 
-		html2canvas(this.screen.nativeElement);
-
 		html2canvas(this.screen.nativeElement).then((canvas) => {
 			var imgData = canvas.toDataURL('image/png');
 			var imgWidth = 148;
@@ -120,21 +118,8 @@ export class PaymentPrintComponent implements OnInit {
 				w: imgWidth,
 				h: imgHeight
 			});
-			let pdfName = 'receipt' + this.payment.paymentDate + '.pdf';
-			// pdf.output('dataurlnewwindow', pdfName);
-
-			var dataSrc = pdf.output('datauristring');
-
-			// pdf.save(pdfName);
-
-			let w = window.open('', pdfName);
-			w.document.write(
-				'<html><head><title>' +
-					pdfName +
-					'</title></head><body><embed src=' +
-					dataSrc +
-					" width='100%' height='100%'></embed></body></html>"
-			);
+			pdf.autoPrint();
+			window.open(pdf.output('bloburl'), '_blank');
 		});
 	}
 }

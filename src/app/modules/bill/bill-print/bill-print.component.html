@@ -1,6 +1,6 @@
-<div id="print-details-wrapper">
+<div id="bill-details-wrapper">
   <div class="title-header">
-    <span class="header-text">Print Invoices</span>
+    <span class="header-text">Print Bills</span>
   </div>
 
   <div class="wrapper-content">
@@ -8,12 +8,12 @@
 
 
       <div class="print-header">
-        <span class="print-header-text">Invoice</span>
+        <span class="print-header-text">Bill</span>
       </div>
 
 
-      <form [formGroup]="invoiceDetailsForm">
-        <div class="row invoiceDetails">
+      <form [formGroup]="billDetailsForm">
+        <div class="row billDetails">
           <div class="col-sm-8 companyDetails ">
             <div class="row"></div>
             <div class="row"></div>
@@ -32,42 +32,42 @@
           </div>
 
 
-          <div class="col-sm-4 clientDetails">
-            <div class="invoiceData">
+          <div class="col-sm-4 vendorDetails">
+            <div class="billData">
               <div class="row">
-                <input type="text" readonly class="form-control-plaintext col-sm-6" value="Invoice Number">
+                <input type="text" readonly class="form-control-plaintext col-sm-6" value="Bill Number">
                 <div class="col-sm-6">
-                  <input type="text" readonly class="form-control-plaintext" formControlName="invoiceNumber"
-                    id="invoiceNumber">
+                  <input type="text" readonly class="form-control-plaintext" formControlName="billNumber"
+                    id="billNumber">
                 </div>
 
               </div>
 
               <div class="row">
-                <input type="text" readonly class="form-control-plaintext col-sm-6" value="Invoice Date">
+                <input type="text" readonly class="form-control-plaintext col-sm-6" value="Bill Date">
                 <div class="col-sm-6">
-                  <input type="text" readonly class="form-control-plaintext" formControlName="invoicedDate"
-                    id="invoicedDate">
+                  <input type="text" readonly class="form-control-plaintext" formControlName="billedDate"
+                    id="billedDate">
                 </div>
 
               </div>
             </div>
 
-            <div class="clientData">
+            <div class="vendorData">
 
               <div class="row">
-                <input type="text" readonly class="form-control-plaintext col-sm-6" value="Client Name">
+                <input type="text" readonly class="form-control-plaintext col-sm-6" value="Vendor Name">
                 <div class="col-sm-6">
-                  <input type="text" readonly class="form-control-plaintext" formControlName="clientName"
-                    id="clientName">
+                  <input type="text" readonly class="form-control-plaintext" formControlName="vendorName"
+                    id="vendorName">
                 </div>
               </div>
 
               <div class="row">
                 <input type="text" readonly class="form-control-plaintext col-sm-6" value="PhoneNumber">
                 <div class="col-sm-6">
-                  <input type="text" readonly class="form-control-plaintext" formControlName="clientPhoneNumber"
-                    id="clientPhoneNumber">
+                  <input type="text" readonly class="form-control-plaintext" formControlName="vendorPhoneNumber"
+                    id="vendorPhoneNumber">
                 </div>
               </div>
 
@@ -75,8 +75,8 @@
               <div class="row">
                 <input type="text" readonly class="form-control-plaintext col-sm-6" value="GST Number">
                 <div class="col-sm-6">
-                  <input type="text" readonly class="form-control-plaintext" formControlName="clientGSTNumber"
-                    id="clientGSTNumber">
+                  <input type="text" readonly class="form-control-plaintext" formControlName="vendorGSTNumber"
+                    id="vendorGSTNumber">
                 </div>
               </div>
 
@@ -84,8 +84,8 @@
               <div class="row">
                 <input type="text" readonly class="form-control-plaintext col-sm-6" value="Address">
                 <div class="col-sm-6">
-                  <input type="text" readonly class="form-control-plaintext" formControlName="clientAddress"
-                    id="clientAddress">
+                  <input type="text" readonly class="form-control-plaintext" formControlName="vendorAddress"
+                    id="vendorAddress">
                 </div>
               </div>
 
@@ -97,7 +97,7 @@
 
       <div class="row">
         <div class="table-wrapper">
-          <p-table #dt [columns]="tableHeaders" [value]="invoiceItems" [responsive]="true">
+          <p-table #dt [columns]="tableHeaders" [value]="billItems" [responsive]="true">
             <ng-template pTemplate="header">
               <tr>
                 <th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
@@ -105,20 +105,20 @@
                 </th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-invoiceItem>
+            <ng-template pTemplate="body" let-billItem>
               <tr>
-                <td scope="col">{{ invoiceItem.itemName }}</td>
-                <td scope="col">{{ invoiceItem.manufacturer }}</td>
-                <td scope="col">{{ invoiceItem.quantity }}</td>
-                <td scope="col">{{ invoiceItem.rate }}₹</td>
-                <td scope="col">{{ getSubAmount(invoiceItem.rate,invoiceItem.quantity) }}₹</td>
-                <td scope="col">{{ invoiceItem.discount}}%</td>
-                <td scope="col">{{ invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"] }}%
+                <td scope="col">{{ billItem.itemName }}</td>
+                <td scope="col">{{ billItem.manufacturer }}</td>
+                <td scope="col">{{ billItem.quantity }}</td>
+                <td scope="col">{{ billItem.rate }}₹</td>
+                <td scope="col">{{ getSubAmount(billItem.rate,billItem.quantity) }}₹</td>
+                <td scope="col">{{ billItem.discount}}%</td>
+                <td scope="col">{{ billItem.tax["stateTax"] + billItem.tax["countryTax"] }}%
                 </td>
-                <td scope="col">{{ getTotalAmount(invoiceItem.rate,invoiceItem.quantity,invoiceItem.discount+invoiceItem.offer,
-                              invoiceItem.tax["stateTax"] + invoiceItem.tax["countryTax"]) }}₹</td>
-                <td scope="col">{{ getOfferDiscount(invoiceItem.offer) }}%</td>
-                <td scope="col">{{ invoiceItem.itemMRP }}₹</td>
+                <td scope="col">{{ getTotalAmount(billItem.rate,billItem.quantity,billItem.discount+billItem.offer,
+                              billItem.tax["stateTax"] + billItem.tax["countryTax"]) }}₹</td>
+                <td scope="col">{{ getOfferDiscount(billItem.offer) }}%</td>
+                <td scope="col">{{ billItem.itemMRP }}₹</td>
               </tr>
 
             </ng-template>
@@ -191,7 +191,7 @@
 
 
       <div class="action-buttons" data-html2canvas-ignore>
-        <button type="button" class="btn button-save" (click)="printInvoice()">Print</button>
+        <button type="button" class="btn button-save" (click)="printBill()">Print</button>
         <button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
       </div>
 

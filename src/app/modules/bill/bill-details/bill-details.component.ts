@@ -145,4 +145,8 @@ export class BillDetailsComponent implements OnInit {
 	getPendingAmount(amountPaid: number): string {
 		return (this.totalAmount - amountPaid).toFixed(2);
 	}
+
+	printBill(billId: string) {
+		this.router.navigate([ 'Bills/Print Bill', billId ]);
+	}
 }

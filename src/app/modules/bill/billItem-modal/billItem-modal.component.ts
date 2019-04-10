@@ -190,7 +190,7 @@ export class BillItemModalComponent implements OnInit {
 			itemMRP: this.item.itemMRP,
 			batchNumber: this.item.batchNumber,
 			expiryDate: this.item.expiryDate,
-			rate: this.item.saleCost,
+			rate: this.item.purchaseCost,
 			discount: this.item.saleDiscount,
 			offer: this.item.saleOffers,
 			stateTax: this.item.stateTaxId,
