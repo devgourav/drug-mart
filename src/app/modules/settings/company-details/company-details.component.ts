@@ -176,42 +176,49 @@ export class CompanyDetailsComponent implements OnInit {
 		return objectMap;
 	}
 
+	/**
+	 * @name loadStateData
+	 * @description push all Indian states to the state Array;
+	 */
 	loadStateData() {
-		this.states.push('Andhra Pradesh (AP)');
-		this.states.push('Arunachal Pradesh (AR)');
-		this.states.push('Assam (AS)');
-		this.states.push('Bihar (BR)');
-		this.states.push('Chhattisgarh (CG)');
-		this.states.push('Goa (GA)');
-		this.states.push('Gujarat (GJ)');
-		this.states.push('Haryana (HR)');
-		this.states.push('Himachal Pradesh (HP)');
-		this.states.push('Jammu and Kashmir (JK)');
-		this.states.push('Jharkhand (JH)');
-		this.states.push('Karnataka (KA)');
-		this.states.push('Kerala (KL)');
-		this.states.push('Madhya Pradesh (MP)');
-		this.states.push('Maharashtra (MH)');
-		this.states.push('Manipur (MN)');
-		this.states.push('Meghalaya (ML)');
-		this.states.push('Mizoram (MZ)');
-		this.states.push('Nagaland (NL)');
-		this.states.push('Odisha(OR)');
-		this.states.push('Punjab (PB)');
-		this.states.push('Rajasthan (RJ)');
-		this.states.push('Sikkim (SK)');
-		this.states.push('Tamil Nadu (TN)');
-		this.states.push('Telangana (TS)');
-		this.states.push('Tripura (TR)');
-		this.states.push('Uttar Pradesh (UP)');
-		this.states.push('Uttarakhand (UK)');
-		this.states.push('West Bengal (WB)');
-		this.states.push('Andaman and Nicobar Islands(AN)');
-		this.states.push('Chandigarh (CH)');
-		this.states.push('Dadra and Nagar Haveli (DN)');
-		this.states.push('Daman and Diu (DD)');
-		this.states.push('National Capital Territory of Delhi (DL)');
-		this.states.push('Lakshadweep (LD)');
-		this.states.push('Pondicherry (PY)');
+		this.states = [
+			...this.states,
+			'Andhra Pradesh (AP)',
+			'Arunachal Pradesh (AR)',
+			'Assam (AS)',
+			'Bihar (BR)',
+			'Chhattisgarh (CG)',
+			'Goa (GA)',
+			'Gujarat (GJ)',
+			'Haryana (HR)',
+			'Himachal Pradesh (HP)',
+			'Jammu and Kashmir (JK)',
+			'Jharkhand (JH)',
+			'Karnataka (KA)',
+			'Kerala (KL)',
+			'Madhya Pradesh (MP)',
+			'Maharashtra (MH)',
+			'Manipur (MN)',
+			'Meghalaya (ML)',
+			'Mizoram (MZ)',
+			'Nagaland (NL)',
+			'Odisha(OR)',
+			'Punjab (PB)',
+			'Rajasthan (RJ)',
+			'Sikkim (SK)',
+			'Tamil Nadu (TN)',
+			'Telangana (TS)',
+			'Tripura (TR)',
+			'Uttar Pradesh (UP)',
+			'Uttarakhand (UK)',
+			'West Bengal (WB)',
+			'Andaman and Nicobar Islands(AN)',
+			'Chandigarh (CH)',
+			'Dadra and Nagar Haveli (DN)',
+			'Daman and Diu (DD)',
+			'National Capital Territory of Delhi (DL)',
+			'Lakshadweep (LD)',
+			'Pondicherry (PY)'
+		];
 	}
 }

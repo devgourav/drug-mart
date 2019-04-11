@@ -23,7 +23,7 @@ export class BillItemModalComponent implements OnInit {
 	item: Item;
 	taxes: Tax[];
 	itemId: string = '';
-	taxMap: Map<string, number>;
+
 	offers: Offer[] = [];
 
 	stateTaxes: Tax[] = [];
@@ -97,34 +97,41 @@ export class BillItemModalComponent implements OnInit {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	addBillItem() {
 		this.addItemEvent.emit(this.getBillItemObj());
 	}
 
+	/**
+	 * 
+	 */
 	editBillItem() {
 		this.editItemEvent.emit(this.getBillItemObj());
 	}
 
+	/**
+	 * @returns BillItem
+	 */
 	getBillItemObj(): BillItem {
 		let stateTaxRate = 0;
 		let countryTaxRate = 0;
-		for (let tax of this.stateTaxes) {
+		let taxMap: Map<string, number> = new Map();
+
+		this.stateTaxes.forEach((tax) => {
 			if (this.billItemForm.get('stateTax').value == tax.id) {
 				stateTaxRate = tax.rate;
 			}
-		}
-
-		for (let tax of this.countryTaxes) {
+		});
+		this.countryTaxes.forEach((tax) => {
 			if (this.billItemForm.get('countryTax').value == tax.id) {
 				countryTaxRate = tax.rate;
 			}
-		}
+		});
 
-		this.taxMap = new Map();
-		this.taxMap.set('stateTax', +stateTaxRate);
-		this.taxMap.set('countryTax', +countryTaxRate);
-
-		const taxMap = this.convertMapToObject(this.taxMap);
+		taxMap.set('stateTax', +stateTaxRate);
+		taxMap.set('countryTax', +countryTaxRate);
 
 		this.billItem = new BillItem(
 			this.billItemForm.get('itemId').value,
@@ -136,17 +143,21 @@ export class BillItemModalComponent implements OnInit {
 			this.billItemForm.get('quantity').value,
 			this.billItemForm.get('rate').value,
 			this.billItemForm.get('itemMRP').value,
-			taxMap
+			this.convertMapToObject(taxMap)
 		);
 
 		this.billItem.discount = +this.billItemForm.get('discount').value;
 		this.billItem.offer = +this.billItemForm.get('offer').value;
 		this.billItem.packType = this.billItemForm.get('packType').value;
 
-		const billItem = Object.assign({}, this.billItem);
-		return billItem;
+		// const billItem = Object.assign({}, this.billItem);
+		const billItemObj = { ...this.billItem };
+		return billItemObj;
 	}
 
+	/**
+	 * @name populateBillItem
+	 */
 	populateBillItem() {
 		this.billItemForm.setValue({
 			itemName: this.billItem.itemName,
@@ -166,21 +177,26 @@ export class BillItemModalComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * @name populateItemDropdown
+	 */
 	populateItemDropdown() {
 		this._itemService.getItems().subscribe((response) => {
 			this.items = response;
 		});
 	}
 
+	/**
+	 * 
+	 * @param event 
+	 */
 	populateOnItemSelectEvent(event: any) {
 		this.itemId = event.target.value;
-		for (let item of this.items) {
+		this.items.forEach((item) => {
 			if (item.id == this.itemId) {
 				this.item = item;
 			}
-		}
-
-		console.log('stateTax', this.item.stateTaxId);
+		});
 		this.billItemForm.patchValue({
 			itemName: this.item.name,
 			itemId: this.item.id,
@@ -198,16 +214,20 @@ export class BillItemModalComponent implements OnInit {
 		});
 	}
 
+	/**
+	 * 
+	 */
 	fetchTaxDetails() {
 		this._taxService.getTaxes().subscribe((response) => {
 			this.taxes = response;
-			for (let tax of response) {
-				if (tax.isStateTax) {
-					this.stateTaxes.push(tax);
-				} else {
-					this.countryTaxes.push(tax);
+
+			this.taxes.forEach((tax) => {
+				if (tax.type['stateTax']) {
+					this.stateTaxes = [ ...this.stateTaxes, tax ];
+				} else if (tax.type['countryTax']) {
+					this.countryTaxes = [ ...this.countryTaxes, tax ];
 				}
-			}
+			});
 		});
 	}
 

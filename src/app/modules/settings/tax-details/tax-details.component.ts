@@ -28,7 +28,13 @@ export class TaxDetailsComponent implements OnInit {
 		isCountryTax: [ '', Validators.required ]
 	});
 
-	constructor(private location: Location, private _taxService: TaxService, private fb: FormBuilder) {}
+	constructor(
+		private location: Location,
+		private _taxService: TaxService,
+		private fb: FormBuilder,
+		private messageService: MessageService,
+		private confirmationService: ConfirmationService
+	) {}
 
 	ngOnInit() {
 		this.getTaxDetails();
@@ -56,58 +62,99 @@ export class TaxDetailsComponent implements OnInit {
 		return this.taxInputForm.get('isCountryTax').value;
 	}
 
-	closeClicked() {
-		this.location.back();
-	}
-
 	getTaxDetails() {
 		this._taxService.getTaxes().subscribe((response) => {
 			this.taxes = response;
-			console.log(response);
 		});
 	}
 
+	/**
+	 * 
+	 * @param tax 
+	 */
 	getTaxType(tax: Tax): string {
-		if (tax.isStateTax) {
-			return 'StateTax';
-		} else {
-			return 'CountryTax';
-		}
+		var taxMap = tax.type;
+		return taxMap['stateTax'] ? 'StateTax' : 'CountryTax';
 	}
 
+	/**
+	 * 
+	 * @param tax 
+	 */
 	deleteTax(tax: Tax) {
-		if (confirm(confirmMsg)) {
-			this._taxService.deleteTax(tax);
-		}
+		this.confirmationService.confirm({
+			message: 'Do you want to delete this item?',
+			header: 'Delete Confirmation',
+			icon: 'pi pi-info-circle',
+			reject: () => {
+				this.msgs = [ { severity: 'info', summary: 'Rejected', detail: 'You have rejected' } ];
+			},
+			accept: () => {
+				this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Tax Deleted' } ];
+				this._taxService.deleteTax(tax);
+				this.messageService.add({ severity: 'success', summary: '', detail: 'Tax Deleted' });
+			}
+		});
 	}
 
+	/**
+	 * 
+	 */
 	setTax() {
 		this._taxService.setTax(this.getTaxObj());
+		this.getTaxDetails();
 	}
 
+	/**
+	 * @name getTaxObj
+	 * @returns Tax
+	 */
 	getTaxObj(): Tax {
-		if (this.isStateTax == 'true') {
-			this.ifStateTax == true;
-		} else {
-			this.isStateTax == false;
+		var taxMap: Map<string, boolean> = new Map();
+		if (this.isStateTax == true) {
+			taxMap.set('stateTax', true);
+		} else if (this.isCountryTax == true) {
+			taxMap.set('countryTax', true);
 		}
-		this.tax = new Tax(this.taxInputForm.get('name').value, this.taxInputForm.get('rate').value, this.isStateTax);
+
+		this.tax = new Tax(this.taxInputForm.get('name').value, this.taxInputForm.get('rate').value);
+		this.tax.type = this.convertMapToObject(taxMap);
 
 		const tax = Object.assign({}, this.tax);
+
+		console.log(tax);
 		return tax;
 	}
 
-	stateTaxChecked(isChecked) {
-		console.log(isChecked);
+	/**
+	 * 
+	 * @param isChecked 
+	 */
+	stateTaxChecked(isChecked: boolean) {
 		if (isChecked) {
 			this.taxInputForm.get('isCountryTax').setValue(false);
 		}
 	}
 
-	countryTaxChanged(isChecked) {
-		console.log(isChecked);
+	/**
+	 * 
+	 * @param isChecked 
+	 */
+	countryTaxChanged(isChecked: boolean) {
 		if (isChecked) {
 			this.taxInputForm.get('isStateTax').setValue(false);
 		}
+	}
+
+	convertMapToObject(map: Map<any, any>): Map<any, any> {
+		let objectMap = Object.create(null);
+		for (let [ k, v ] of map) {
+			objectMap[k] = v;
+		}
+		return objectMap;
+	}
+
+	closeClicked() {
+		this.location.back();
 	}
 }

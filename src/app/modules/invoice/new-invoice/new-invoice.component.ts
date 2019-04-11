@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,9 +9,6 @@ import { InvoiceService } from 'src/app/core/service/invoice.service';
 import { ClientService } from 'src/app/core/service/client.service';
 import { InvoiceItem } from 'src/app/core/model/invoiceItem.model';
 import { Client } from 'src/app/core/model/client.model';
-import { OfferService } from 'src/app/core/service/offer.service';
-import { Offer } from 'src/app/core/model/offer.model';
-import { BillItem } from 'src/app/core/model/billItem.model';
 import { Observable, of } from 'rxjs';
 import { PaymentService } from 'src/app/core/service/payment.service';
 import { Payment } from 'src/app/core/model/payment.model';
@@ -33,7 +30,6 @@ export class NewInvoiceComponent implements OnInit {
 	invoiceItem: InvoiceItem;
 	clients: Client[];
 	client: Client;
-	billMap: Map<string, number> = new Map();
 	currDate: Date = new Date();
 	receipt: Receipt;
 	itemMap: Map<string, number> = new Map();
@@ -57,6 +53,17 @@ export class NewInvoiceComponent implements OnInit {
 	isInvoicePayment: boolean = true;
 
 	invoiceAmount: Amount = new Amount();
+
+	invoiceInputForm = this.fb.group({
+		invoiceNumber: [ '' ],
+		clientId: [ '', Validators.required ],
+		invoicedDate: [ '', Validators.required ],
+		orderNote: new FormControl(''),
+		amountPaid: [ '', Validators.required ],
+		paymentMethod: new FormControl(''),
+		paymentRef: new FormControl('')
+	});
+
 	constructor(
 		private location: Location,
 		private modalService: NgbModal,
@@ -69,19 +76,10 @@ export class NewInvoiceComponent implements OnInit {
 		private _receiptService: ReceiptService
 	) {}
 
-	invoiceInputForm = this.fb.group({
-		invoiceNumber: [ '' ],
-		clientId: [ '', Validators.required ],
-		invoicedDate: [ '', Validators.required ],
-		orderNote: new FormControl(''),
-		amountPaid: [ '', Validators.required ],
-		paymentMethod: new FormControl(''),
-		paymentRef: new FormControl('')
-	});
-
 	ngOnInit() {
 		this.generateInvoiceNumber();
 		this.populateClientDropDown();
+		this.getCurrentDate();
 
 		this.route.paramMap.subscribe((params) => {
 			this.invoiceId = params.get('id');
@@ -90,12 +88,6 @@ export class NewInvoiceComponent implements OnInit {
 			}
 		});
 
-		const date = new Date();
-		let currentDate = date.toISOString().substring(0, 10);
-		console.log(currentDate);
-		this.invoiceInputForm.patchValue({
-			invoicedDate: currentDate
-		});
 		this.tableHeaders = [
 			{ field: '', header: 'Particular' },
 			{ field: '', header: 'Manufacturer' },
@@ -108,6 +100,13 @@ export class NewInvoiceComponent implements OnInit {
 			{ field: '', header: 'Offers' },
 			{ field: '', header: 'M.R.P' }
 		];
+	}
+
+	getCurrentDate() {
+		const currentDate = new Date().toISOString().substring(0, 10);
+		this.invoiceInputForm.patchValue({
+			invoicedDate: currentDate
+		});
 	}
 
 	get invoicedDate() {
@@ -124,7 +123,7 @@ export class NewInvoiceComponent implements OnInit {
 
 	openItemModal() {
 		const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
-		modalRef.componentInstance.addItemEvent.subscribe((response: BillItem) => {
+		modalRef.componentInstance.addItemEvent.subscribe((response: InvoiceItem) => {
 			this.invoiceItem = new InvoiceItem(
 				response.itemId,
 				response.itemName,
@@ -140,6 +139,7 @@ export class NewInvoiceComponent implements OnInit {
 			this.invoiceItem.discount = response.discount;
 			this.invoiceItem.offer = response.offer;
 			this.invoiceItem.packType = response.packType;
+			this.itemMap.set(response.itemId, response.quantity);
 
 			const invoiceItem = Object.assign({}, this.invoiceItem);
 			this.invoiceItems.push(invoiceItem);
@@ -252,8 +252,8 @@ export class NewInvoiceComponent implements OnInit {
 				amountPaid: this.invoice.amountPaid,
 				paymentMethod: this.invoice.paymentMethod
 			});
+
 			this.receiptId = this.invoice.receiptId;
-			console.log('getInvoice', this.invoice);
 
 			this.calculateTotalCosts(this.invoiceItems);
 		});
@@ -265,11 +265,12 @@ export class NewInvoiceComponent implements OnInit {
 	}
 
 	setClientDetails(clientId: string): Client {
-		for (let client of this.clients) {
+		this.clients.forEach((client) => {
 			if (clientId == client.id) {
 				this.client = client;
 			}
-		}
+		});
+
 		return this.client;
 	}
 
@@ -288,11 +289,14 @@ export class NewInvoiceComponent implements OnInit {
 	}
 
 	updateAccountBalance() {
-		console.log();
 		this.client.amountBalance += this.invoice.totalAmount - this.invoice.amountPaid;
 		this._clientService.updateClient(this.client);
 	}
 
+	/**
+	 * @name getReceiptObj
+	 * @returns Receipt
+	 */
 	getReceiptObj(): Receipt {
 		this.receipt = new Receipt(
 			this.invoiceInputForm.get('clientId').value,
@@ -304,6 +308,7 @@ export class NewInvoiceComponent implements OnInit {
 		this.receipt.paymentMethod = this.invoiceInputForm.get('paymentMethod').value;
 		this.receipt.paymentRefNo = this.invoiceInputForm.get('paymentRef').value;
 		this.receipt.invoiceReceiptType = true;
+
 		for (let client of this.clients) {
 			if (this.clientId == client.id) {
 				this.receipt.clientName = client.name;
@@ -318,10 +323,13 @@ export class NewInvoiceComponent implements OnInit {
 		}
 
 		const receipt = Object.assign({}, this.receipt);
-		console.log('receipt', receipt);
 		return receipt;
 	}
 
+	/**
+	 * @name getInvoiceObj
+	 * @returns Invoice
+	 */
 	getInvoiceObj(): Invoice {
 		this.invoice = new Invoice(
 			this.invoiceInputForm.get('clientId').value,
@@ -345,10 +353,13 @@ export class NewInvoiceComponent implements OnInit {
 		this.invoice.clientName = this.setClientDetails(this.invoiceInputForm.get('clientId').value).name;
 		this.invoice.id = this.invoiceId;
 		const invoice = Object.assign({}, this.invoice);
-		console.log('invoice', invoice);
 		return invoice;
 	}
 
+	/**
+	 * 
+	 * @param invoiceItem 
+	 */
 	deleteItem(invoiceItem: InvoiceItem) {
 		const index: number = this.invoiceItems.indexOf(invoiceItem);
 		if (index !== -1) {
@@ -356,6 +367,10 @@ export class NewInvoiceComponent implements OnInit {
 		}
 	}
 
+	/**
+	 * 
+	 * @param invoiceItem 
+	 */
 	editItem(invoiceItem: InvoiceItem) {
 		const modalRef = this.modalService.open(InvoiceItemModalComponent, { size: 'lg', keyboard: true });
 		if (invoiceItem) {
@@ -363,13 +378,10 @@ export class NewInvoiceComponent implements OnInit {
 		}
 		modalRef.componentInstance.editItemEvent.subscribe((response: InvoiceItem) => {
 			this.invoiceItem = response;
-			for (let invoiceItem of this.invoiceItems) {
-				if (this.invoiceItem.itemId == invoiceItem.itemId) {
-					const index: number = this.invoiceItems.indexOf(invoiceItem);
-					this.invoiceItems[index] = this.invoiceItem;
-					break;
-				}
-			}
+			const index = this.invoiceItems.findIndex((invoiceItem) => {
+				return invoiceItem.id == this.invoiceItem.id;
+			});
+			this.invoiceItems[index] = this.invoiceItem;
 			this.calculateTotalCosts(this.invoiceItems);
 		});
 	}

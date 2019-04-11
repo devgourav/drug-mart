@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormBuilder, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,14 +10,9 @@ import { BillService } from 'src/app/core/service/bill.service';
 import { VendorService } from 'src/app/core/service/vendor.service';
 import { BillItem } from 'src/app/core/model/billItem.model';
 import { Vendor } from 'src/app/core/model/vendor.model';
-import { OfferService } from 'src/app/core/service/offer.service';
-import { Offer } from 'src/app/core/model/offer.model';
 import { Payment } from 'src/app/core/model/payment.model';
 import { PaymentService } from 'src/app/core/service/payment.service';
 import { ItemService } from 'src/app/core/service/item.service';
-import { isRegExp } from 'util';
-
-// TODO: Add A save/Update prompt
 
 @Component({
 	selector: 'app-new-bill',
@@ -77,18 +72,12 @@ export class NewBillComponent implements OnInit {
 
 	ngOnInit() {
 		this.populateVendorDropDown();
+		this.getCurrentDate();
 		this.route.paramMap.subscribe((params) => {
 			this.billId = params.get('id');
 			if (this.billId) {
 				this.getBill(params.get('id'));
 			}
-		});
-
-		const date = new Date();
-		let currentDate = date.toISOString().substring(0, 10);
-		console.log(currentDate);
-		this.billInputForm.patchValue({
-			billedDate: currentDate
 		});
 
 		this.tableHeaders = [
@@ -103,6 +92,13 @@ export class NewBillComponent implements OnInit {
 			{ field: '', header: 'Offers' },
 			{ field: '', header: 'M.R.P' }
 		];
+	}
+
+	getCurrentDate() {
+		let currentDate = new Date().toISOString().substring(0, 10);
+		this.billInputForm.patchValue({
+			billedDate: currentDate
+		});
 	}
 
 	get billedDate() {
@@ -136,6 +132,7 @@ export class NewBillComponent implements OnInit {
 			this.billItem.offer = response.offer;
 			this.billItem.packType = response.packType;
 			this.itemMap.set(response.itemId, response.quantity);
+
 			const billItem = Object.assign({}, this.billItem);
 			this.billItems.push(billItem);
 			this.calculateTotalCosts(this.billItems);
@@ -178,7 +175,6 @@ export class NewBillComponent implements OnInit {
 
 		this.billAmount.subAmount = this.subAmount.toFixed(2);
 		this.billAmount.taxAmount = this.taxAmount.toFixed(2);
-		print;
 		this.billAmount.discountAmount = (this.discountAmount + this.offerAmount).toFixed(2);
 		this.billAmount.totalAmount = (+this.billAmount.subAmount +
 			+this.billAmount.taxAmount -
@@ -227,11 +223,12 @@ export class NewBillComponent implements OnInit {
 	}
 
 	setVendorDetails(vendorId: string): Vendor {
-		for (let vendor of this.vendors) {
+		this.vendors.forEach((vendor) => {
 			if (vendorId == vendor.id) {
 				this.vendor = vendor;
 			}
-		}
+		});
+
 		return this.vendor;
 	}
 
@@ -266,8 +263,6 @@ export class NewBillComponent implements OnInit {
 		this.payment.paymentRefNo = this.billInputForm.get('paymentRef').value;
 		this.payment.billPaymentType = true;
 
-		this.billItems = this.bill.billItems;
-
 		for (let vendor of this.vendors) {
 			if (this.vendorId == vendor.id) {
 				this.payment.vendorName = vendor.name;
@@ -281,7 +276,6 @@ export class NewBillComponent implements OnInit {
 			this.payment.id = this.bill.paymentId;
 		}
 		const payment = Object.assign({}, this.payment);
-
 		return payment;
 	}
 
@@ -297,7 +291,6 @@ export class NewBillComponent implements OnInit {
 		this.bill.paymentRef = this.billInputForm.get('paymentRef').value;
 		this.bill.orderNote = this.billInputForm.get('orderNote').value;
 		this.bill.billNumber = this.billInputForm.get('billNumber').value;
-
 		this.bill.paymentId = this.paymentId;
 
 		if (this.billAmount != null) {
@@ -326,13 +319,10 @@ export class NewBillComponent implements OnInit {
 		}
 		modalRef.componentInstance.editItemEvent.subscribe((response: BillItem) => {
 			this.billItem = response;
-			for (let billItem of this.billItems) {
-				if (this.billItem.itemId == billItem.itemId) {
-					const index: number = this.billItems.indexOf(billItem);
-					this.billItems[index] = this.billItem;
-					break;
-				}
-			}
+			const index = this.billItems.findIndex((billItem) => {
+				return billItem.id == this.billItem.id;
+			});
+			this.billItems[index] = this.billItem;
 			this.calculateTotalCosts(this.billItems);
 		});
 	}

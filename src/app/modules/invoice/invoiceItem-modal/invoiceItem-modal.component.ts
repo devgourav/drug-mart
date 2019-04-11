@@ -201,7 +201,7 @@ export class InvoiceItemModalComponent implements OnInit {
 		this._taxService.getTaxes().subscribe((response) => {
 			this.taxes = response;
 			for (let tax of response) {
-				if (tax.isStateTax) {
+				if (tax.type.get('stateTax')) {
 					this.stateTaxes.push(tax);
 				} else {
 					this.countryTaxes.push(tax);

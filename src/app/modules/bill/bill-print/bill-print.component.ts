@@ -79,24 +79,27 @@ export class BillPrintComponent implements OnInit {
 		];
 	}
 
+	/**
+	 * 
+	 * @param billId 
+	 */
 	getBill(billId: string) {
 		this._billService.getBillById(billId).subscribe((response) => {
 			this.bill = response;
 			this._vendorService.getVendorById(this.bill.vendorId).subscribe((response) => {
 				this.vendor = response;
-				console.log('vendor->getBill', this.vendor);
 				this.populateBillDetails();
-				this.populateAfterTableDetails();
 			});
 		});
 	}
 
+	/**
+	 * @name populateBillDetails
+	 * @description populates billDetailsForm and afterTableDetailsForm
+	 */
 	populateBillDetails() {
 		this._companyDetailsService.getCompanyDetails().subscribe((response) => {
 			this.companyDetails = response[0];
-			console.log('companyDetails', this.companyDetails);
-			console.log('vendor', this.vendor);
-			console.log('bill', this.bill);
 			this.billDetailsForm.setValue({
 				name: this.companyDetails.name,
 				address: this.getFullAddress(this.companyDetails.billingAddress),
@@ -110,36 +113,50 @@ export class BillPrintComponent implements OnInit {
 				vendorAddress: this.vendor.address['streetAddress']
 			});
 			this.billItems = this.bill.billItems;
+
+			this.afterTableDetailsForm.setValue({
+				subAmount: (this.bill.totalAmount - this.bill.totalTax + this.bill.totalDiscount).toFixed(2),
+				taxAmount: this.bill.totalTax.toFixed(2),
+				discountAmount: this.bill.totalDiscount.toFixed(2),
+				totalAmount: this.bill.totalAmount.toFixed(2),
+				amountPaid: this.bill.amountPaid.toFixed(2),
+				orderNote: this.bill.orderNote
+			});
 		});
 	}
 
-	populateAfterTableDetails() {
-		this.afterTableDetailsForm.setValue({
-			subAmount: (this.bill.totalAmount - this.bill.totalTax + this.bill.totalDiscount).toFixed(2),
-			taxAmount: this.bill.totalTax.toFixed(2),
-			discountAmount: this.bill.totalDiscount.toFixed(2),
-			totalAmount: this.bill.totalAmount.toFixed(2),
-			amountPaid: this.bill.amountPaid.toFixed(2),
-			orderNote: this.bill.orderNote
-		});
-	}
-
-	getFullAddress(address) {
-		const fullAddress = address['streetAddress'] + '-' + address['pincode'];
+	/**
+	 * 
+	 * @param address 
+	 */
+	getFullAddress(address: Map<string, string>) {
+		var fullAddress = '';
+		for (const key in address) {
+			fullAddress += address[key] + ' ';
+		}
 		return fullAddress;
 	}
 
+	/**
+	 * 
+	 * @param rate 
+	 * @param qty 
+	 */
 	getSubAmount(rate: number, qty: number): number {
 		return rate * qty;
 	}
 
+	/**
+	 * 
+	 * @param rate 
+	 * @param qty 
+	 * @param discountRate 
+	 * @param taxRate 
+	 */
 	getTotalAmount(rate: number, qty: number, discountRate: number, taxRate: number) {
 		return ((1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty)).toFixed(2);
 	}
 
-	getOfferDiscount(offer: number) {
-		return offer.toFixed(2);
-	}
 	closeClicked() {
 		this.location.back();
 	}

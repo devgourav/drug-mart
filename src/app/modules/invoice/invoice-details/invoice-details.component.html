@@ -38,12 +38,9 @@
 						<td>{{ invoice?.invoiceNumber}}</td>
 						<td>{{ invoice?.invoicedDate }}</td>
 						<td>{{ invoice?.clientName }}</td>
-						<td class="currencyDisplay"> {{ getSubAmount(invoice.invoiceItems)}}</td>
-						<td class="currencyDisplay"> {{ getTaxAmount(invoice.invoiceItems) }}</td>
-						<td class="currencyDisplay"> {{ getDiscountAmount(invoice.invoiceItems) }}</td>
-						<td class="currencyDisplay"> {{ getTotalAmount((invoice.id)) }}</td>
-						<!-- <td>{{ invoice?.orderNote }}</td> -->
-						<!-- <td class="currencyDisplay"> {{ getPendingAmount(invoice?.amountPaid)}}</td> -->
+						<td class="currencyDisplay"> {{ getSubAmount(invoice) }}</td>
+						<td class="currencyDisplay"> {{ invoice?.totalAmount }}</td>
+						<td class="currencyDisplay"> {{ invoice?.amountPaid }}</td>
 						<td>
 							<button type="button" class="btn button-primary" (click)="editInvoice(invoice.id)"><i
 									class="pi pi-pencil"></i>
