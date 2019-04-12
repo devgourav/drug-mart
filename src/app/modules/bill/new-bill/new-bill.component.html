@@ -68,9 +68,8 @@
 								<td scope="col">{{ billItem.rate }}₹</td>
 								<td scope="col">{{ getSubAmount(billItem.rate,billItem.quantity) }}₹</td>
 								<td scope="col">{{ billItem.discount}}%</td>
-								<td scope="col">{{ billItem.tax["stateTax"] + billItem.tax["countryTax"] }}%</td>
-								<td scope="col">{{ getTotalAmount(billItem.rate,billItem.quantity,billItem.discount+billItem.offer,
-								billItem.tax["stateTax"] + billItem.tax["countryTax"]) }}₹</td>
+								<td scope="col">{{ billItem.taxrate }}%</td>
+								<td scope="col">{{ getTotalAmount(billItem.rate*billItem.quantity,billItem.taxrate-billItem.discount-billItem.offer) }}₹</td>
 								<td scope="col">{{ getOfferDiscount(billItem.offer) }}%</td>
 								<td scope="col">{{ billItem.itemMRP }}₹</td>
 								<td>

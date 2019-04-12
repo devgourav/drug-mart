@@ -61,7 +61,7 @@ export class BillItemModalComponent implements OnInit {
 	get expiryDate() {
 		return this.billItemForm.get('expiryDate');
 	}
-
+	taxMap: Map<string, number>;
 	get quantity() {
 		return this.billItemForm.get('quantity');
 	}
@@ -92,7 +92,6 @@ export class BillItemModalComponent implements OnInit {
 		this.populateItemDropdown();
 		this.fetchOffers();
 		if (this.billItem) {
-			console.warn('BillItem:' + this.billItem);
 			this.populateBillItem();
 		}
 	}
@@ -115,23 +114,20 @@ export class BillItemModalComponent implements OnInit {
 	 * @returns BillItem
 	 */
 	getBillItemObj(): BillItem {
-		let stateTaxRate = 0;
-		let countryTaxRate = 0;
-		let taxMap: Map<string, number> = new Map();
+		let taxRate = 0;
 
-		this.stateTaxes.forEach((tax) => {
-			if (this.billItemForm.get('stateTax').value == tax.id) {
-				stateTaxRate = tax.rate;
-			}
-		});
-		this.countryTaxes.forEach((tax) => {
-			if (this.billItemForm.get('countryTax').value == tax.id) {
-				countryTaxRate = tax.rate;
+		let taxMap: Map<string, string> = new Map();
+		let stateTaxId = this.billItemForm.get('stateTax').value;
+		let countryTaxId = this.billItemForm.get('countryTax').value;
+
+		this.taxes.forEach((tax) => {
+			if (stateTaxId == tax.id || countryTaxId == tax.id) {
+				taxRate += tax.rate;
 			}
 		});
 
-		taxMap.set('stateTax', +stateTaxRate);
-		taxMap.set('countryTax', +countryTaxRate);
+		taxMap.set('stateTax', stateTaxId);
+		taxMap.set('countryTax', countryTaxId);
 
 		this.billItem = new BillItem(
 			this.billItemForm.get('itemId').value,
@@ -149,6 +145,7 @@ export class BillItemModalComponent implements OnInit {
 		this.billItem.discount = +this.billItemForm.get('discount').value;
 		this.billItem.offer = +this.billItemForm.get('offer').value;
 		this.billItem.packType = this.billItemForm.get('packType').value;
+		this.billItem.taxrate = taxRate;
 
 		// const billItem = Object.assign({}, this.billItem);
 		const billItemObj = { ...this.billItem };

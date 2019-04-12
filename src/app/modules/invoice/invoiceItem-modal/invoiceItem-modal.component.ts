@@ -8,7 +8,7 @@ import { TaxService } from 'src/app/core/service/tax.service';
 import { Tax } from 'src/app/core/model/tax.model';
 import { Offer } from 'src/app/core/model/offer.model';
 import { OfferService } from 'src/app/core/service/offer.service';
-import { BillItem } from 'src/app/core/model/billItem.model';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'item-modal',
@@ -16,15 +16,15 @@ import { BillItem } from 'src/app/core/model/billItem.model';
 	styleUrls: [ './invoiceItem-modal.component.scss' ]
 })
 export class InvoiceItemModalComponent implements OnInit {
-	@Input() invoiceItem: BillItem;
-	@Output() addItemEvent: EventEmitter<BillItem> = new EventEmitter();
-	@Output() editItemEvent: EventEmitter<BillItem> = new EventEmitter();
+	@Input() invoiceItem: InvoiceItem;
+	@Output() addItemEvent: EventEmitter<InvoiceItem> = new EventEmitter();
+	@Output() editItemEvent: EventEmitter<InvoiceItem> = new EventEmitter();
 
 	items: Item[] = [];
 	item: Item;
 	taxes: Tax[];
 	itemId: string = '';
-	taxMap: Map<string, number>;
+
 	offers: Offer[] = [];
 
 	stateTaxes: Tax[] = [];
@@ -79,6 +79,8 @@ export class InvoiceItemModalComponent implements OnInit {
 		return this.invoiceItemForm.get('discount');
 	}
 
+	itemSubscription: Subscription;
+
 	constructor(
 		private modalService: NgbModal,
 		public activeModal: NgbActiveModal,
@@ -93,11 +95,14 @@ export class InvoiceItemModalComponent implements OnInit {
 		this.populateItemDropdown();
 		this.fetchOffers();
 		if (this.invoiceItem) {
-			console.warn('InvoiceItem:' + this.invoiceItem);
+			console.log('InvoiceItem:', this.invoiceItem);
 			this.populateInvoiceItem();
 		}
 	}
 
+	/**
+	 * 
+	 */
 	addInvoiceItem() {
 		this.addItemEvent.emit(this.getInvoiceItemObj());
 	}
@@ -106,28 +111,27 @@ export class InvoiceItemModalComponent implements OnInit {
 		this.editItemEvent.emit(this.getInvoiceItemObj());
 	}
 
-	getInvoiceItemObj(): BillItem {
-		let stateTaxRate = 0;
-		let countryTaxRate = 0;
-		for (let tax of this.stateTaxes) {
-			if (this.invoiceItemForm.get('stateTax').value == tax.id) {
-				stateTaxRate = tax.rate;
+	/**
+	 * @name getInvoiceItemObj
+	 * @returns InvoiceItem
+	 */
+	getInvoiceItemObj(): InvoiceItem {
+		let taxRate = 0;
+
+		let taxMap: Map<string, string> = new Map();
+		let stateTaxId = this.invoiceItemForm.get('stateTax').value;
+		let countryTaxId = this.invoiceItemForm.get('countryTax').value;
+
+		this.taxes.forEach((tax) => {
+			if (stateTaxId == tax.id || countryTaxId == tax.id) {
+				taxRate += tax.rate;
 			}
-		}
+		});
 
-		for (let tax of this.countryTaxes) {
-			if (this.invoiceItemForm.get('countryTax').value == tax.id) {
-				countryTaxRate = tax.rate;
-			}
-		}
+		taxMap.set('stateTax', stateTaxId);
+		taxMap.set('countryTax', countryTaxId);
 
-		this.taxMap = new Map();
-		this.taxMap.set('stateTax', +stateTaxRate);
-		this.taxMap.set('countryTax', +countryTaxRate);
-
-		const taxMap = this.convertMapToObject(this.taxMap);
-
-		this.invoiceItem = new BillItem(
+		this.invoiceItem = new InvoiceItem(
 			this.invoiceItemForm.get('itemId').value,
 			this.invoiceItemForm.get('itemName').value,
 			this.invoiceItemForm.get('itemHSN').value,
@@ -137,14 +141,16 @@ export class InvoiceItemModalComponent implements OnInit {
 			this.invoiceItemForm.get('quantity').value,
 			this.invoiceItemForm.get('rate').value,
 			this.invoiceItemForm.get('itemMRP').value,
-			taxMap
+			this.convertMapToObject(taxMap)
 		);
 
 		this.invoiceItem.discount = +this.invoiceItemForm.get('discount').value;
 		this.invoiceItem.offer = +this.invoiceItemForm.get('offer').value;
 		this.invoiceItem.packType = this.invoiceItemForm.get('packType').value;
+		this.invoiceItem.taxrate = taxRate;
 
-		const invoiceItem = Object.assign({}, this.invoiceItem);
+		// const invoiceItem = Object.assign({}, this.invoiceItem);
+		const invoiceItem = { ...this.invoiceItem };
 		return invoiceItem;
 	}
 
@@ -168,11 +174,15 @@ export class InvoiceItemModalComponent implements OnInit {
 	}
 
 	populateItemDropdown() {
-		this._itemService.getItems().subscribe((response) => {
+		this.itemSubscription = this._itemService.getItems().subscribe((response) => {
 			this.items = response;
 		});
 	}
 
+	/**
+	 * 
+	 * @param event 
+	 */
 	populateOnItemSelectEvent(event: any) {
 		this.itemId = event.target.value;
 		for (let item of this.items) {
@@ -201,9 +211,9 @@ export class InvoiceItemModalComponent implements OnInit {
 		this._taxService.getTaxes().subscribe((response) => {
 			this.taxes = response;
 			for (let tax of response) {
-				if (tax.type.get('stateTax')) {
+				if (tax.type['stateTax']) {
 					this.stateTaxes.push(tax);
-				} else {
+				} else if (tax.type['countryTax']) {
 					this.countryTaxes.push(tax);
 				}
 			}
@@ -226,5 +236,9 @@ export class InvoiceItemModalComponent implements OnInit {
 
 	calculatedDiscount(minItems: number, freeItems: number): number {
 		return freeItems / (minItems + freeItems) * 100;
+	}
+
+	ngOnDestroy(): void {
+		this.itemSubscription.unsubscribe();
 	}
 }

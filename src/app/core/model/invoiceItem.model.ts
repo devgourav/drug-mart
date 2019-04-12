@@ -5,6 +5,7 @@ export class InvoiceItem {
 	discount: number;
 	offer: number;
 	packType: string;
+	taxrate: number;
 
 	constructor(
 		public itemId: string,
@@ -16,6 +17,6 @@ export class InvoiceItem {
 		public quantity: number,
 		public rate: number,
 		public itemMRP: number,
-		public tax: Map<string, number>
+		public tax: Map<string, string>
 	) {}
 }

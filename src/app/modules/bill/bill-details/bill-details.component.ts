@@ -8,6 +8,7 @@ import { PaymentService } from 'src/app/core/service/payment.service';
 import { VendorService } from 'src/app/core/service/vendor.service';
 import { Payment } from 'src/app/core/model/payment.model';
 import { Vendor } from 'src/app/core/model/vendor.model';
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-bill-details',
@@ -24,6 +25,9 @@ export class BillDetailsComponent implements OnInit {
 	response: any;
 	anyAmount: number = 0;
 	totalAmount: number = 0;
+	billSubscription: Subscription;
+	paymentSubscription: Subscription;
+	vendorSubscription: Subscription;
 
 	constructor(
 		private _billService: BillService,
@@ -51,7 +55,7 @@ export class BillDetailsComponent implements OnInit {
 	 * @name getBills
 	 */
 	getBills() {
-		this._billService.getBills().subscribe((response) => {
+		this.billSubscription = this._billService.getBills().subscribe((response) => {
 			this.bills = response;
 		});
 	}
@@ -62,28 +66,30 @@ export class BillDetailsComponent implements OnInit {
 	 * @name deleteBill
 	 */
 	deleteBill(bill: Bill) {
-		this._paymentService.getPaymentById(bill.paymentId).subscribe((paymentResponse) => {
+		this.paymentSubscription = this._paymentService.getPaymentById(bill.paymentId).subscribe((paymentResponse) => {
 			this.payment = paymentResponse;
-			this._vendorService.getVendorById(this.payment.vendorId).subscribe((vendorResponse) => {
-				vendorResponse.amountBalance += this.payment.amountPaid - bill.totalAmount;
-				this.vendor = vendorResponse;
+			this.vendorSubscription = this._vendorService
+				.getVendorById(this.payment.vendorId)
+				.subscribe((vendorResponse) => {
+					vendorResponse.amountBalance += this.payment.amountPaid - bill.totalAmount;
+					this.vendor = vendorResponse;
 
-				this.confirmationService.confirm({
-					message: 'Do you want to delete this item?',
-					header: 'Delete Confirmation',
-					icon: 'pi pi-info-circle',
-					reject: () => {
-						this.msgs = [ { severity: 'info', summary: 'Rejected', detail: 'You have rejected' } ];
-					},
-					accept: () => {
-						this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Bill Deleted' } ];
-						this._billService.deleteBill(bill);
-						this._paymentService.deletePayment(this.payment);
-						this._vendorService.updateVendor(this.vendor);
-						this.messageService.add({ severity: 'success', summary: '', detail: 'Bill Deleted' });
-					}
+					this.confirmationService.confirm({
+						message: 'Do you want to delete this item?',
+						header: 'Delete Confirmation',
+						icon: 'pi pi-info-circle',
+						reject: () => {
+							this.msgs = [ { severity: 'info', summary: 'Rejected', detail: 'You have rejected' } ];
+						},
+						accept: () => {
+							this.msgs = [ { severity: 'info', summary: 'Confirmed', detail: 'Bill Deleted' } ];
+							this._billService.deleteBill(bill);
+							this._paymentService.deletePayment(this.payment);
+							this._vendorService.updateVendor(this.vendor);
+							this.messageService.add({ severity: 'success', summary: '', detail: 'Bill Deleted' });
+						}
+					});
 				});
-			});
 		});
 	}
 
@@ -105,5 +111,9 @@ export class BillDetailsComponent implements OnInit {
 	 */
 	printBill(billId: string) {
 		this.router.navigate([ 'Bills/Print Bill', billId ]);
+	}
+
+	ngOnDestroy(): void {
+		this.billSubscription.unsubscribe();
 	}
 }

@@ -139,9 +139,13 @@ export class NewInvoiceComponent implements OnInit {
 			this.invoiceItem.discount = response.discount;
 			this.invoiceItem.offer = response.offer;
 			this.invoiceItem.packType = response.packType;
+			this.invoiceItem.taxrate = response.taxrate;
 			this.itemMap.set(response.itemId, response.quantity);
 
 			const invoiceItem = Object.assign({}, this.invoiceItem);
+
+			console.log('openItemModal', invoiceItem);
+
 			this.invoiceItems.push(invoiceItem);
 			this.calculateTotalCosts(this.invoiceItems);
 		});
@@ -159,8 +163,8 @@ export class NewInvoiceComponent implements OnInit {
 	//   return discountRate*0.1*this.getSubAmount(rate,qty);
 	// }
 
-	getTotalAmount(rate: number, qty: number, discountRate: number, taxRate: number) {
-		return ((1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty)).toFixed(2);
+	getTotalAmount(subAmount: number, netRate: number) {
+		return ((1 + netRate * 0.01) * subAmount).toFixed(2);
 	}
 
 	getOfferDiscount(offer: number) {
@@ -171,7 +175,7 @@ export class NewInvoiceComponent implements OnInit {
 		this.subAmount = this.taxAmount = this.discountAmount = this.offerAmount = this.totalAmount = this.taxRate = this.discountRate = this.offerRate = 0;
 
 		for (let invoiceItem of invoiceItems) {
-			this.taxRate = invoiceItem.tax['stateTax'] + invoiceItem.tax['countryTax'];
+			this.taxRate = invoiceItem.rate;
 			this.discountRate = invoiceItem.discount;
 			this.offerRate = invoiceItem.offer;
 			this.subAmount += invoiceItem.rate * invoiceItem.quantity;

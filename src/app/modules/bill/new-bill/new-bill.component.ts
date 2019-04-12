@@ -131,6 +131,7 @@ export class NewBillComponent implements OnInit {
 			this.billItem.discount = response.discount;
 			this.billItem.offer = response.offer;
 			this.billItem.packType = response.packType;
+			this.billItem.taxrate = response.taxrate;
 			this.itemMap.set(response.itemId, response.quantity);
 
 			const billItem = Object.assign({}, this.billItem);
@@ -151,8 +152,8 @@ export class NewBillComponent implements OnInit {
 	//   return discountRate*0.1*this.getSubAmount(rate,qty);
 	// }
 
-	getTotalAmount(rate: number, qty: number, discountRate: number, taxRate: number) {
-		return ((1 + (taxRate - discountRate) * 0.01) * this.getSubAmount(rate, qty)).toFixed(2);
+	getTotalAmount(subAmount: number, netRate: number) {
+		return ((1 + netRate * 0.01) * subAmount).toFixed(2);
 	}
 
 	getOfferDiscount(offer: number) {
@@ -163,7 +164,7 @@ export class NewBillComponent implements OnInit {
 		this.subAmount = this.taxAmount = this.discountAmount = this.offerAmount = this.totalAmount = this.taxRate = this.discountRate = this.offerRate = 0;
 
 		for (let billItem of billItems) {
-			this.taxRate = billItem.tax['stateTax'] + billItem.tax['countryTax'];
+			this.taxRate = billItem.taxrate;
 			this.discountRate = billItem.discount;
 			this.offerRate = billItem.offer;
 			this.subAmount += billItem.rate * billItem.quantity;

@@ -122,7 +122,7 @@
             <div class="col-sm-4">
               <select name="itemTax1" id="itemTax1" class="form-control" formControlName="stateTax">
                 <option value="" [selected]="true">Select a Tax</option>
-                <option *ngFor="let tax of taxes" value="{{ tax.id }}">{{ tax.name }}</option>
+                <option *ngFor="let tax of stateTaxes" value="{{ tax.id }}">{{ tax.name }}</option>
               </select>
             </div>
           </div>
@@ -132,7 +132,7 @@
             <div class="col-sm-4">
               <select name="itemTax2" id="itemTax2" class="form-control" formControlName="countryTax">
                 <option value="" [selected]="true">Select a Tax</option>
-                <option *ngFor="let tax of taxes" value="{{ tax.id }}">{{ tax.name }}</option>
+                <option *ngFor="let tax of countryTaxes" value="{{ tax.id }}">{{ tax.name }}</option>
               </select>
             </div>
           </div>
