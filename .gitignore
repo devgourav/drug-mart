@@ -45,4 +45,4 @@ testem.log
 Thumbs.db
 
 #Secuity Related
-/src/environments
+src/environments
