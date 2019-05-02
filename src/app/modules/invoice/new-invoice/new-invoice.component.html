@@ -1,10 +1,12 @@
-<div id="new-invoice-wrapper make-scrollable">
-	<div class="title-header">
+<div id="new-invoice-wrapper">
+	<div class="page-appbar">
 		<span class="header-text">New Invoice</span>
 	</div>
 
-	<div class="wrapper-content">
+	<div class="content-wrapper">
 		<div class="input-form">
+
+
 			<form [formGroup]="invoiceInputForm">
 				<div class="row beforeTable">
 					<div class="col-sm-6">
@@ -19,7 +21,7 @@
 								</select>
 							</div>
 							<div class="col-sm-4">
-								<button type="button" (click)="navigateNewClient()" class="btn button-primary">New
+								<button type="button" (click)="navigateNewClient()" class="btn button      button-primary">New
 									Client</button>
 							</div>
 						</div>
@@ -42,6 +44,20 @@
 									disabled>
 							</div>
 						</div>
+
+						<div class="form-group row">
+								<label class="col-sm-3 col-form-label" for="priceListRate">Price List</label>
+								<div class="col-sm-5">
+									<select name="priceListRate" id="priceListRate" formControlName="priceListRate" (change)="setPriceListRate($event)"
+										class="form-control">
+										<option value="" [selected]="true">Select Price list</option>
+										<option *ngFor="let priceList of priceLists" value="{{priceList.rate}}">
+											{{priceList.name}}</option>
+									</select>
+								</div>
+							</div>
+
+
 					</div>
 				</div>
 
@@ -60,19 +76,19 @@
 								<tr>
 									<td scope="col">{{ invoiceItem.itemName }}</td>
 									<td scope="col">{{ invoiceItem.manufacturer }}</td>
-									<td scope="col">{{ invoiceItem.quantity }}</td>
-									<td scope="col">{{ invoiceItem.rate }}₹</td>
-									<td scope="col">{{ getSubAmount(invoiceItem.rate,invoiceItem.quantity) }}₹</td>
-									<td scope="col">{{ invoiceItem.discount}}%</td>
-									<td scope="col">{{ invoiceItem.taxrate }}%
-									</td>
-									<td scope="col">{{ getTotalAmount(invoiceItem.rate*invoiceItem.quantity,invoiceItem.taxrate - invoiceItem.discount-invoiceItem.offer) }}₹</td>
-									<td scope="col">{{ getOfferDiscount(invoiceItem.offer) }}%</td>
 									<td scope="col">{{ invoiceItem.itemMRP }}₹</td>
+									<td scope="col">{{ invoiceItem.quantity }}</td>
+									<td scope="col">{{ invoiceItem.rate.toFixed(2) }}₹</td>
+									<!-- <td scope="col">{{ getSubAmount(invoiceItem.rate,invoiceItem.quantity) }}₹</td> -->
+									<td scope="col">{{ invoiceItem.discount}}%</td>
+									<td scope="col">{{ invoiceItem.taxrate }}%</td>
+									<td scope="col">{{ getTotalAmount(invoiceItem.rate*invoiceItem.quantity,invoiceItem.taxrate - invoiceItem.discount-invoiceItem.offer) }}₹</td>
+									<!-- <td scope="col">{{ getOfferDiscount(invoiceItem.offer) }}%</td> -->
+								
 									<td data-html2canvas-ignore>
-										<button type="button" class="btn button-primary"
+										<button type="button" class="btn button button-primary"
 											(click)="editItem(invoiceItem)"><i class="pi pi-pencil"></i></button>
-										<button type="button" class="btn button-cancel"
+										<button type="button" class="btn button button-cancel"
 											(click)="deleteItem(invoiceItem)"><i class="pi pi-trash"></i></button>
 									</td>
 								</tr>
@@ -83,7 +99,7 @@
 				</div>
 
 				<div class="row action-buttons">
-					<button type="button" class="btn button-primary new-item-btn" (click)="openItemModal()">Add New
+					<button type="button" class="btn button button-primary" (click)="openItemModal()">Add New
 						Item</button>
 				</div>
 				<div class="afterTable">
@@ -113,6 +129,13 @@
 									<span> {{ invoiceAmount.discountAmount }}</span>
 								</div>
 							</div>
+
+							<div class="row cost-row">
+									<label class="col-sm-4" for="discount">Round Off:</label>
+									<div class="amount col-sm-8" id="discount">
+										<span> {{ invoiceAmount.roundOffAmount }}</span>
+									</div>
+								</div>
 
 							<hr>
 							<div class="row cost-row">
@@ -170,13 +193,15 @@
 				</div>
 				<div class="action-buttons">
 					<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="invoiceId"
-						id="invoiceUpdateButton" class="btn button-save" (click)="updateInvoice()">Update</button>
+						id="invoiceUpdateButton" class="btn button button-save" (click)="updateInvoice()">Update</button>
 					<button type="submit" [disabled]="!invoiceInputForm.valid" *ngIf="!invoiceId" id="invoiceSaveButton"
-						class="btn button-save" (click)="saveInvoice()">Save</button>
-					<button type="button" id="invoiceCancelButton" class="btn button-cancel"
+						class="btn button button-save" (click)="saveInvoice()">Save</button>
+					<button type="button" id="invoiceCancelButton" class="btn button button-cancel"
 						(click)="closeClicked()">Cancel</button>
 				</div>
 			</form>
+
+
 		</div>
 	</div>
 </div>

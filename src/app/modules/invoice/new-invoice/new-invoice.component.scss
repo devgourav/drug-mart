@@ -2,26 +2,22 @@
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
 
-.wrapper-content {
-	height: 100%;
+.content-wrapper {
+	height: 100vh;
+	background-color: $background-color-dark-light;
+	color: $text-color-light;
+
+
 	label {
 		text-align: right;
 	}
 	.input-form {
-		margin-left: 15px;
-		padding-top: 40px;
 		text-align: left;
 		font-weight: bold;
 		width: 100vw;
 
 		.table-wrapper {
 			width: 100%;
-			margin-left: 15px;
-		}
-
-		.new-item-btn {
-			margin-top: 20px;
-			text-align: center;
 		}
 
 		.beforeTable {
@@ -57,9 +53,3 @@
 		}
 	}
 }
-
-// .rupeeSymbol {
-// 	text-align: left;
-// 	display: inline-flex;
-// 	align-items: center;
-// }

@@ -16,6 +16,8 @@ import { InvoiceItemModalComponent } from '../invoiceItem-modal/invoiceItem-moda
 import { Receipt } from 'src/app/core/model/receipt.model';
 import { ReceiptService } from 'src/app/core/service/receipt.service';
 import { ItemService } from 'src/app/core/service/item.service';
+import { PriceList } from 'src/app/core/model/priceList.model';
+import { PriceListService } from 'src/app/core/service/price-list.service';
 
 // TODO: Add A save/Update prompt
 
@@ -29,6 +31,7 @@ export class NewInvoiceComponent implements OnInit {
 	invoiceItems: InvoiceItem[] = [];
 	invoiceItem: InvoiceItem;
 	clients: Client[];
+	priceLists: PriceList[];
 	client: Client;
 	currDate: Date = new Date();
 	receipt: Receipt;
@@ -50,6 +53,7 @@ export class NewInvoiceComponent implements OnInit {
 	taxRate: number;
 	discountRate: number;
 	offerRate: number;
+	priceListRate: number = 0;
 	isInvoicePayment: boolean = true;
 
 	invoiceAmount: Amount = new Amount();
@@ -57,6 +61,7 @@ export class NewInvoiceComponent implements OnInit {
 	invoiceInputForm = this.fb.group({
 		invoiceNumber: [ '' ],
 		clientId: [ '', Validators.required ],
+		priceListRate: new FormControl(''),
 		invoicedDate: [ '', Validators.required ],
 		orderNote: new FormControl(''),
 		amountPaid: [ '', Validators.required ],
@@ -73,12 +78,14 @@ export class NewInvoiceComponent implements OnInit {
 		private route: ActivatedRoute,
 		private router: Router,
 		private fb: FormBuilder,
-		private _receiptService: ReceiptService
+		private _receiptService: ReceiptService,
+		private _priceListService: PriceListService
 	) {}
 
 	ngOnInit() {
 		this.generateInvoiceNumber();
 		this.populateClientDropDown();
+		this.populatePriceListsDropDown();
 		this.getCurrentDate();
 
 		this.route.paramMap.subscribe((params) => {
@@ -91,14 +98,12 @@ export class NewInvoiceComponent implements OnInit {
 		this.tableHeaders = [
 			{ field: '', header: 'Particular' },
 			{ field: '', header: 'Manufacturer' },
+			{ field: '', header: 'MRP' },
 			{ field: '', header: 'Quantity' },
 			{ field: '', header: 'Rate' },
-			{ field: '', header: 'Amount' },
 			{ field: '', header: 'Discount' },
 			{ field: '', header: 'Tax' },
-			{ field: '', header: 'Total' },
-			{ field: '', header: 'Offers' },
-			{ field: '', header: 'M.R.P' }
+			{ field: '', header: 'Amount' },
 		];
 	}
 
@@ -171,15 +176,20 @@ export class NewInvoiceComponent implements OnInit {
 		return offer.toFixed(2);
 	}
 
+
 	calculateTotalCosts(invoiceItems: InvoiceItem[]) {
 		this.subAmount = this.taxAmount = this.discountAmount = this.offerAmount = this.totalAmount = this.taxRate = this.discountRate = this.offerRate = 0;
+
+		console.log("calculateTotalCosts->priceListRate",this.priceListRate);
 
 		for (let invoiceItem of invoiceItems) {
 			this.taxRate = invoiceItem.rate;
 			this.discountRate = invoiceItem.discount;
 			this.offerRate = invoiceItem.offer;
-			this.subAmount += invoiceItem.rate * invoiceItem.quantity;
+			this.subAmount += (invoiceItem.rate + this.priceListRate * 0.01 * invoiceItem.rate) * invoiceItem.quantity;
 		}
+
+		console.log("calculateTotalCosts",this.subAmount);
 
 		this.taxAmount += this.taxRate * 0.01 * this.subAmount;
 		this.offerAmount += this.offerRate * 0.01 * this.subAmount;
@@ -188,14 +198,24 @@ export class NewInvoiceComponent implements OnInit {
 		this.invoiceAmount.subAmount = this.subAmount.toFixed(2);
 		this.invoiceAmount.taxAmount = this.taxAmount.toFixed(2);
 		this.invoiceAmount.discountAmount = (this.discountAmount + this.offerAmount).toFixed(2);
-		this.invoiceAmount.totalAmount = (+this.invoiceAmount.subAmount +
+
+		var totalSum: number = +this.invoiceAmount.subAmount +
 			+this.invoiceAmount.taxAmount -
-			+this.invoiceAmount.discountAmount).toFixed(2);
+			+this.invoiceAmount.discountAmount;
+
+		this.invoiceAmount.roundOffAmount = (+totalSum.toPrecision(2) - totalSum).toFixed(2);
+		this.invoiceAmount.totalAmount = (+totalSum.toPrecision(2)).toFixed(2);
 	}
 
 	populateClientDropDown() {
 		this._clientService.getClients().subscribe((response) => {
 			this.clients = response;
+		});
+	}
+
+	populatePriceListsDropDown() {
+		this._priceListService.getPriceLists().subscribe((response) => {
+			this.priceLists = response;
 		});
 	}
 
@@ -266,6 +286,18 @@ export class NewInvoiceComponent implements OnInit {
 	fetchClientName(event: any) {
 		this.clientId = event.target.value;
 		this.setClientDetails(this.clientId);
+	}
+
+	setPriceListRate(event: any){
+		console.log("setPriceListRate",event.target.value);
+		this.priceListRate = event.target.value;
+		if(this.invoiceItems.length > 0){
+			for(let invoiceItem of this.invoiceItems){
+				invoiceItem.rate += this.priceListRate * 0.01 * invoiceItem.rate;
+			}
+			this.calculateTotalCosts(this.invoiceItems);
+		}
+		
 	}
 
 	setClientDetails(clientId: string): Client {

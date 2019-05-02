@@ -73,8 +73,7 @@ export class TaxDetailsComponent implements OnInit {
 	 * @param tax 
 	 */
 	getTaxType(tax: Tax): string {
-		var taxMap = tax.type;
-		return taxMap['stateTax'] ? 'StateTax' : 'CountryTax';
+		return tax.isStateTax? 'StateTax' : 'CountryTax';
 	}
 
 	/**
@@ -111,14 +110,17 @@ export class TaxDetailsComponent implements OnInit {
 	 */
 	getTaxObj(): Tax {
 		var taxMap: Map<string, boolean> = new Map();
-		if (this.isStateTax == true) {
-			taxMap.set('stateTax', true);
-		} else if (this.isCountryTax == true) {
-			taxMap.set('countryTax', true);
-		}
 
 		this.tax = new Tax(this.taxInputForm.get('name').value, this.taxInputForm.get('rate').value);
-		this.tax.type = this.convertMapToObject(taxMap);
+
+		if (this.isStateTax == true) {
+			this.tax.isStateTax = true;
+			this.tax.isCountryTax = false;
+		} else if (this.isCountryTax == true) {
+			this.tax.isStateTax = false;
+			this.tax.isCountryTax = true;
+		}
+
 
 		const tax = Object.assign({}, this.tax);
 
@@ -144,14 +146,6 @@ export class TaxDetailsComponent implements OnInit {
 		if (isChecked) {
 			this.taxInputForm.get('isStateTax').setValue(false);
 		}
-	}
-
-	convertMapToObject(map: Map<any, any>): Map<any, any> {
-		let objectMap = Object.create(null);
-		for (let [ k, v ] of map) {
-			objectMap[k] = v;
-		}
-		return objectMap;
 	}
 
 	closeClicked() {

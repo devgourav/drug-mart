@@ -53,12 +53,25 @@ export class ItemService {
 		this.itemDocument.update(item);
 	}
 
-	batchItemQuantityUpdate(itemMaps: Map<string, number>) {
+	batchItemQuantityUpdate(itemQuantityMap: Map<string, number>) {
 		var batch = this.afs.firestore.batch();
 
-		for (let [ key, value ] of itemMaps) {
+		for (let [ key, value ] of itemQuantityMap) {
 			const sfDocRef = this.afs.firestore.collection('items').doc(key);
 			batch.update(sfDocRef, { quantity: value });
+		}
+
+		batch.commit().then((response) => {
+			console.log('response', response);
+		});
+	}
+
+	batchPurchasePriceUpdate(itemPurchaseCostMap: Map<string, number>) {
+		var batch = this.afs.firestore.batch();
+
+		for (let [ key, value ] of itemPurchaseCostMap) {
+			const sfDocRef = this.afs.firestore.collection('items').doc(key);
+			batch.update(sfDocRef, { purchaseCost: value });
 		}
 
 		batch.commit().then((response) => {

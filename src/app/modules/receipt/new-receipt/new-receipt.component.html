@@ -1,5 +1,5 @@
 <div id="new-receipt-wrapper">
-  <div class="title-header">
+  <div class="page-appbar">
     <span class="header-text">Receipt Details</span>
   </div>
 
@@ -79,8 +79,8 @@
         </div>
       </form>
       <div class="action-buttons">
-        <button type="button" class="btn button-save" (click)="saveReceipt()">Save</button>
-        <button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+        <button type="button" class="btn button button-save" (click)="saveReceipt()">Save</button>
+        <button type="button" class="btn button button-cancel" (click)="closeClicked()">Back</button>
     </div>
     </div>
 
@@ -117,7 +117,7 @@
               <td>{{ receipt?.receiptDate}}</td>
               <td>{{ getReceiptType(receipt) }}</td>
               <td data-html2canvas-ignore>
-                <button type="button" class="btn button-primary"><i
+                <button type="button" class="btn button button-primary"><i
                   class="pi pi-search"></i></button>
               </td>
             </tr>

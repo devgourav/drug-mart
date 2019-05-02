@@ -1,13 +1,14 @@
 <div id="invoice-details-wrapper">
 
-	<div class="title-header">
+	<div class="page-appbar">
 		<span class="header-text">Recent Invoices</span>
+
 		<div class="action-area">
-			<a routerLink="New Invoice"><button class="btn button-save">New Invoice</button></a>
-			<button class="btn button-filter">Export</button>
+			<a routerLink="New Invoice"><button class="button button-save">New Invoice</button></a>
+			<button class="button button-filter">Export</button>
 		</div>
-		<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
 	</div>
+	<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
 
 
 	<div class="content-wrapper">
@@ -16,7 +17,7 @@
 			<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 
-			<p-table #dt [columns]="tableHeaders" [value]="invoices">
+			<p-table #dt [columns]="tableHeaders" [value]="invoices" [paginator]="true" [rows]="10">
 				<ng-template pTemplate="caption">
 					<div style="text-align: right">
 						<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -25,7 +26,7 @@
 					</div>
 				</ng-template>
 				<ng-template pTemplate="header">
-					<tr>
+					<tr class="table-header">
 						<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
 							{{tableHeader.header}}
 							<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
@@ -34,7 +35,7 @@
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-invoice>
-					<tr>
+					<tr class="table-body">
 						<td>{{ invoice?.invoiceNumber}}</td>
 						<td>{{ invoice?.invoicedDate }}</td>
 						<td>{{ invoice?.clientName }}</td>
@@ -42,13 +43,13 @@
 						<td class="currencyDisplay"> {{ invoice?.totalAmount }}</td>
 						<td class="currencyDisplay"> {{ invoice?.amountPaid }}</td>
 						<td>
-							<button type="button" class="btn button-primary" (click)="editInvoice(invoice.id)"><i
+							<button type="button" class="button button-primary" (click)="editInvoice(invoice.id)"><i
 									class="pi pi-pencil"></i>
 							</button>
-							<button type="button" class="btn button-primary" (click)="printInvoice(invoice.id)"><i
+							<button type="button" class="button button-primary" (click)="printInvoice(invoice.id)"><i
 								class="pi pi-print"></i>
 							</button>
-							<button type="button" class="btn button-cancel" (click)="deleteInvoice(invoice)">
+							<button type="button" class="button button-cancel" (click)="deleteInvoice(invoice)">
 								<i class="pi pi-trash"></i>
 							</button>
 

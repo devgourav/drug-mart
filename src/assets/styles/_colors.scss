@@ -1,18 +1,28 @@
-$text-color-dark: black;
-$text-color: #e0e0e0;
-$text-color-light: white;
+//Light Theme
+$text-color-light: #fafafa;
+$background-color-light: #e0e0e0;
 
-$primary-color: #ff9800;
-$primary-color-dark: #f57c00;
-$primary-accent-color: #448aff;
-$primary-accent-color-light: #03a9f4;
+//Dark Theme
+$text-color-dark: #37474f;
+$background-color-dark: #37474f;
+$background-color-dark-light: #546e7a;
+
+
+
+
+
+
+//Common Theme
+$primary-accent-color: #ff9800;
+$primary-accent-color-dark: #f57c00;
+
+$secondary-accent-color: #448aff;
+$secondary-accent-color-light: #03a9f4;
 
 $positive-color: #4caf50;
 $positive-color-dark: #37803a;
 $negative-color: #f44336;
 $negative-color-dark: #ea1c0d;
+$border-color-dark:#37474f;
 
-$border-color-dark: #616161;
-$background-color: #e0e0e0;
-$background-color-light: #eeeeee;
-$background-color-dark: #616161;
+

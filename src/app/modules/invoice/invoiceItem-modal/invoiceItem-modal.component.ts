@@ -24,9 +24,7 @@ export class InvoiceItemModalComponent implements OnInit {
 	item: Item;
 	taxes: Tax[];
 	itemId: string = '';
-
 	offers: Offer[] = [];
-
 	stateTaxes: Tax[] = [];
 	countryTaxes: Tax[] = [];
 
@@ -211,9 +209,9 @@ export class InvoiceItemModalComponent implements OnInit {
 		this._taxService.getTaxes().subscribe((response) => {
 			this.taxes = response;
 			for (let tax of response) {
-				if (tax.type['stateTax']) {
+				if (tax.isStateTax) {
 					this.stateTaxes.push(tax);
-				} else if (tax.type['countryTax']) {
+				} else{
 					this.countryTaxes.push(tax);
 				}
 			}

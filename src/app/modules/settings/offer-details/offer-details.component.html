@@ -1,5 +1,5 @@
 <div id="offer-details-wrapper">
-	<div class="title-header">
+	<div class="page-appbar">
 		<span class="header-text">Offer Details</span>
 	</div>
 
@@ -8,7 +8,7 @@
 
 			<div class="row">
 				<div class="col">
-					<div class=" form-group row">
+					<!-- <div class=" form-group row">
 						<label class="col-md-3 col-form-label" for="offerName">Offer Name</label>
 						<div class="col-md-5">
 							<input maxlength="50" type="text" maxlength="100" id="offerName" class="form-control"
@@ -18,7 +18,7 @@
 							<p-message severity="error" text="Offer Name Should not be empty"
 								*ngIf="name.errors && (name.touched || name.dirty)"></p-message>
 						</div>
-					</div>
+					</div> -->
 
 					<div class=" form-group row">
 						<label class="col-md-3 col-form-label" for="rate">Required Items</label>
@@ -57,7 +57,7 @@
 			<div class="form-group row">
 				<div class="col-sm-3"></div>
 				<div class="col-sm-9 action-button">
-					<button type="submit" [disabled]="!offerInputForm.valid" class="btn button-save"
+					<button type="submit" [disabled]="!offerInputForm.valid" class="btn button button-save"
 						(click)="setOffer()">Add
 						Offer</button>
 				</div>
@@ -98,7 +98,7 @@
 						<td>{{ offer?.freeItems }}</td>
 						<td>{{ calculatedDiscount(offer?.minItems,offer?.freeItems) }}</td>
 						<td data-html2canvas-ignore>
-							<button type="button" class="btn button-cancel" (click)="deleteOffer(offer)">Delete</button>
+							<button type="button" class="btn button button-cancel" (click)="deleteOffer(offer)">Delete</button>
 						</td>
 					</tr>
 				</ng-template>
@@ -109,6 +109,6 @@
 	</div>
 
 	<div class="action-buttons">
-		<button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+		<button type="button" class="btn button button-cancel" (click)="closeClicked()">Back</button>
 	</div>
 </div>

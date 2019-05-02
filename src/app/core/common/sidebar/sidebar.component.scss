@@ -3,14 +3,16 @@
 
 .sidebar-wrapper {
 	.sidebar-info {
+		font-family: 'Montserrat', sans-serif;
 		color: $text-color-dark;
-		background: $primary-color;
+		background: $primary-accent-color;
 		height: 15vh;
 		text-transform: uppercase;
 		padding: 5px 0;
 		text-align: center;
 		width: 100%;
 		font-size: 1.3em;
+		font-weight: 600;
 		display: inline-block;
 		.software-name {
 			display: inline-block;
@@ -19,10 +21,12 @@
 	}
 
 	.sidebar-brand {
+		font-family: 'Montserrat', sans-serif;
 		color: $text-color-dark;
 		text-transform: uppercase;
-		background: $primary-color-dark;
+		background: $primary-accent-color-dark;
 		margin-bottom: 40px;
+		font-weight: 600;
 		padding: 5px;
 		text-align: center;
 		width: 100%;
@@ -38,9 +42,11 @@
 			line-height: 50px;
 			text-align: left;
 			a {
+				font-family: 'Montserrat', sans-serif;
 				display: block;
 				text-decoration: none;
 				color: $text-color-light;
+				font-weight: 600;
 				font-size: 1.2em;
 			}
 
@@ -54,7 +60,7 @@
 
 			.router-link-active {
 				background: $primary-accent-color;
-				color: $text-color;
+				color: $text-color-light;
 			}
 		}
 	}

@@ -1,14 +1,13 @@
 <div id="receipt-details-wrapper">
 
-  <div class="title-header">
+  <div class="page-appbar">
     <span class="header-text">Receipt Details</span>
     <div class="action-area">
-      <a routerLink="New Receipt"><button class="btn button-save">New Receipt</button></a>
-      <button class="btn button-filter">Export</button>
+      <a routerLink="New Receipt"><button class="button button-save">New Receipt</button></a>
+      <button class="button button-filter">Export</button>
     </div>
-    <p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
-
   </div>
+  <p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
 
 
   <div class="content-wrapper">
@@ -17,7 +16,7 @@
       <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 
-      <p-table #dt [columns]="tableHeaders" [value]="receipts">
+      <p-table #dt [columns]="tableHeaders" [value]="receipts" [paginator]="true" [rows]="10">
         <ng-template pTemplate="caption">
           <div style="text-align: right">
             <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -27,7 +26,7 @@
         </ng-template>
 
         <ng-template pTemplate="header">
-          <tr>
+          <tr class="table-header">
             <th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
               {{tableHeader.header}}
               <p-sortIcon [field]="tableHeader.field"></p-sortIcon>
@@ -36,7 +35,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-receipt>
-          <tr>
+          <tr class="table-body">
             <td>{{ receipt?.clientName }}</td>
             <td>{{ receipt?.clientContactName }}</td>
             <td>{{ receipt?.clientPhoneNumber }}</td>
@@ -44,9 +43,9 @@
             <td>{{ receipt?.receiptDate }}</td>
             <td>{{ getReceiptType(receipt) }}</td>
             <td data-html2canvas-ignore>
-              <button type="button" class="btn button-primary" (click)="printReceipt(receipt.id)"><i
+              <button type="button" class="btn button button-primary" (click)="printReceipt(receipt.id)"><i
                   class="pi pi-print"></i></button>
-              <button type="button" class="btn button-cancel" (click)="deleteReceipt(receipt)"><i
+              <button type="button" class="btn button button-cancel" (click)="deleteReceipt(receipt)"><i
                   class="pi pi-trash"></i></button>
             </td>
           </tr>

@@ -20,6 +20,8 @@ export class AuthService {
 	displayName: string = '';
 	currentUser: any;
 
+	errorMessage: string = '';
+
 	credential: auth.AuthCredential;
 	confirmationResult: auth.ConfirmationResult;
 
@@ -40,62 +42,48 @@ export class AuthService {
 		);
 	}
 
-	// async googleLogin() {
-	// 	console.log('Google login');
-	// 	const provider = new auth.GoogleAuthProvider();
-	// 	await this.afAuth.auth
-	// 		.signInWithPopup(provider)
-	// 		.then((firebaseUser) => {
-	// 			this.updateUserData(firebaseUser.user);
-	// 		})
-	// 		.catch((error) => console.error('googleLogin', error));
-	// }
 
 	async logout() {
 		await this.afAuth.auth.signOut();
 		return this.router.navigate([ '/' ]);
 	}
 
-	// public onEmailandPasswordRegister(emailID, newPassword) {
+	// public onEmailandPasswordSignIn(emailID:string, password:string){
 	// 	auth()
-	// 		.createUserWithEmailAndPassword(emailID, newPassword)
-	// 		.then((user) => {
-	// 			return this.updateUserData(user);
+	// 		.signInWithEmailAndPassword(emailID, password)
+	// 		.then((firebaseUser) => {
+	// 			if (firebaseUser) {
+	// 				this.setUserData(firebaseUser.user);
+	// 			}
 	// 		})
-	// 		.catch((error) => console.error('onRegisterSubmit', error));
+	// 		.catch(function(error){
+	// 			console.log("Login Error",error);
+	// 			this.errorMessage = error.message;
+	// 		});
+
+	// 		throw new Error(this.errorMessage);
 	// }
 
-	public onEmailandPasswordSignIn(emailID, password) {
-		auth()
-			.signInWithEmailAndPassword(emailID, password)
-			.then((firebaseUser) => {
-				if (firebaseUser) {
-					this.setUserData(firebaseUser.user);
-				}
-			})
-			.catch((error) => console.error('onEmailSignInSubmit', error));
-	}
-
-	public setUserData(user: any) {
-		this._userService.getUserById(user.uid).subscribe((response) => {
-			console.log('Response:', response);
-			if (response.roles != '') {
-				this.roles = response.roles;
-			} else {
-				this.roles = { subscriber: true, editor: false, admin: false };
-			}
-			var data: User = {
-				id: user.uid,
-				email: user.email,
-				phoneNumber: ' ',
-				displayName: user.displayName,
-				roles: this.roles,
-				creationDate: response.creationDate,
-				modificationDate: response.modificationDate
-			};
-			return this.router.navigateByUrl('/Dashboard');
-		});
-	}
+	// public setUserData(user: any) {
+	// 	this._userService.getUserById(user.uid).subscribe((response) => {
+	// 		console.log('Response:', response);
+	// 		if (response.roles != '') {
+	// 			this.roles = response.roles;
+	// 		} else {
+	// 			this.roles = { subscriber: true, editor: false, admin: false };
+	// 		}
+	// 		var data: User = {
+	// 			id: user.uid,
+	// 			email: user.email,
+	// 			phoneNumber: ' ',
+	// 			displayName: user.displayName,
+	// 			roles: this.roles,
+	// 			creationDate: response.creationDate,
+	// 			modificationDate: response.modificationDate
+	// 		};
+	// 		return this.router.navigateByUrl('/Dashboard');
+	// 	});
+	// }
 
 	private checkAuthorization(user: User, allowedRoles: string[]): boolean {
 		if (!user) {
@@ -109,7 +97,7 @@ export class AuthService {
 		return false;
 	}
 
-	Abilities;
+	//Abilities
 	canRead(user: User): boolean {
 		const allowed = [ 'admin', 'editor', 'subscriber' ];
 		return this.checkAuthorization(user, allowed);

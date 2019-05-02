@@ -3,39 +3,26 @@
 @import "../../../../assets/styles/common.scss";
 
 #tax-details-wrapper {
-	width: 100%;
-	font-family: 'IBM Plex Sans', sans-serif;
-	color: $text-color-dark;
-	height: 100%;
+	font-family: 'Montserrat', sans-serif;
+	color: $text-color-light;
+	background-color: $background-color-dark-light;
+	height:100%;
 
 	.input-form {
+		text-align: left;
 		font-weight: bold;
-		margin-top: 40px;
-		text-align: center;
-		margin-left: 40px;
 		padding: 10px;
-		width: 50vw;
-
-		label {
-			text-align: right;
-		}
-
-		.error-message {
-			text-align: left;
-		}
-
-		.action-button {
-			display: flex;
-			justify-content: left;
-			button {
-				width: 30%;
-			}
-		}
+		width:100%;
 	}
 
 	.taxType {
 		display: flex;
 		justify-content: left;
 		font-weight: normal;
+	}
+
+	.table-wrapper{
+		padding-left: 40px;
+		padding-top: 40px;
 	}
 }

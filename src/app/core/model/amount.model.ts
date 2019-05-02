@@ -4,4 +4,5 @@ export class Amount {
 	offerAmount: string;
 	subAmount: string; //Amount
 	totalAmount: string; //Amount - Discount + Tax
+	roundOffAmount: string;
 }

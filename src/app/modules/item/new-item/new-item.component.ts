@@ -212,8 +212,9 @@ export class NewItemComponent implements OnInit {
 
 	fetchTaxes() {
 		this._taxService.getTaxes().subscribe((response) => {
+			console.log("getTaxes:",response);
 			for (let tax of response) {
-				if (tax.type.get('stateTax')) {
+				if (tax.isStateTax) {
 					this.stateTaxes.push(tax);
 				} else {
 					this.countryTaxes.push(tax);

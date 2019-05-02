@@ -4,15 +4,19 @@ export class Invoice {
 	id: string;
 	invoiceNumber: string;
 	clientName: string;
+	priceListRate: number;
 	totalTax: number;
 	totalDiscount: number;
 	totalAmount: number;
+	roundOffAmount: number;
 	creationDate: Date;
 	modificationDate: Date;
 	paymentMethod: string;
 	orderNote: string;
 	paymentRef: string;
 	receiptId: string;
+
+
 
 	constructor(
 		public clientId: string,

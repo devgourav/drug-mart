@@ -1,74 +1,87 @@
 @import "../assets/styles/_colors.scss";
 @import "../assets/styles/_button.scss";
 @import "../assets/styles/common.scss";
-
-// #login-wrapper {
-// 	display: flex;
-// 	justify-content: center;
-// 	align-items: center;
-// 	background-color: $primary-color;
-// 	width: 20vw;
-
-// 	.login-content {
-// 		padding: 10px;
-// 		text-align: center;
-
-// 		label {
-// 			text-align: right;
-// 		}
-// 	}
-// 	.text-header {
-// 		padding: 10px;
-// 	}
-// }
+@import "../assets/styles/_mixins.scss";
 
 html,
 body {
-	min-height: 100vh;
+	color: $text-color-light;
 	height: auto;
 	margin: 0;
+	min-height: 100vh;
 }
 
-.login-wrapper {
+.page-container {
+	
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.4em;
+	font-weight: 500;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+  flex-direction: column;
 	height: 100vh;
-	// background-color: $background-color;
-	background-image: url("../assets/graphics/prism.png");
-	background-repeat: repeat;
+	// background-image: url("../assets/graphics/prism.png");
+	// background-repeat: repeat;
 
-	.login-content {
-		padding: 20px;
-		width: 20vw;
+	.login-wrapper {
 		text-align: center;
+		padding: 30px;
+		background-color: white;
+		border-radius: 10px;
+		width:28vw;
+	
+		@include z-depth-3;
 
 		.text-header {
 			padding-bottom: 20px;
+
 			.title-text {
+				font-family: 'Montserrat', sans-serif;
+				font-weight: 600;
 				font-size: 2em;
-				color: $primary-color-dark;
-			}
-			.subtitle-text {
-				font-size: 1.2em;
-				color: $text-color-light;
+				letter-spacing: 0.06em;
+				color: $primary-accent-color-dark;
 			}
 		}
 
 		label {
 			text-align: right;
-			color: $text-color-light;
 		}
 
-		button {
-			padding-top: 5px;
-			width: 100%;
-		}
-
-		.notice-text {
+		input{
+			font-weight: 600;
 			font-size: 1em;
-			color: $text-color-light;
 		}
+
+		.button-wrapper{
+			display: flex;
+			margin-top:40px;
+			justify-content: center;
+
+
+			.button-login{
+				color: $text-color-dark;
+				font-weight: 600;
+				letter-spacing: 0.06em;
+
+				background: rgb(255,235,59);
+				background: linear-gradient(90deg, rgba(255,235,59,1) 0%, rgba(251,140,0,1) 44%, rgba(244,67,54,1) 100%);
+			}
+		}
+
+	}
+
+	.notice-header{
+		margin-top: 2em;
+		text-align: center;
+		width:40vw;
+	}
+	.notice-text {
+		font-family: 'Esteban', serif;
+		font-size: 1.2em;
+		font-weight: 400;
+		color: $negative-color;
 	}
 }
 
@@ -82,7 +95,8 @@ body {
 		width: 85vw;
 		float: right;
 		margin-left: 10px;
-		background: $background-color;
+		background: $background-color-light;
+		
 	}
 
 	.app-sidebar {
@@ -91,20 +105,7 @@ body {
 		height: 100%;
 		background: $background-color-dark;
 		overflow-y: auto;
+		@include z-depth-2;
 	}
 }
 
-// mat-sidenav-container {
-// 	height: 100vh;
-// }
-// mat-sidenav {
-// 	width: 15vw;
-// 	height: 100vh;
-// 	background: $background-color-dark;
-// }
-
-// mat-sidenav-content {
-// 	height: 100vh;
-// 	margin-left: 10px;
-// 	background: $background-color;
-// }

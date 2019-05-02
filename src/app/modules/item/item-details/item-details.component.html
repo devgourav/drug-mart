@@ -1,23 +1,25 @@
 <div id="item-details-wrapper">
 
-	<div class="title-header">
-		<span class="header-text">Item Details</span>
-		<div class="action-area">
-				<a routerLink="New Item"><button class="btn button-save">New Item</button></a>
-				<button class="btn button-filter">Export</button>
+	<div class="page-appbar">
+			<span class="header-text">Item Details</span>
+	
+			<div class="action-area">
+				<a routerLink="New Item"><button class="button button-save">New Item</button></a>
+				<a routerLink="Price List"><button class="button button-save">Price List</button></a>
+				<button class="button button-filter">Export</button>
 			</div>
-			<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
+		</div>
 
-	</div>
+		<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
 
 
 	<div class="content-wrapper">
 		<div class="table-wrapper">
 
-			<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+				<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 
-			<p-table #dt [columns]="tableHeaders" [value]="items">
+			<p-table #dt [columns]="tableHeaders" [value]="items" [paginator]="true" [rows]="10">
 				<ng-template pTemplate="caption">
 					<div style="text-align: right">
 						<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -27,7 +29,7 @@
 				</ng-template>
 
 				<ng-template pTemplate="header">
-					<tr>
+					<tr class="table-header">
 						<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
 							{{tableHeader.header}}
 							<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
@@ -36,7 +38,7 @@
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-item>
-					<tr>
+					<tr class="table-body">
 						<td>{{ item?.name }}</td>
 						<td>{{ item?.manufacturer }}</td>
 						<td>{{ item?.HSNCode }}</td>
@@ -45,9 +47,9 @@
 						<!-- <td>{{ item?.saleCost }}</td> -->
 						<td>{{ item?.quantity }}</td>
 						<td data-html2canvas-ignore>
-							<button type="button" class="btn button-primary"
+							<button type="button" class="button button-primary"
 								(click)="editItem(item.id)">View/Edit</button>
-							<button type="button" class="btn button-cancel" (click)="deleteItem(item)">Delete</button>
+							<button type="button" class="button button-cancel" (click)="deleteItem(item)">Delete</button>
 						</td>
 					</tr>
 

@@ -1,5 +1,5 @@
 <div id="new-payment-wrapper">
-  <div class="title-header">
+  <div class="page-appbar">
     <span class="header-text">Payment Details</span>
   </div>
 
@@ -80,8 +80,8 @@
         </div>
       </form>
       <div class="action-buttons">
-        <button type="button" class="btn button-save" (click)="savePayment()">Save</button>
-        <button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
+        <button type="button" class="btn button button-save" (click)="savePayment()">Save</button>
+        <button type="button" class="btn button button-cancel" (click)="closeClicked()">Back</button>
     </div>
     </div>
 
@@ -95,7 +95,7 @@
           <ng-template pTemplate="caption">
             <div style="text-align: right">
               <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-              <input type="text" pInputText size="50" placeholder="Search Paymentes"
+              <input type="text" pInputText size="50" placeholder="Search Payments"
                 (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
             </div>
           </ng-template>
@@ -118,7 +118,7 @@
               <td>{{ payment?.paymentDate}}</td>
               <td>{{ getPaymentType(payment) }}</td>
               <td data-html2canvas-ignore>
-                <button type="button" class="btn button-primary"><i
+                <button type="button" class="btn button button-primary"><i
                   class="pi pi-search"></i></button>
               </td>
             </tr>

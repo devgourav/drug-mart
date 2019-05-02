@@ -25,7 +25,9 @@ export class NewBillComponent implements OnInit {
 	billItems: BillItem[] = [];
 	billItem: BillItem;
 	payment: Payment;
-	itemMap: Map<string, number> = new Map();
+	itemQuantityMap: Map<string, number> = new Map();
+	itemPurchaseCostMap: Map<string, number> = new Map();
+
 
 	billId: string = '';
 	vendorId: string = '';
@@ -132,7 +134,8 @@ export class NewBillComponent implements OnInit {
 			this.billItem.offer = response.offer;
 			this.billItem.packType = response.packType;
 			this.billItem.taxrate = response.taxrate;
-			this.itemMap.set(response.itemId, response.quantity);
+			this.itemQuantityMap.set(response.itemId, response.quantity);
+			this.itemPurchaseCostMap.set(response.itemId, response.rate);
 
 			const billItem = Object.assign({}, this.billItem);
 			this.billItems.push(billItem);
@@ -236,7 +239,9 @@ export class NewBillComponent implements OnInit {
 	saveBill() {
 		this.paymentId = this._paymentService.setPayment(this.getPaymentObj());
 		this._billService.setBill(this.getBillObj());
-		this._itemService.batchItemQuantityUpdate(this.itemMap);
+		this._itemService.batchItemQuantityUpdate(this.itemQuantityMap);
+		this._itemService.batchPurchasePriceUpdate(this.itemPurchaseCostMap);
+
 		this.updateAccountBalance();
 		this.closeClicked();
 	}

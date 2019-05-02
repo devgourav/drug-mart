@@ -1,62 +1,57 @@
 <div id="client-details-wrapper">
+  <div class="page-appbar">
+    <span class="header-text">Client Details</span>
 
-	<div class="title-header">
-		<span class="header-text">Client Details</span>
-		<div class="action-area">
-			<a routerLink="New Client"><button class="btn button-save">New Client</button></a>
-			<button class="btn button-filter">Export</button>
-			<!-- <button class="btn button-filter">Import</button> -->
-		</div>
-		<p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
-	</div>
+    <div class="action-area">
+      <a routerLink="New Client"><button class="button button-save">New Client</button></a>
+      <button class="button button-filter">Export</button>
+    </div>
+  </div>
 
-	<div class="content-wrapper">
+  <p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
+
+  <div class="content-wrapper">
+    <div class="table-wrapper">
+
+      <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+
+      <p-table #dt [columns]="tableHeaders" [value]="clients" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="caption">
+          <div style="text-align: right">
+            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="50" placeholder="Search Clients"
+              (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr class="table-header">
+            <th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+              {{tableHeader.header}}
+              <p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-client>
+          <tr class="table-body">
+            <td>{{ client?.name }}</td>
+            <td>{{ client?.contactPersonName }}</td>
+            <td>{{ client?.contactPersonPhoneNumber }}</td>
+            <td>{{ client?.phoneNumber }}</td>
+            <td class="currencyDisplay">{{ client?.amountBalance.toFixed(2) }}</td>
 
 
+            <td data-html2canvas-ignore>
+              <button type="button" class="button button-primary" (click)="editClient(client.id)">View/Edit</button>
+              <button type="button" class="button button-cancel" (click)="deleteClient(client)">Delete</button>
+            </td>
+          </tr>
 
-		<div class="table-wrapper">
+        </ng-template>
+      </p-table>
+    </div>
 
-			<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
-
-			<p-table #dt [columns]="tableHeaders" [value]="clients" [paginator]="true" [rows]="10">
-				<ng-template pTemplate="caption">
-					<div style="text-align: right">
-						<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-						<input type="text" pInputText size="50" placeholder="Search Clients"
-							(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-					</div>
-				</ng-template>
-
-				<ng-template pTemplate="header">
-					<tr>
-						<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
-							{{tableHeader.header}}
-							<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
-						</th>
-						<th>Actions</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-client>
-					<tr>
-						<td>{{ client ?.name }}</td>
-						<td>{{ client?.contactPersonName }}</td>
-						<td>{{ client?.contactPersonPhoneNumber }}</td>
-						<td>{{ client?.phoneNumber }}</td>
-						<td class="currencyDisplay">{{ client?.amountBalance.toFixed(2) }}</td>
-						 
-						 
-						<td data-html2canvas-ignore>
-							<button type="button" class="btn button-primary"
-								(click)="editClient(client.id)">View/Edit</button>
-							<button type="button" class="btn button-cancel"
-								(click)="deleteClient(client)">Delete</button>
-						</td>
-					</tr>
-
-				</ng-template>
-			</p-table>
-		</div>
-
-	</div>
+  </div>
 
 </div>

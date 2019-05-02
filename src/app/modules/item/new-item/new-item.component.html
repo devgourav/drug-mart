@@ -1,235 +1,239 @@
 <div id="new-item-wrapper">
-	<div class="title-header">
-		<span class="header-text">Item Details</span>
-	</div>
+  <div class="page-appbar">
+    <span class="header-text">Item Details</span>
+  </div>
 
-	<div class="wrapper-content">
-		<div class="input-form">
-			<form [formGroup]="itemInputForm" (ngSubmit)="setItem()">
-				<div class="row">
-					<div class="col">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemName">Item Name</label>
-							<div class="col-sm-6">
-								<input type="text" id="itemName" class="form-control" formControlName="name">
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="Item name Should not be empty"
-									*ngIf="name.errors && (name.touched || name.dirty)"></p-message>
-							</div>
-						</div>
+  <div class="content-wrapper">
+    <div class="input-form">
+      <form [formGroup]="itemInputForm" (ngSubmit)="setItem()">
+        <div class="row">
+          <div class="col">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemName">Item Name</label>
+              <div class="col-sm-6">
+                <input type="text" id="itemName" class="form-control" formControlName="name"
+                  [ngClass]="{'error-input': name.errors && (name.touched || name.dirty)}">
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="Item name Should not be empty"
+                  *ngIf="name.errors && (name.touched || name.dirty)"></p-message>
+              </div>
+            </div>
 
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemHSNCode">HSN Code</label>
+              <div class="col-sm-6">
+                <input type="text" id="itemHSNCode" class="form-control" formControlName="HSNCode"
+                  [ngClass]="{'error-input': HSNCode.errors && (HSNCode.touched || HSNCode.dirty)}">
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="HSNCode should not be empty"
+                  *ngIf="HSNCode.errors && (HSNCode.touched || HSNCode.dirty)"></p-message>
+              </div>
+            </div>
 
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemDescription">Item Description</label>
-							<div class="col-sm-6">
-								<input type="text" id="itemDescription" class="form-control"
-									formControlName="description">
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemMfg">Item Manufacturer</label>
-							<div class="col-sm-6">
-								<input type="text" id="itemMfg" class="form-control" formControlName="manufacturer">
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="Manufacturer name Should not be empty"
-									*ngIf="manufacturer.errors && (manufacturer.touched || manufacturer.dirty)">
-								</p-message>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemUnit">Pack Type</label>
-							<div class="col-sm-6">
-								<input type="text" id="itemUnit" class="form-control" formControlName="packType">
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="form-group row"
-							[ngClass]="{'has-error':quantity.errors && (quantity.touched || quantity.dirty)}">
-							<label class="col-sm-3 col-form-label" for="itemQuantity">Quantity</label>
-							<div class="col-sm-6">
-								<input type="number" id="itemQuantity" class="form-control" formControlName="quantity"
-									appQuantity>
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="Quantity should not be empty"
-									*ngIf="quantity.errors && (quantity.touched || quantity.dirty)"></p-message>
-							</div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemMfg">Item Manufacturer</label>
+              <div class="col-sm-6">
+                <input type="text" id="itemMfg" class="form-control" formControlName="manufacturer"
+                  [ngClass]="{'error-input': manufacturer.errors && (manufacturer.touched || manufacturer.dirty)}">
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="Manufacturer name Should not be empty"
+                  *ngIf="manufacturer.errors && (manufacturer.touched || manufacturer.dirty)">
+                </p-message>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemUnit">Selling Unit</label>
+              <div class="col-sm-6">
+                <input type="text" id="itemUnit" class="form-control" formControlName="packType">
+              </div>
+            </div>
 
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemHSNCode">HSN Code</label>
-							<div class="col-sm-6">
-								<input type="text" id="itemHSNCode" class="form-control" formControlName="HSNCode">
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="HSNCode should not be empty"
-									*ngIf="HSNCode.errors && (HSNCode.touched || HSNCode.dirty)"></p-message>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="batchNumber">Batch Number</label>
-							<div class="col-sm-6">
-								<input type="text" id="batchNumber" class="form-control" formControlName="batchNumber">
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="BatchNumber should not be empty"
-									*ngIf="batchNumber.errors && (batchNumber.touched || batchNumber.dirty)">
-								</p-message>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="expiryDate">Expiry Date</label>
-							<div class="col-sm-6">
-								<input type="date" id="expiryDate" class="form-control" formControlName="expiryDate">
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="ExpiryDate should not be empty"
-									*ngIf="expiryDate.errors && (expiryDate.touched || expiryDate.dirty)"></p-message>
-							</div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemMRP">MRP</label>
+              <div class="col-sm-6">
+                <input type="number" id="itemMRP" class="form-control" formControlName="itemMRP"
+                  [ngClass]="{'error-input': itemMRP.errors && (itemMRP.touched || itemMRP.dirty)}" appCurrency>
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="Item MRP should not be empty"
+                  *ngIf="itemMRP.errors && (itemMRP.touched || itemMRP.dirty)"></p-message>
+              </div>
+            </div>
 
-						</div>
+          </div>
+          <div class="col">
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemDescription">Item Description</label>
+              <div class="col-sm-6">
+                <input type="text" id="itemDescription" class="form-control" formControlName="description">
+              </div>
+            </div>
+            <div class="form-group row"
+              [ngClass]="{'has-error':quantity.errors && (quantity.touched || quantity.dirty)}">
+              <label class="col-sm-3 col-form-label" for="itemQuantity">Quantity</label>
+              <div class="col-sm-6">
+                <input type="number" id="itemQuantity" class="form-control" formControlName="quantity"
+                  [ngClass]="{'error-input': quantity.errors && (quantity.touched || quantity.dirty)}" appQuantity>
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="Quantity should not be empty"
+                  *ngIf="quantity.errors && (quantity.touched || quantity.dirty)"></p-message>
+              </div>
 
+            </div>
 
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col">
-						<div class="form-group row">
-							<div class="col-sm-5"></div>
-							<div class="col-sm-7">Sale Info</div>
-						</div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="batchNumber">Batch Number</label>
+              <div class="col-sm-6">
+                <input type="text" id="batchNumber" class="form-control" formControlName="batchNumber">
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="BatchNumber should not be empty"
+                  *ngIf="batchNumber.errors && (batchNumber.touched || batchNumber.dirty)">
+                </p-message>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="expiryDate">Expiry Date</label>
+              <div class="col-sm-6">
+                <input type="date" id="expiryDate" class="form-control" formControlName="expiryDate"
+                  [ngClass]="{'error-input': expiryDate.errors && (expiryDate.touched || expiryDate.dirty)}">
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="ExpiryDate should not be empty"
+                  *ngIf="expiryDate.errors && (expiryDate.touched || expiryDate.dirty)"></p-message>
+              </div>
 
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemSalePrice">Min. Unit Price</label>
-							<div class="col-sm-6">
-								<input type="number" id="itemSalePrice" class="form-control" formControlName="saleCost"
-									appCurrency>
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="Sale Cost should not be empty"
-									*ngIf="saleCost.errors && (saleCost.touched || saleCost.dirty)"></p-message>
-							</div>
-
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemMRP">MRP</label>
-							<div class="col-sm-6">
-								<input type="number" id="itemMRP" class="form-control" formControlName="itemMRP"
-									appCurrency>
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="Item MRP should not be empty"
-									*ngIf="itemMRP.errors && (itemMRP.touched || itemMRP.dirty)"></p-message>
-							</div>
-
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="saleDiscount">Discounts</label>
-							<div class="col-sm-6">
-								<input type="number" id="saleDiscount" class="form-control"
-									formControlName="saleDiscount" appCurrency>
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="Discount cannot be more than 100%"
-									*ngIf="saleDiscount.errors?.max && (saleDiscount.touched || saleDiscount.dirty)">
-								</p-message>
-							</div>
-
-						</div>
-
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="paymentMethod">Offers</label>
-							<div class="col-sm-6">
-								<select name="saleOffers" id="saleOffers" formControlName="saleOffers"
-									class="form-control">
-									<option value="" [selected]="true">Select Offers</option>
-									<option *ngFor="let offer of offers"
-										value="{{calculatedDiscount(offer.minItems,offer.freeItems)}}">{{offer.name}}
-									</option>
-								</select>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="col">
-						<div class="form-group row">
-							<div class="col-sm-5"></div>
-							<div class="col-sm-7">Purchase Info</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="itemPurchasePrice">Unit Price</label>
-							<div class="col-sm-6">
-								<input type="number" id="itemPurchasePrice" class="form-control"
-									formControlName="purchaseCost" appCurrency>
-							</div>
-							<div class="col-sm-3 error-message">
-								<p-message severity="error" text="Purchase Cost should not be empty"
-									*ngIf="purchaseCost.errors && (purchaseCost.touched || purchaseCost.dirty)">
-								</p-message>
-							</div>
-						</div>
+            </div>
 
 
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="stateTaxId">State Tax</label>
-							<div class="col-sm-6">
-								<select name="taxId" id="taxId" formControlName="stateTaxId"
-									class="form-control">
-									<option value="" [selected]="true">Select Tax</option>
-									<option *ngFor="let tax of stateTaxes"
-										value="{{tax.id}}">{{tax.name}}
-									</option>
-								</select>
-							</div>
-						</div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col">
+            <div class="form-group row">
+              <div class="col-sm-5"></div>
+              <div class="col-sm-7">Sale Info</div>
+            </div>
 
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label" for="countryTaxId">Country Tax</label>
-							<div class="col-sm-6">
-								<select name="countryTaxId" id="countryTaxId" formControlName="countryTaxId"
-									class="form-control">
-									<option value="" [selected]="true">Select Tax</option>
-									<option *ngFor="let tax of countryTaxes"
-										value="{{tax.id}}">{{tax.name}}
-									</option>
-								</select>
-							</div>
-						</div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemSalePrice">Rate</label>
+              <div class="col-sm-6">
+                <input type="number" id="itemSalePrice" class="form-control" formControlName="saleCost"
+                  [ngClass]="{'error-input': saleCost.errors && (saleCost.touched || saleCost.dirty)}" appCurrency>
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="Sale Cost should not be empty"
+                  *ngIf="saleCost.errors && (saleCost.touched || saleCost.dirty)"></p-message>
+              </div>
 
-						<div class="form-group row">
+            </div>
+
+
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="saleDiscount">Discounts</label>
+              <div class="col-sm-6">
+                <input type="number" id="saleDiscount" class="form-control" formControlName="saleDiscount" appCurrency
+                  [ngClass]="{'error-input': saleDiscount.errors && (saleDiscount.touched || saleDiscount.dirty)}">
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="Discount cannot be more than 100%"
+                  *ngIf="saleDiscount.errors && (saleDiscount.touched || saleDiscount.dirty)">
+                </p-message>
+              </div>
+
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="paymentMethod">Offers</label>
+              <div class="col-sm-6">
+                <select name="saleOffers" id="saleOffers" formControlName="saleOffers" class="form-control">
+                  <option value="" [selected]="true">Select Offers</option>
+                  <option *ngFor="let offer of offers" value="{{calculatedDiscount(offer.minItems,offer.freeItems)}}">
+                    {{offer.name}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col">
+            <div class="form-group row">
+              <div class="col-sm-5"></div>
+              <div class="col-sm-7">Purchase Info</div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="itemPurchasePrice">Rate</label>
+              <div class="col-sm-6">
+                <input type="number" id="itemPurchasePrice" class="form-control" formControlName="purchaseCost"
+                  [ngClass]="{'error-input': purchaseCost.errors && (purchaseCost.touched || purchaseCost.dirty)}"
+                  appCurrency>
+              </div>
+              <div class="col-sm-3 error-message">
+                <p-message severity="error" text="Purchase Cost should not be empty"
+                  *ngIf="purchaseCost.errors && (purchaseCost.touched || purchaseCost.dirty)">
+                </p-message>
+              </div>
+            </div>
+
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="stateTaxId">State Tax</label>
+              <div class="col-sm-6">
+                <select name="taxId" id="taxId" formControlName="stateTaxId" class="form-control">
+                  <option value="" [selected]="true">Select Tax</option>
+                  <option *ngFor="let tax of stateTaxes" value="{{tax.id}}">{{tax.name}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-3 col-form-label" for="countryTaxId">Country Tax</label>
+              <div class="col-sm-6">
+                <select name="countryTaxId" id="countryTaxId" formControlName="countryTaxId" class="form-control">
+                  <option value="" [selected]="true">Select Tax</option>
+                  <option *ngFor="let tax of countryTaxes" value="{{tax.id}}">{{tax.name}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- <div class="form-group row">
 							<label class="col-sm-3 col-form-label" for="itemPurchasePrice">Cess</label>
 							<div class="col-sm-6">
 								<input type="number" id="cess" class="form-control"
-									formControlName="cess" appCurrency>
+									formControlName="cess" [ngClass]="{'error-input': cess.errors && (cess.touched || cess.dirty)}" appCurrency>
 							</div>
 							<div class="col-sm-3 error-message">
 								<p-message severity="error" text="Cess cannot be more than 100%"
-									*ngIf="cess.errors?.max && (cess.touched || cess.dirty)">
+									*ngIf="cess.errors && (cess.touched || cess.dirty)">
 								</p-message>
 							</div>
-						</div>
+						</div> -->
 
-					</div>
+          </div>
 
-				</div>
-				<div class="action-buttons">
-					<button type="submit" [disabled]="!itemInputForm.valid" *ngIf="!itemId"
-						class="btn button-save">Save</button>
-					<button type="button" [disabled]="!itemInputForm.valid" *ngIf="itemId" (click)="updateItem()"
-						class="btn button-save">Update</button>
-					<button type="button" [disabled]="!itemInputForm.valid" *ngIf="itemId" (click)="printItem()"
-						class="btn button-save">Print</button>
-					<button type="button" (click)="closeClicked()" class="btn button-cancel">Cancel</button>
-				</div>
+        </div>
+        <div class="action-buttons">
+          <button type="submit" [disabled]="!itemInputForm.valid" *ngIf="!itemId"
+            class="btn button button-save">Save</button>
+          <button type="button" [disabled]="!itemInputForm.valid" *ngIf="itemId" (click)="updateItem()"
+            class="btn button button-save">Update</button>
+          <button type="button" [disabled]="!itemInputForm.valid" *ngIf="itemId" (click)="printItem()"
+            class="btn button button-save">Print</button>
+          <button type="button" (click)="closeClicked()" class="btn button button-cancel">Cancel</button>
+        </div>
 
-			</form>
+      </form>
 
-		</div>
-	</div>
+    </div>
+  </div>
 
 </div>

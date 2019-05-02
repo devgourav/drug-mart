@@ -3,15 +3,14 @@
 @import "../../../../assets/styles/common.scss";
 
 #offer-details-wrapper {
-	width: 100%;
-	font-family: 'IBM Plex Sans', sans-serif;
-	color: $text-color-dark;
+	font-family: 'Montserrat', sans-serif;
+	color: $text-color-light;
+	background-color: $background-color-dark-light;
+	height:100vh;
 
 	.input-form {
 		font-weight: bold;
-		margin-top: 40px;
 		text-align: center;
-		margin-left: 40px;
 		padding: 10px;
 		width: 50vw;
 
@@ -26,9 +25,6 @@
 		.action-button {
 			display: flex;
 			justify-content: left;
-			button {
-				width: 30%;
-			}
 		}
 	}
 }

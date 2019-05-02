@@ -219,10 +219,10 @@ export class BillItemModalComponent implements OnInit {
 			this.taxes = response;
 
 			this.taxes.forEach((tax) => {
-				if (tax.type['stateTax']) {
-					this.stateTaxes = [ ...this.stateTaxes, tax ];
-				} else if (tax.type['countryTax']) {
-					this.countryTaxes = [ ...this.countryTaxes, tax ];
+				if (tax.isStateTax){
+					this.stateTaxes.push(tax);
+				} else{
+					this.countryTaxes.push(tax);
 				}
 			});
 		});

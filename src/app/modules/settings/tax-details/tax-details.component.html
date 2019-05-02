@@ -1,134 +1,119 @@
 <div id="tax-details-wrapper">
-	<div class="title-header">
-		<span class="header-text">Tax Details</span>
-	</div>
-
-	<div class="input-form">
-		<form [formGroup]="taxInputForm">
-
-			<div class="row">
-				<div class="col">
-					<div class=" form-group row">
-						<label class="col-sm-3 col-form-label" for="taxName">Tax Name</label>
-						<div class="col-sm-5">
-							<input type="text" id="taxName" class="form-control" formControlName="name">
-						</div>
-						<div class="col-sm-4 error-message">
-							<p-message severity="error" text="Tax Name Should not be empty"
-								*ngIf="name.errors && (name.touched || name.dirty)"></p-message>
-						</div>
-					</div>
-
-					<div class=" form-group row">
-						<label class="col-sm-3 col-form-label" for="taxRate">Tax Rate</label>
-						<div class="col-sm-3">
-							<input type="number" id="taxRate" class="form-control" formControlName="rate" appCurrency>
-						</div>
-						<div class="col-sm-2">
-							<select name="taxUnit" id="taxUnit" class="form-control">
-								<option value="percentage" selected>% - Percentage</option>
-							</select>
-						</div>
-						<div class="col-sm-4 error-message">
-							<p-message severity="error" text="Tax cannot be more than 100%"
-								*ngIf="rate.errors?.max && (rate.touched || rate.dirty)"></p-message>
-
-							<p-message severity="error" text="Tax Rate cannot be empty"
-								*ngIf="rate.errors?.required && (rate.touched || rate.dirty)"></p-message>
-						</div>
-					</div>
-
-					<div class=" form-group row">
-						<label class="col-sm-3 col-form-label" for="isStateTax">Tax Type</label>
-						<div class="col-sm-5 taxType">
-							<!-- <p-checkbox [formControl]="taxInputForm.controls['isStateTax']" label="StateTax"
-								binary="true"></p-checkbox>
-							<p-checkbox [formControl]="taxInputForm.controls['isStateTax']" label="Country Tax"
-								binary="true"></p-checkbox> -->
-							<div class="form-check form-check-inline">
-								<input type="checkbox" [formControl]="taxInputForm.controls['isStateTax']"
-									class="form-check-input" id="stateTax" (change)="stateTaxChecked(isStateTax)">
-								<label class="form-check-label" for="stateTax">StateTax</label>
-							</div>
-
-							<div class="form-check form-check-inline">
-								<input type="checkbox" [formControl]="taxInputForm.controls['isCountryTax']"
-									class="form-check-input" id="CountryTax" (change)="countryTaxChanged(isCountryTax)">
-								<label class="form-check-label" for="CountryTax">CountryTax</label>
-							</div>
-						</div>
-
-						<div class="col-sm-4 error-message">
-							<p-message severity="error" text="Tax Type Should not be empty"
-								*ngIf="isStateTax.errors && (isStateTax.touched || isStateTax.dirty)"></p-message>
-						</div>
-
-					</div>
-
-					<div class="form-group row">
-						<div class="col-sm-3"></div>
-						<div class="col-sm-9 action-button">
-							<button type="submit" [disabled]="!taxInputForm.valid" class="btn button-save"
-								(click)="setTax()">Add
-								Tax</button>
-						</div>
-					</div>
-
-				</div>
-
-			</div>
+  <div class="page-appbar">
+    <span class="header-text">Tax Details</span>
+  </div>
 
 
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col">
+        <div class="input-form">
+          <form [formGroup]="taxInputForm">
+            <div class=" form-group row">
+              <label class="col-sm-3 col-form-label" for="taxName">Tax Name</label>
+              <div class="col-sm-5">
+                <input type="text" id="taxName" class="form-control" formControlName="name">
+              </div>
+              <div class="col-sm-4 error-message">
+                <p-message severity="error" text="Tax Name Should not be empty"
+                  *ngIf="name.errors && (name.touched || name.dirty)"></p-message>
+              </div>
+            </div>
 
-		</form>
-	</div>
+            <div class=" form-group row">
+              <label class="col-sm-3 col-form-label" for="taxRate">Tax Rate</label>
+              <div class="col-sm-3">
+                <input type="number" id="taxRate" class="form-control" formControlName="rate" appCurrency>
+              </div>
+              <div class="col-sm-2">
+                <select name="taxUnit" id="taxUnit" class="form-control">
+                  <option value="percentage" selected>% - Percentage</option>
+                </select>
+              </div>
+              <div class="col-sm-4 error-message">
+                <p-message severity="error" text="Tax cannot be more than 100%"
+                  *ngIf="rate.errors && (rate.touched || rate.dirty)"></p-message>
 
+                <p-message severity="error" text="Tax Rate cannot be empty"
+                  *ngIf="rate.errors && (rate.touched || rate.dirty)"></p-message>
+              </div>
+            </div>
 
-	<div class="content-wrapper">
-		<div class="table-wrapper">
-			<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+            <div class=" form-group row">
+              <label class="col-sm-3 col-form-label" for="isStateTax">Tax Type</label>
+              <div class="col-sm-5 taxType">
+                <div class="form-check form-check-inline">
+                  <input type="checkbox" [formControl]="taxInputForm.controls['isStateTax']" class="form-check-input"
+                    id="stateTax" (change)="stateTaxChecked(isStateTax)">
+                  <label class="form-check-label" for="stateTax">StateTax</label>
+                </div>
 
-			<p-table #dt [columns]="tableHeaders" [value]="taxes">
+                <div class="form-check form-check-inline">
+                  <input type="checkbox" [formControl]="taxInputForm.controls['isCountryTax']" class="form-check-input"
+                    id="CountryTax" (change)="countryTaxChanged(isCountryTax)">
+                  <label class="form-check-label" for="CountryTax">CountryTax</label>
+                </div>
+              </div>
 
-				<ng-template pTemplate="caption">
-					<div style="text-align: right">
-						<i class="pi pi-search" style="margin:4px 4px 0 0"></i>
-						<input type="text" pInputText size="50" placeholder="Search Taxes"
-							(input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
-					</div>
-				</ng-template>
+              <div class="col-sm-4 error-message">
+                <p-message severity="error" text="Tax Type Should not be empty"
+                  *ngIf="isStateTax.errors && (isStateTax.touched || isStateTax.dirty)"></p-message>
+              </div>
 
-				<ng-template pTemplate="header">
-					<tr>
-						<th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
-							{{tableHeader.header}}
-							<p-sortIcon [field]="tableHeader.field"></p-sortIcon>
-						</th>
-						<th>Actions</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-tax>
-					<tr>
-						<td>{{ tax?.name }}</td>
-						<td>{{ tax?.rate }}</td>
-						<td>{{ getTaxType(tax) }}</td>
-						<td data-html2canvas-ignore>
-							<button type="button" class="btn button-cancel" (click)="deleteTax(tax)">Delete</button>
-						</td>
-					</tr>
-				</ng-template>
+            </div>
 
-			</p-table>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-9 action-button">
+                <button type="submit" [disabled]="!taxInputForm.valid" class="btn button            	button-save"
+                  (click)="setTax()">Add
+                  Tax</button>
+              </div>
+            </div>
 
+          </form>
+        </div>
+      </div>
+    </div>
 
-		</div>
+  </div>
+  <div class="table-wrapper">
+    <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
-	</div>
+    <p-table #dt [columns]="tableHeaders" [value]="taxes" [paginator]="true" [rows]="10">
 
-	<div class="action-buttons">
-		<button type="button" class="btn button-cancel" (click)="closeClicked()">Back</button>
-	</div>
+      <ng-template pTemplate="caption">
+        <div style="text-align: right">
+          <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+          <input type="text" pInputText size="50" placeholder="Search Taxes"
+            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+        </div>
+      </ng-template>
 
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
+            {{tableHeader.header}}
+            <p-sortIcon [field]="tableHeader.field"></p-sortIcon>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tax>
+        <tr>
+          <td>{{ tax?.name }}</td>
+          <td>{{ tax?.rate }}</td>
+          <td>{{ getTaxType(tax) }}</td>
+          <td data-html2canvas-ignore>
+            <button type="button" class="btn button button-cancel" (click)="deleteTax(tax)">Delete</button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
 
+    <div class="action-buttons">
+      <button type="button" class="btn button button-cancel" (click)="closeClicked()">Back</button>
+    </div>
 
+  </div>
 </div>

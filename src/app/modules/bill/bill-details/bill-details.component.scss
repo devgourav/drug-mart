@@ -3,23 +3,6 @@
 @import "../../../../assets/styles/common.scss";
 
 #bill-details-wrapper {
-	.table-wrapper {
-		tbody {
-			.form-control {
-				font-size: 12px;
-			}
-		}
-
-		.currencyDisplay::before {
-			content: '\20B9'; //Ruppee symbol for CSS
-		}
-		.currencyDisplay::after {
-			content: '/-';
-		}
-	}
-
-	#action-buttons {
-		text-align: center;
-		margin: auto;
-	}
+	height: 100%;
+	background-color: $background-color-dark-light;
 }

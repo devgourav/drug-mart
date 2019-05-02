@@ -2,18 +2,21 @@
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
 
-#new-item-wrapper {
+#pricelist-details-wrapper {
 	font-family: 'Montserrat', sans-serif;
-	background-color: $background-color-dark-light;
 	color: $text-color-light;
-	height: 100%;
-}
+	background-color: $background-color-dark-light;
+	height:100%;
 
 	.input-form {
 		text-align: left;
 		font-weight: bold;
 		padding: 10px;
-		width:100%;
-
+		width:50vw;
 	}
 
+	.table-wrapper{
+		padding-left: 40px;
+		padding-top: 40px;
+	}
+}

@@ -1,48 +1,78 @@
 @import "_colors.scss";
+@import "_mixins.scss";
 
-html,
-body {
-	font-family: 'Montserrat', sans-serif;
-	color: $text-color-dark;
-}
+// .wrapper-content {
+// 	font-family: 'Montserrat', sans-serif;
+// 	font-weight: 300;
+// 	display: flex;
+// 	width: 100%;
+// 	height: 100vh;
+// 	background-color: $background-color-dark-light;
+// }
 
-.wrapper-content {
-	font-family: 'Montserrat', sans-serif;
-	font-weight: 300;
+.action-buttons {
 	display: flex;
+	justify-content: center;
 	width: 100%;
-	height: 100vh;
-	background-color: $background-color;
+	button {
+		padding: 10px;
+		margin-top: 10px;
+		width: 10%;
+	}
 }
 
-.btn {
-	color: $text-color-light;
-}
 
-//Title Header CSS
-.title-header {
-	font-weight: bold;
+.page-appbar{
 	padding: 16px 0;
 	background-color: $background-color-dark;
-	font-size: 1.4em;
-	text-align: left;
-	.header-text {
-		margin-left: 40px;
-		color: $text-color-light;
-		text-transform: uppercase;
-	}
-	.action-area {
-		float: right;
-		padding-right: 40px;
-	}
+	@include z-depth-2;
+	display: flex;
+  justify-content: center;
+
+		.header-text {
+			flex: 1 1 auto;
+			text-align: left;
+			font-weight: 600;
+			margin-left: 40px;
+			font-size: 1.4em;
+			color: $text-color-light;
+			text-transform: uppercase;
+		}
+		.action-area {
+			float: right;
+			padding-right: 40px;
+		}
 }
+//Title Header
+
 
 .content-wrapper {
+	font-family: 'Montserrat', sans-serif;
 	display: flex;
 	justify-content: left;
-	margin-left: 15px;
-	overflow-y: scroll;
+	width: 100%;
+	height: auto;
+	padding-left: 40px;
+	padding-top: 40px;
+	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+.table-wrapper {
+	font-family: 'Montserrat', sans-serif;
+	.currencyDisplay::before {
+		content: '\20B9'; //Ruppee symbol for CSS
+	}
+	.currencyDisplay::after {
+		content: '/-';
+	}
+	.table-header{
+		font-size:16px;
+	}
+	.table-body{
+		font-weight: 700;
+		font-size:16px;
+	}
 }
 
 .has-error {
@@ -51,21 +81,22 @@ body {
 	select,
 	option {
 		/* make it glow! */
-		-webkit-box-shadow: 0 0 4px #c62828;
-		-moz-box-shadow: 0 0 4px #c62828;
-		box-shadow: 0 0 4px #c62828;
+		-webkit-box-shadow: 0 0 5px $negative-color;
+		-moz-box-shadow: 0 0 5px $negative-color;
+		box-shadow: 0 0 5px $negative-color;
+		border: 1px solid $negative-color;
 	}
-	color: #c62828;
+	color: $negative-color;
 }
 
 .no-error {
 	input,
 	textarea,
-	select {
+	select{
 		/* make it glow! */
-		-webkit-box-shadow: 0 0 4px #4caf50;
-		-moz-box-shadow: 0 0 4px #4caf50;
-		box-shadow: 0 0 4px #4caf50;
+		-webkit-box-shadow: 0 0 5px $positive-color;
+		-moz-box-shadow: 0 0 5px $positive-color;
+		box-shadow: 0 0 5px $positive-color;
 	}
 }
 
@@ -73,5 +104,48 @@ hr {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 	border: 0;
-	border-top: 1px solid $border-color-dark;
+	border-top: 1px solid $background-color-dark;
+}
+
+
+//Used in styling widgets in dashboard
+.widget-container {
+	display: block;
+	width: 20vw;
+	color: $text-color-dark;
+	font-weight: 800;
+	background-color: $background-color-light;
+	@include z-depth-1;
+	.widget-data {
+		text-align: center;
+		width: 100%;
+		padding: 20px;
+		background-color: $background-color-light;
+		vertical-align: middle;
+		color: $text-color-dark;
+		label {
+			text-align: left;
+		}
+	}
+	.widget-title {
+		text-align: center;
+		padding: 20px;
+		width: 100%;
+		vertical-align: middle;
+	}
+}
+
+.input-form{
+	label {
+		text-align: right;
+	}
+	input,textarea{
+		font-weight: 600;
+		font-size: 1.2em;
+		border-radius: 5px;
+	}
+	select,option{
+		font-weight: 600;
+		font-size: 1em;
+	}
 }

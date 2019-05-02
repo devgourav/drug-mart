@@ -22,7 +22,7 @@ export class OfferDetailsComponent implements OnInit {
 	msgs: Message[] = [];
 
 	offerInputForm = this.fb.group({
-		name: [ '', Validators.required ],
+		// name: [ '', Validators.required ],
 		minItems: [ '', Validators.required ],
 		freeItems: [ '', Validators.required ],
 		description: new FormControl('')
@@ -78,8 +78,10 @@ export class OfferDetailsComponent implements OnInit {
 	}
 
 	getOfferObj(): Offer {
+		var offername: string = this.offerInputForm.get('minItems').value + "+" + this.offerInputForm.get('freeItems').value;
+
 		this.offer = new Offer(
-			this.offerInputForm.get('name').value,
+			offername,
 			this.offerInputForm.get('minItems').value,
 			this.offerInputForm.get('freeItems').value
 		);

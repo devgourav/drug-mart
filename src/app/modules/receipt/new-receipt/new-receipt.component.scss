@@ -2,6 +2,13 @@
 @import "../../../../assets/styles/_button.scss";
 @import "../../../../assets/styles/common.scss";
 
+
+#new-receipt-wrapper{
+	font-family: 'Montserrat', sans-serif;
+	background-color: $background-color-dark-light;
+	color: $text-color-light;
+	height: 100%;
+}
 .input-form {
 	font-weight: bold;
 	margin-top: 40px;
@@ -9,15 +16,4 @@
 	margin-left: 40px;
 	padding: 10px;
 	width: 50vw;
-
-	label {
-		text-align: right;
-	}
-	.error-message {
-		text-align: left;
-	}
-
-	.currency {
-		font-weight: normal;
-	}
 }

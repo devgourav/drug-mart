@@ -19,19 +19,35 @@ export class NewVendorComponent implements OnInit {
 	addressMap: Map<string, string>;
 	private subscriptions: Array<Subscription> = [];
 
+	// vendorInputForm = this.fb.group({
+	// 	name: [ '', Validators.required ],
+	// 	phoneNumber: [ '', [Validators.maxLength(10),Validators.required] ],
+	// 	emailId: [ '', Validators.email ],
+	// 	website: new FormControl(''),
+	// 	GSTIN: new FormControl(''),
+	// 	amountBalance: new FormControl(''),
+	// 	contactPersonName: [ '', Validators.required ],
+	// 	contactPersonPhoneNumber: [ ''],
+	// 	contactPersonEmailId: [ '', Validators.email ],
+	// 	address: [ '', [ Validators.required, Validators.maxLength(200) ] ],
+	// 	pincode: [ ''],
+	// 	notes: [ '', Validators.maxLength(200) ]
+	// });
+
+
 	vendorInputForm = this.fb.group({
 		name: [ '', Validators.required ],
-		phoneNumber: [ '', Validators.maxLength(10) ],
-		emailId: [ '', Validators.email ],
 		website: new FormControl(''),
 		GSTIN: new FormControl(''),
 		amountBalance: new FormControl(''),
 		contactPersonName: [ '', Validators.required ],
-		contactPersonPhoneNumber: [ '', Validators.required ],
+		contactPersonPhoneNumber: [ ''],
 		contactPersonEmailId: [ '', Validators.email ],
 		address: [ '', [ Validators.required, Validators.maxLength(200) ] ],
-		pincode: [ '', Validators.required ],
-		notes: [ '', Validators.maxLength(200) ]
+		pincode: [ ''],
+		notes: [ '', Validators.maxLength(200) ],
+		drugLicense20B: new FormControl(''),
+		drugLicense21B: new FormControl('')
 	});
 
 	constructor(
@@ -55,13 +71,13 @@ export class NewVendorComponent implements OnInit {
 		return this.vendorInputForm.get('name');
 	}
 
-	get phoneNumber() {
-		return this.vendorInputForm.get('phoneNumber');
-	}
+	// get phoneNumber() {
+	// 	return this.vendorInputForm.get('phoneNumber');
+	// }
 
-	get emailId() {
-		return this.vendorInputForm.get('emailId');
-	}
+	// get emailId() {
+	// 	return this.vendorInputForm.get('emailId');
+	// }
 
 	get contactPersonName() {
 		return this.vendorInputForm.get('contactPersonName');
@@ -96,15 +112,17 @@ export class NewVendorComponent implements OnInit {
 
 				this.vendor = new Vendor(
 					response.name,
-					response.phoneNumber,
-					response.emailId,
+					// response.phoneNumber,
+					// response.emailId,
 					response.website,
 					response.GSTIN,
 					response.contactPersonName,
 					response.contactPersonPhoneNumber,
 					response.contactPersonEmailId,
 					this.addressMap,
-					response.notes
+					response.notes,
+					response.drugLicense20B,
+					response.drugLicense21B
 				);
 				this.vendor.amountBalance = +response.amountBalance.toFixed(2);
 				this.populateVendorData();
@@ -130,8 +148,8 @@ export class NewVendorComponent implements OnInit {
 	populateVendorData() {
 		this.vendorInputForm.setValue({
 			name: this.vendor.name,
-			phoneNumber: this.vendor.phoneNumber,
-			emailId: this.vendor.emailId,
+			// phoneNumber: this.vendor.phoneNumber,
+			// emailId: this.vendor.emailId,
 			website: this.vendor.website,
 			GSTIN: this.vendor.GSTIN,
 			amountBalance: this.vendor.amountBalance,
@@ -140,7 +158,9 @@ export class NewVendorComponent implements OnInit {
 			contactPersonEmailId: this.vendor.contactPersonEmailId,
 			address: this.vendor.address.get('streetAddress'),
 			pincode: this.vendor.address.get('pincode'),
-			notes: this.vendor.notes
+			notes: this.vendor.notes,
+			drugLicense20B:this.vendor.drugLicense20B,
+			drugLicense21B:this.vendor.drugLicense21B
 		});
 	}
 
@@ -153,15 +173,17 @@ export class NewVendorComponent implements OnInit {
 
 		this.vendor = new Vendor(
 			this.vendorInputForm.get('name').value,
-			this.vendorInputForm.get('phoneNumber').value,
-			this.vendorInputForm.get('emailId').value,
+			// this.vendorInputForm.get('phoneNumber').value,
+			// this.vendorInputForm.get('emailId').value,
 			this.vendorInputForm.get('website').value,
 			this.vendorInputForm.get('GSTIN').value,
 			this.vendorInputForm.get('contactPersonName').value,
 			this.vendorInputForm.get('contactPersonPhoneNumber').value,
 			this.vendorInputForm.get('contactPersonEmailId').value,
 			addressMap,
-			this.vendorInputForm.get('notes').value
+			this.vendorInputForm.get('notes').value,
+			this.vendorInputForm.get('drugLicense20B').value,
+			this.vendorInputForm.get('drugLicense21B').value
 		);
 		this.vendor.id = this.vendorId;
 		this.vendor.amountBalance = 0;

@@ -1,7 +1,5 @@
-export class Tax {
+export class PriceList {
 	id: string;
-	isCountryTax: boolean;
-	isStateTax: boolean;
 	creationDate: Date;
 	modificationDate: Date;
 

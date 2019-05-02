@@ -1,9 +1,9 @@
-<div id="new-bill-wrapper make-scrollable">
-	<div class="title-header">
+<div id="new-bill-wrapper">
+	<div class="page-appbar">
 		<span class="header-text">Add New Bill</span>
 	</div>
 
-	<div class="wrapper-content">
+	<div class="content-wrapper">
 		<div class="input-form">
 			<form [formGroup]="billInputForm">
 				<div class="row beforeTable">
@@ -19,7 +19,7 @@
 								</select>
 							</div>
 							<div class="col-sm-4">
-								<button type="button" (click)="navigateNewVendor()" class="btn button-primary">New
+								<button type="button" (click)="navigateNewVendor()" class="btn button button-primary">New
 									Vendor</button>
 							</div>
 						</div>
@@ -73,9 +73,9 @@
 								<td scope="col">{{ getOfferDiscount(billItem.offer) }}%</td>
 								<td scope="col">{{ billItem.itemMRP }}₹</td>
 								<td>
-									<button type="button" class="btn button-primary" (click)="editItem(billItem)"><i
+									<button type="button" class="btn button button-primary" (click)="editItem(billItem)"><i
 											class="pi pi-pencil"></i></button>
-									<button type="button" class="btn button-cancel" (click)="deleteItem(billItem)"><i
+									<button type="button" class="btn button button-cancel" (click)="deleteItem(billItem)"><i
 											class="pi pi-trash"></i></button>
 								</td>
 							</tr>
@@ -85,7 +85,7 @@
 
 
 				<div class="row action-buttons">
-					<button type="button" class="btn button-primary" (click)="openItemModal()">Add New Item</button>
+					<button type="button" class="btn button button-primary" (click)="openItemModal()">Add Item</button>
 				</div>
 				<div class="afterTable">
 					<div class="row afterTableRow">
@@ -180,13 +180,13 @@
 
 						</div>
 					</div>
-				</div>
+				</div>  
 				<div class="action-buttons">
 					<button type="submit" [disabled]="!billInputForm.valid" *ngIf="billId" id="billUpdateButton"
-						class="btn button-save" (click)="updateBill()">Update</button>
+						class="btn button button-save" (click)="updateBill()">Update</button>
 					<button type="submit" [disabled]="!billInputForm.valid" *ngIf="!billId" id="billSaveButton"
-						class="btn button-save" (click)="saveBill()">Save</button>
-					<button type="button" id="billCancelButton" class="btn button-cancel"
+						class="btn button button-save" (click)="saveBill()">Save</button>
+					<button type="button" id="billCancelButton" class="btn button button-cancel"
 						(click)="closeClicked()">Cancel</button>
 				</div>
 			</form>

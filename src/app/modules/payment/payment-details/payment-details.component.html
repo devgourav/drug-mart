@@ -1,14 +1,13 @@
 <div id="payment-details-wrapper">
 
-  <div class="title-header">
+  <div class="page-appbar">
     <span class="header-text">Payment Details</span>
     <div class="action-area">
-      <a routerLink="New Payment"><button class="btn button-save">New Payment</button></a>
-      <button class="btn button-filter">Export</button>
+      <a routerLink="New Payment"><button class="button button-save">New Payment</button></a>
+      <button class="button button-filter">Export</button>
     </div>
-    <p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
-
   </div>
+  <p-toast [style]="{marginTop: '40px'}" position="top-center"></p-toast>
 
 
   <div class="content-wrapper">
@@ -17,7 +16,7 @@
       <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
 
 
-      <p-table #dt [columns]="tableHeaders" [value]="payments">
+      <p-table #dt [columns]="tableHeaders" [value]="payments" [paginator]="true" [rows]="10">
         <ng-template pTemplate="caption">
           <div style="text-align: right">
             <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
@@ -27,7 +26,7 @@
         </ng-template>
 
         <ng-template pTemplate="header">
-          <tr>
+          <tr class="table-header">
             <th *ngFor="let tableHeader of tableHeaders" [pSortableColumn]="tableHeader.field">
               {{tableHeader.header}}
               <p-sortIcon [field]="tableHeader.field"></p-sortIcon>
@@ -36,7 +35,7 @@
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-payment>
-          <tr>
+          <tr  class="table-body">
             <td>{{ payment?.vendorName }}</td>
             <td>{{ payment?.vendorContactName }}</td>
             <td>{{ payment?.vendorPhoneNumber }}</td>
@@ -44,11 +43,9 @@
             <td>{{ payment?.paymentDate }}</td>
             <td>{{ getPaymentType(payment) }}</td>
             <td data-html2canvas-ignore>
-              <!-- <button type="button" class="btn button-primary" (click)="editPayment(payment.id)"><i
-                  class="pi pi-eye"></i></button> -->
-              <button type="button" class="btn button-primary" (click)="printPayment(payment.id)"><i
+              <button type="button" class="btn button button-primary" (click)="printPayment(payment.id)"><i
                     class="pi pi-print"></i></button>
-              <button type="button" class="btn button-cancel" (click)="deletePayment(payment)"><i
+              <button type="button" class="btn button button-cancel" (click)="deletePayment(payment)"><i
                   class="pi pi-trash"></i></button>
 
             </td>

@@ -12,9 +12,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ItemPricelistComponent } from './item-pricelist/item-pricelist.component';
 
 @NgModule({
-	declarations: [ NewItemComponent, ItemDetailsComponent ],
+	declarations: [ NewItemComponent, ItemDetailsComponent, ItemPricelistComponent ],
 	imports: [
 		CommonModule,
 		ItemRoutingModule,
