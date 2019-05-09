@@ -33,7 +33,7 @@ export class ItemService {
 		this.itemDocument = this.afs.doc(`items/${id}`);
 		return this.itemDocument.valueChanges();
 	}
-
+	
 	setItem(item: Item) {
 		const id = this.afs.createId();
 		item.id = id;
